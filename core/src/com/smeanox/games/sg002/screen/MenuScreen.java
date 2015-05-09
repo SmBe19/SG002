@@ -24,72 +24,62 @@
 
 package com.smeanox.games.sg002.screen;
 
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
+import com.smeanox.games.sg002.screen.gui.Button;
+import com.smeanox.games.sg002.screen.gui.ClickHandler;
+import com.smeanox.games.sg002.screen.gui.Resizer;
+import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
+import com.smeanox.games.sg002.util.Language;
 
 /**
  * Menu screen
  * @author Benjamin Schmid
  */
-public class MenuScreen implements Screen {
+public class MenuScreen extends AbstractScreen {
 
-	/**
-	 * Called when this screen becomes the current screen for a Game.
-	 */
-	@Override
-	public void show() {
+	/** Constructor */
+	public MenuScreen(){
+		super();
 
+		// build menu
+		Button b;
+		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, Language.getStrings().get("menu.startGame"), Color.BLACK);
+		b.setResizer(new Resizer() {
+			@Override
+			public Rectangle getNewSize(float width, float height) {
+				return new Rectangle(0 - 200 * Consts.devScaleX, height * 0.1f - 50 * Consts.devScaleY, 400 * Consts.devScaleX, 100 * Consts.devScaleY);
+			}
+		});
+		b.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick() {
+				ScreenManager.showGame();
+			}
+		});
+		addGUIElement(b);
+
+		b = new Button(null, Assets.liberationLarge, Language.getStrings().get("game.name"), Color.ORANGE);
+		b.setResizer(new Resizer() {
+			@Override
+			public Rectangle getNewSize(float width, float height) {
+				return new Rectangle(0 - 200 * Consts.devScaleX, height * 0.4f - 50 * Consts.devScaleY, 400 * Consts.devScaleX, 100 * Consts.devScaleY);
+			}
+		});
+		addGUIElement(b);
 	}
 
 	/**
 	 * Called when the screen should render itself.
-	 *
 	 * @param delta The time in seconds since the last render.
 	 */
 	@Override
 	public void render(float delta) {
-
-	}
-
-	/**
-	 * Called when the Application is resized.
-	 * @param width
-	 * @param height
-	 */
-	@Override
-	public void resize(int width, int height) {
-		Consts.updateScale();
-	}
-
-	/**
-	 * Called when the Application is paused, usually when it's not active or visible on screen.
-	 */
-	@Override
-	public void pause() {
-
-	}
-
-	/**
-	 * Called when the Application is resumed from a paused state, usually when it regains focus.
-	 */
-	@Override
-	public void resume() {
-
-	}
-
-	/**
-	 * Called when this screen is no longer the current screen for a Game.
-	 */
-	@Override
-	public void hide() {
-
-	}
-
-	/**
-	 * Called when this screen should release all resources.
-	 */
-	@Override
-	public void dispose() {
-
+		clearScreen();
+		updateGUI(delta);
+		renderGUI(delta);
 	}
 }

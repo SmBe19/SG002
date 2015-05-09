@@ -31,65 +31,14 @@ import com.smeanox.games.sg002.util.Consts;
  * Main game screen. That's where the action happens.
  * @author Benjamin Schmid
  */
-public class GameScreen implements Screen {
-
-	/**
-	 * Called when this screen becomes the current screen for a Game.
-	 */
-	@Override
-	public void show() {
-
-	}
-
+public class GameScreen extends AbstractScreen {
 	/**
 	 * Called when the screen should render itself.
-	 *
 	 * @param delta The time in seconds since the last render.
 	 */
 	@Override
 	public void render(float delta) {
-
+		clearScreen();
 	}
 
-	/**
-	 * Called when the Application is resized.
-	 * @param width
-	 * @param height
-	 */
-	@Override
-	public void resize(int width, int height) {
-		Consts.updateScale();
-	}
-
-	/**
-	 * Called when the Application is paused, usually when it's not active or visible on screen.
-	 */
-	@Override
-	public void pause() {
-
-	}
-
-	/**
-	 * Called when the Application is resumed from a paused state, usually when it regains focus.
-	 */
-	@Override
-	public void resume() {
-
-	}
-
-	/**
-	 * Called when this screen is no longer the current screen for a Game.
-	 */
-	@Override
-	public void hide() {
-
-	}
-
-	/**
-	 * Called when this screen should release all resources.
-	 */
-	@Override
-	public void dispose() {
-
-	}
 }

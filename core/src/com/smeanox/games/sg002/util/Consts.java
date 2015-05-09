@@ -19,11 +19,11 @@ public class Consts {
 	public static float devScaleY = 1.0f;
 
 	/** The font size for small */
-	public static int fontSizeSmall = 12;
+	public static int fontSizeSmall = 22;
 	/** The font size for medium */
-	public static int fontSizeMedium = 24;
+	public static int fontSizeMedium = 32;
 	/** The font size for large */
-	public static int fontSizeLarge = 32;
+	public static int fontSizeLarge = 42;
 
 	private Consts(){
 	}

@@ -24,16 +24,15 @@ public class ScreenManager {
 	 */
 	public static void init(Game game){
 		ScreenManager.game = game;
-
-		splashScreen = new SplashScreen();
-		gameScreen = new GameScreen();
-		menuScreen = new MenuScreen();
 	}
 
 	/**
 	 * Sets the splash screen as active screen
 	 */
 	public static void showSplash(){
+		if(splashScreen == null){
+			splashScreen = new SplashScreen();
+		}
 		game.setScreen(splashScreen);
 	}
 
@@ -41,6 +40,9 @@ public class ScreenManager {
 	 * Sets the splash screen as active screen
 	 */
 	public static void showMenu(){
+		if(menuScreen == null){
+			menuScreen = new MenuScreen();
+		}
 		game.setScreen(menuScreen);
 	}
 
@@ -48,6 +50,9 @@ public class ScreenManager {
 	 * Sets the game screen as active screen
 	 */
 	public static void showGame(){
+		if(gameScreen == null){
+			gameScreen = new GameScreen();
+		}
 		game.setScreen(gameScreen);
 	}
 }

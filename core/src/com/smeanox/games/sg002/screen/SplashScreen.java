@@ -1,34 +1,28 @@
 package com.smeanox.games.sg002.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.smeanox.games.sg002.util.Assets;
-import com.smeanox.games.sg002.util.Consts;
 
 /**
  * Screen displayed at startup of game while loading assets
  * @author Benjamin Schmid
  */
-public class SplashScreen implements Screen {
+public class SplashScreen extends AbstractScreen {
 
 	/** smeanox logo */
 	public static Sprite smeanox;
 
 	/** how long the splash screen is shown in seconds */
-	private final float splashDuration = 4f;
+	private final float splashDuration = 0.4f;
 	/** how many seconds already passed */
 	private float timePassed;
 
-	/** sprite batch */
-	private SpriteBatch spriteBatch;
-
 	/** Constructor */
 	public SplashScreen(){
-		spriteBatch = new SpriteBatch();
+		super();
 	}
 
 	/**
@@ -36,7 +30,9 @@ public class SplashScreen implements Screen {
 	 */
 	@Override
 	public void show() {
-		Assets.loadAssets();
+		super.show();
+
+		Assets.prepareLoadAssets();
 
 		timePassed = 0;
 
@@ -45,7 +41,6 @@ public class SplashScreen implements Screen {
 
 	/**
 	 * Called when the screen should render itself.
-	 *
 	 * @param delta The time in seconds since the last render.
 	 */
 	@Override
@@ -57,8 +52,11 @@ public class SplashScreen implements Screen {
 			timePassed = Math.min(timePassed, splashDuration / 2f);
 		}
 
-		Gdx.graphics.getGL20().glClearColor(0, 0, 0, 1);
-		Gdx.graphics.getGL20().glClear(GL20.GL_COLOR_BUFFER_BIT);
+		if(timePassed >= splashDuration){
+			ScreenManager.showMenu();
+		}
+
+		clearScreen();
 
 		spriteBatch.begin();
 
@@ -76,7 +74,7 @@ public class SplashScreen implements Screen {
 	 */
 	@Override
 	public void resize(int width, int height) {
-		Consts.updateScale();
+		super.resize(width, height);
 		scaleSprites();
 	}
 
@@ -86,38 +84,6 @@ public class SplashScreen implements Screen {
 	private void scaleSprites(){
 		float scale = (float)Gdx.graphics.getWidth() / Assets.smeanox.getWidth() * 0.8f;
 		smeanox.setSize(Assets.smeanox.getWidth() * scale, Assets.smeanox.getHeight() * scale);
-		smeanox.setCenter(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
-	}
-
-	/**
-	 * Called when the Application is paused, usually when it's not active or visible on screen.
-	 */
-	@Override
-	public void pause() {
-
-	}
-
-	/**
-	 * Called when the Application is resumed from a paused state, usually when it regains focus.
-	 */
-	@Override
-	public void resume() {
-
-	}
-
-	/**
-	 * Called when this screen is no longer the current screen for a Game.
-	 */
-	@Override
-	public void hide() {
-
-	}
-
-	/**
-	 * Called when this screen should release all resources.
-	 */
-	@Override
-	public void dispose() {
-
+		smeanox.setCenter(0, 0);
 	}
 }

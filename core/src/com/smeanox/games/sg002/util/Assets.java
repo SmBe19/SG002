@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -19,11 +18,14 @@ public class Assets {
 	/** smeanox logo */
 	public static Texture smeanox;
 
+	/** button */
+	public static Texture button;
+
 	/** liberation font */
 	public static FreeType liberation;
-	public static BitmapFont liberationSmall;
-	public static BitmapFont liberationMedium;
-	public static BitmapFont liberationLarge;
+	public static BitmapFontRapper liberationSmall;
+	public static BitmapFontRapper liberationMedium;
+	public static BitmapFontRapper liberationLarge;
 
 	private Assets(){
 	}
@@ -50,6 +52,12 @@ public class Assets {
 		if(manager == null) {
 			manager = new AssetManager();
 		}
+
+		liberationSmall = new BitmapFontRapper();
+		liberationMedium = new BitmapFontRapper();
+		liberationLarge = new BitmapFontRapper();
+
+		manager.load("images/button.png", Texture.class);
 	}
 
 	/**
@@ -68,6 +76,8 @@ public class Assets {
 	 * assigns the loaded assets to variables
 	 */
 	private static void finishedLoading(){
+		button = manager.get("images/button.png", Texture.class);
+
 		createFonts();
 	}
 
@@ -75,16 +85,43 @@ public class Assets {
 	 * Creates fonts on the fly for the active screen size
 	 */
 	public static void createFonts(){
+		if(liberationSmall == null) {
+			liberationSmall = new BitmapFontRapper();
+		}
+		if(liberationMedium == null) {
+			liberationMedium = new BitmapFontRapper();
+		}
+		if(liberationLarge == null) {
+			liberationLarge = new BitmapFontRapper();
+		}
+
+		if(liberationSmall.bitmapFont != null) {
+			liberationSmall.bitmapFont.dispose();
+		}
+		if(liberationMedium.bitmapFont != null) {
+			liberationMedium.bitmapFont.dispose();
+		}
+		if(liberationLarge.bitmapFont != null) {
+			liberationLarge.bitmapFont.dispose();
+		}
+
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LiberationSans-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
-		parameter.size = (int)(Consts.fontSizeSmall * Consts.devScaleY);
-		liberationSmall = generator.generateFont(parameter);
-		parameter.size = (int)(Consts.fontSizeMedium * Consts.devScaleY);
-		liberationMedium = generator.generateFont(parameter);
-		parameter.size = (int)(Consts.fontSizeLarge * Consts.devScaleY);
-		liberationLarge = generator.generateFont(parameter);
+		parameter.size = (int)Math.ceil(Consts.fontSizeSmall * Consts.devScaleY);
+		liberationSmall.bitmapFont = generator.generateFont(parameter);
+		parameter.size = (int)Math.ceil(Consts.fontSizeMedium * Consts.devScaleY);
+		liberationMedium.bitmapFont = generator.generateFont(parameter);
+		parameter.size = (int) Math.ceil(Consts.fontSizeLarge * Consts.devScaleY);
+		liberationLarge.bitmapFont = generator.generateFont(parameter);
 
 		generator.dispose();
+	}
+
+	/**
+	 * Disposes all assets
+	 */
+	public static void unload(){
+		manager.dispose();
 	}
 }
