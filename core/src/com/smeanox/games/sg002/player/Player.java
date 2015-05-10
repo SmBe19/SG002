@@ -12,11 +12,6 @@ public abstract class Player {
 	protected int money;
 	protected boolean isPlaying;
 
-	public Player(GameController gameController){
-		this.gameController = gameController;
-		money = 0;
-	}
-
 	public final void startPlaying(){
 		isPlaying = true;
 		play();
@@ -30,6 +25,10 @@ public abstract class Player {
 	protected abstract void play();
 
 	public abstract void update(float delta);
+
+	public void setGameController(GameController gameController) {
+		this.gameController = gameController;
+	}
 
 	public final int getMoney() {
 		return money;

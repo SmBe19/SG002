@@ -62,6 +62,7 @@ public class Assets {
 		liberationLarge = new BitmapFontRapper();
 
 		manager.load("images/button.png", Texture.class);
+		manager.load("images/background.png", Texture.class);
 	}
 
 	/**
@@ -100,6 +101,7 @@ public class Assets {
 	 */
 	private static void finishedLoading(){
 		button = manager.get("images/button.png", Texture.class);
+		background = manager.get("images/background.png", Texture.class);
 
 		setGameObjectTypeTextures();
 

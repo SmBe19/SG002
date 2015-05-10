@@ -1,5 +1,6 @@
 package com.smeanox.games.sg002.world;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.smeanox.games.sg002.player.Player;
 
 import java.util.HashSet;
@@ -40,6 +41,20 @@ public class GameWorld {
 
 	public GameObject[][] getWorldMap() {
 		return worldMap;
+	}
+
+	/**
+	 * Sets the starting GameObjects for the given player at a random position
+	 * @param player
+	 */
+	public void addStartGameObjects(Player player, GameObjectType gameObjectType){
+		int x, y;
+		do{
+			x = MathUtils.random(mapSizeX-1);
+			y = MathUtils.random(mapSizeY-1);
+		} while(getWorldMap(x, y) != null);
+
+		worldMap[y][x] = new GameObject(gameObjectType, player);
 	}
 
 	/**
@@ -148,6 +163,10 @@ public class GameWorld {
 		if(!gameObject.getGameObjectType().getCanProduceList().contains(gameObjectType)){
 			return false;
 		}
+		// the new GameObject is too expensive
+		if(activePlayer.getMoney() < gameObjectType.getValue()){
+			return false;
+		}
 		// the gameObject has been used already
 		if(usedGameObjects.contains(gameObject)){
 			return false;
@@ -167,10 +186,11 @@ public class GameWorld {
 		if(!canProduce(startX, startY, endX, endY, gameObjectType)){
 			return false;
 		}
-		GameObject newGameObject = new GameObject(gameObjectType);
+		GameObject newGameObject = new GameObject(gameObjectType, activePlayer);
 		newGameObject.setPositionX(endX);
 		newGameObject.setPositionY(endY);
 		worldMap[endY][endX] = newGameObject;
+		activePlayer.addMoney(-gameObjectType.getValue());
 		usedGameObjects.add(getWorldMap(startX, startY));
 		usedGameObjects.add(newGameObject);
 		return true;

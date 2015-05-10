@@ -1,6 +1,6 @@
 <Config>
     <GameObjectTypes>
-        <GameObjectType id="townCenter" name="gameObjectType.townCenter.name" texture="images/townCenter.png">
+        <GameObjectType id="townCenter" name="gameObjectType.townCenter.name" texture="images/townCenter.png" start="true">
             <HP defaultHP="1000"/>
             <Value value="100" valuePerRound="100" valueOnDestruction="100"/>
             <Radius radiusWalkMin="0" radiusWalkMax="0" radiusProduceMin="1" radiusProduceMax="2" radiusFightMin="0" radiusFightMax="0"/>

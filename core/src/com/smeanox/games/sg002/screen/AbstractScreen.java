@@ -18,13 +18,14 @@ import java.util.LinkedList;
  * @author Benjamin Schmid
  */
 public abstract class AbstractScreen implements Screen {
-	/** list of all clickables on the screen */
+	/** list of all guielements on the screen */
 	protected LinkedList<GUIElement> guiElements;
 
 	/** sprite batch */
 	protected SpriteBatch spriteBatch;
 
 	protected Camera camera;
+	private Camera guiCamera;
 	private Vector2 vector2;
 	private Vector3 vector3;
 
@@ -33,6 +34,7 @@ public abstract class AbstractScreen implements Screen {
 		guiElements = new LinkedList<GUIElement>();
 
 		camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		guiCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		spriteBatch = new SpriteBatch();
 
 		vector2 = new Vector2();
@@ -66,6 +68,17 @@ public abstract class AbstractScreen implements Screen {
 		return unproject(v2.x, v2.y);
 	}
 
+	protected Vector2 unprojectGUI(float x, float y){
+		vector3.set(x, y, 0);
+		vector3.set(guiCamera.unproject(vector3));
+		vector2.set(vector3.x, vector3.y);
+		return vector2;
+	}
+
+	protected Vector2 unprojectGUI(Vector2 v2){
+		return unprojectGUI(v2.x, v2.y);
+	}
+
 	/**
 	 * Called when this screen becomes the current screen for a Game.
 	 */
@@ -86,7 +99,7 @@ public abstract class AbstractScreen implements Screen {
 	 * @param delta The time in seconds since the last render.
 	 */
 	protected void updateGUI(float delta){
-		vector2 = unproject(Gdx.input.getX(), Gdx.input.getY());
+		vector2 = unprojectGUI(Gdx.input.getX(), Gdx.input.getY());
 		for(GUIElement guiElement : guiElements){
 			guiElement.updateClickable(vector2);
 		}
@@ -97,11 +110,13 @@ public abstract class AbstractScreen implements Screen {
 	 * @param delta The time in seconds since the last render.
 	 */
 	protected void renderGUI(float delta){
+		spriteBatch.setProjectionMatrix(guiCamera.combined);
 		spriteBatch.begin();
 		for(GUIElement guiElement : guiElements){
 			guiElement.render(delta, spriteBatch);
 		}
 		spriteBatch.end();
+		spriteBatch.setProjectionMatrix(camera.combined);
 	}
 
 	/**
@@ -115,11 +130,31 @@ public abstract class AbstractScreen implements Screen {
 		camera.viewportWidth = width;
 		camera.viewportHeight = height;
 		camera.update();
+		guiCamera.viewportWidth = width;
+		guiCamera.viewportHeight = height;
+		guiCamera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 
 		for(GUIElement guiElement : guiElements){
 			guiElement.resize(width, height);
 		}
+	}
+
+	/**
+	 * moves the camera
+	 * @param x offset
+	 * @param y offset
+	 */
+	protected void moveCamera(float x, float y){
+		camera.translate(x, y, 0);
+		camera.update();
+		spriteBatch.setProjectionMatrix(camera.combined);
+	}
+
+	protected void setCameraPosition(float x, float y){
+		camera.position.set(x, y, 0);
+		camera.update();
+		spriteBatch.setProjectionMatrix(camera.combined);
 	}
 
 	/**

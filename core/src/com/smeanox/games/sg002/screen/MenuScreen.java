@@ -28,12 +28,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.smeanox.games.sg002.player.LocalPlayer;
 import com.smeanox.games.sg002.screen.gui.Button;
 import com.smeanox.games.sg002.screen.gui.ClickHandler;
 import com.smeanox.games.sg002.screen.gui.Resizer;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.util.Language;
+import com.smeanox.games.sg002.world.GameController;
+import com.smeanox.games.sg002.world.Scenario;
 
 /**
  * Menu screen
@@ -47,6 +50,7 @@ public class MenuScreen extends AbstractScreen {
 
 		// build menu
 		Button b;
+		// start game
 		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, Language.getStrings().get("menu.startGame"), Color.BLACK);
 		b.setResizer(new Resizer() {
 			@Override
@@ -57,11 +61,16 @@ public class MenuScreen extends AbstractScreen {
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				ScreenManager.showGame();
+				Scenario scenario = Scenario.getScanarioById("main");
+				GameController gameController = new GameController(scenario);
+				for(int i = 0; i < scenario.getMaxPlayerCount(); i++){
+					gameController.addPlayer(new LocalPlayer());
+				}
+				ScreenManager.showGame(gameController);
 			}
 		});
 		addGUIElement(b);
-
+		// game name
 		b = new Button(null, Assets.liberationLarge, Language.getStrings().get("game.name"), Color.ORANGE);
 		b.setResizer(new Resizer() {
 			@Override

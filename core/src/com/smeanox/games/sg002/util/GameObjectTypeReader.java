@@ -39,6 +39,10 @@ public class GameObjectTypeReader {
 				canProduces.put(aGameObjectType, canProduce);
 				Assets.addToLoadQueue(gameObjectType.getAttribute("texture"), Texture.class);
 				ids.add(gameObjectType.getAttribute("id"));
+
+				if(gameObjectType.getBooleanAttribute("start", false)){
+					GameObjectType.setStartGameObjectType(aGameObjectType);
+				}
 			}
 
 			for(Map.Entry<GameObjectType, XmlReader.Element> entry : damageTables.entrySet()){

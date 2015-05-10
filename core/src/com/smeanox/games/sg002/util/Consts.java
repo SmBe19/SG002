@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 
 /**
  * Contains all constants
@@ -28,6 +29,12 @@ public class Consts {
 	public static final int fieldSizeX = 512;
 	/** The size of a single tile on the map */
 	public static final int fieldSizeY = 512;
+
+	/** The color to display the hp in */
+	public static final Color hpColor = Color.BLUE;
+
+	/** The amount the zoom factor is multiplied by per click */
+	public static final float zoomStep = 1.1f;
 
 	private Consts(){
 	}

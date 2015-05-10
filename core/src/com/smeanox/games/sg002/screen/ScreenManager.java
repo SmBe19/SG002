@@ -2,6 +2,8 @@ package com.smeanox.games.sg002.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
+import com.smeanox.games.sg002.world.GameController;
+import com.smeanox.games.sg002.world.Scenario;
 
 /**
  * Manages the different Screens
@@ -50,9 +52,15 @@ public class ScreenManager {
 	 * Sets the game screen as active screen
 	 */
 	public static void showGame(){
-		if(gameScreen == null){
-			gameScreen = new GameScreen();
-		}
+		game.setScreen(gameScreen);
+	}
+
+	/**
+	 * Sets the game screen as active screen with the given scenario loaded
+	 */
+	public static void showGame(GameController gameController){
+		gameScreen = null;
+		gameScreen = new GameScreen(gameController);
 		game.setScreen(gameScreen);
 	}
 }

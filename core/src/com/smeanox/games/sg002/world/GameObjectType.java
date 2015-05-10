@@ -12,6 +12,7 @@ import java.util.HashMap;
  */
 public class GameObjectType {
 	private static HashMap<String, GameObjectType> idToGameObjectType = new HashMap<String, GameObjectType>();
+	private static GameObjectType startGameObjectType;
 
 	private String id;
 	private String name;
@@ -173,5 +174,13 @@ public class GameObjectType {
 	 */
 	public static Collection<GameObjectType> getAllGameObjectTypes(){
 		return idToGameObjectType.values();
+	}
+
+	public static GameObjectType getStartGameObjectType() {
+		return startGameObjectType;
+	}
+
+	public static void setStartGameObjectType(GameObjectType startGameObjectType) {
+		GameObjectType.startGameObjectType = startGameObjectType;
 	}
 }

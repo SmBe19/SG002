@@ -29,6 +29,8 @@ public class GameController {
 	public void addPlayer(Player player){
 		players.add(player);
 		player.setMoney(scenario.getStartMoney());
+		player.setGameController(this);
+		gameWorld.addStartGameObjects(player, GameObjectType.getStartGameObjectType());
 	}
 
 	/**
@@ -56,7 +58,9 @@ public class GameController {
 	 * @param delta The time in seconds since the last render.
 	 */
 	public void update(float delta) {
-		activePlayer.update(delta);
+		if(activePlayer != null) {
+			activePlayer.update(delta);
+		}
 	}
 
 	public Player getActivePlayer(){

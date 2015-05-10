@@ -15,8 +15,10 @@ public class GameObject {
 	// Stats
 	private int hp;
 
-	public GameObject(GameObjectType gameObjectType){
+	public GameObject(GameObjectType gameObjectType, Player player){
 		this.gameObjectType = gameObjectType;
+		this.player = player;
+		this.hp = gameObjectType.getDefaultHP();
 	}
 
 	public GameObjectType getGameObjectType() {

@@ -1,0 +1,22 @@
+package com.smeanox.games.sg002.player;
+
+import com.smeanox.games.sg002.world.GameController;
+
+/**
+ * A real player that plays local
+ * @author Benjamin Schmid
+ */
+public class LocalPlayer extends Player {
+	public LocalPlayer(){
+	}
+
+	@Override
+	protected void play() {
+
+	}
+
+	@Override
+	public void update(float delta) {
+
+	}
+}
