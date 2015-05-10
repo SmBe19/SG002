@@ -24,9 +24,6 @@
 
 package com.smeanox.games.sg002.screen;
 
-import com.badlogic.gdx.Screen;
-import com.smeanox.games.sg002.util.Consts;
-
 /**
  * Main game screen. That's where the action happens.
  * @author Benjamin Schmid

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.smeanox.games.sg002.world.GameObjectType;
 
 /**
  * Manages all Assets
@@ -20,6 +21,9 @@ public class Assets {
 
 	/** button */
 	public static Texture button;
+
+	/** background */
+	public static Texture background;
 
 	/** liberation font */
 	public static FreeType liberation;
@@ -61,6 +65,15 @@ public class Assets {
 	}
 
 	/**
+	 * Adds the asset to be loaded
+	 * @param filename filename of the asset to be loaded
+	 * @param type class of the asset
+	 */
+	public static void addToLoadQueue(String filename, Class type){
+		manager.load(filename, type);
+	}
+
+	/**
 	 * loads the assets
 	 * @return true if the assets are loaded
 	 */
@@ -73,12 +86,30 @@ public class Assets {
 	}
 
 	/**
+	 * returns the loaded asset
+	 * @param name filename of the loaded asset
+	 * @param <T>
+	 * @return the asset
+	 */
+	public static <T> T getAsset(String name){
+		return (T)manager.get(name);
+	}
+
+	/**
 	 * assigns the loaded assets to variables
 	 */
 	private static void finishedLoading(){
 		button = manager.get("images/button.png", Texture.class);
 
+		setGameObjectTypeTextures();
+
 		createFonts();
+	}
+
+	private static void setGameObjectTypeTextures(){
+		for(GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()){
+			gameObjectType.setTexture(manager.get(gameObjectType.getTextureName(), Texture.class));
+		}
 	}
 
 	/**

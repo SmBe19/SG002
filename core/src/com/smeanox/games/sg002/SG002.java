@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.smeanox.games.sg002.screen.ScreenManager;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
+import com.smeanox.games.sg002.util.GameObjectTypeReader;
 import com.smeanox.games.sg002.util.Language;
+import com.smeanox.games.sg002.util.ScenarioReader;
 
 /**
  * Main Class of the game
@@ -25,6 +27,8 @@ public class SG002 extends Game {
 		Language.loadStrings();
 		Consts.updateScale();
 		Assets.loadAssetsSplashScreen();
+		GameObjectTypeReader.readGameObjectTypes(Gdx.files.internal("config/GameObjectTypes.xml"));
+		ScenarioReader.readScenarios(Gdx.files.internal("config/Scenarios.xml"));
 
 		ScreenManager.init(this);
 		ScreenManager.showSplash();

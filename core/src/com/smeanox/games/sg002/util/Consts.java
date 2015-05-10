@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 
 /**
  * Contains all constants
- *
  * @author Benjamin Schmid
  */
 public class Consts {
@@ -19,11 +18,16 @@ public class Consts {
 	public static float devScaleY = 1.0f;
 
 	/** The font size for small */
-	public static int fontSizeSmall = 22;
+	public static final int fontSizeSmall = 22;
 	/** The font size for medium */
-	public static int fontSizeMedium = 32;
+	public static final int fontSizeMedium = 32;
 	/** The font size for large */
-	public static int fontSizeLarge = 42;
+	public static final int fontSizeLarge = 42;
+
+	/** The size of a single tile on the map */
+	public static final int fieldSizeX = 512;
+	/** The size of a single tile on the map */
+	public static final int fieldSizeY = 512;
 
 	private Consts(){
 	}

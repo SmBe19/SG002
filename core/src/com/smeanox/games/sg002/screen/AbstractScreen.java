@@ -114,7 +114,6 @@ public abstract class AbstractScreen implements Screen {
 		Consts.updateScale();
 		camera.viewportWidth = width;
 		camera.viewportHeight = height;
-		camera.position.set(0, 0, 0);
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
 
