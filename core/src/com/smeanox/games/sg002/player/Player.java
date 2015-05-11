@@ -1,5 +1,6 @@
 package com.smeanox.games.sg002.player;
 
+import com.badlogic.gdx.graphics.Color;
 import com.smeanox.games.sg002.world.GameController;
 
 /**
@@ -11,6 +12,8 @@ public abstract class Player {
 
 	protected int money;
 	protected boolean isPlaying;
+	protected Color color;
+	protected boolean showGUI;
 
 	public final void startPlaying(){
 		isPlaying = true;
@@ -40,5 +43,21 @@ public abstract class Player {
 
 	public final void addMoney(int amount) {
 		money += amount;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public boolean isShowGUI() {
+		return showGUI;
+	}
+
+	public void setShowGUI(boolean showGUI) {
+		this.showGUI = showGUI;
 	}
 }

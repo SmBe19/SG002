@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.GameObject;
@@ -63,13 +64,17 @@ public class GameView {
 		this.activeY = activeY;
 	}
 
+	public GameObject getActiveGameObject(){
+		return gameWorld.getWorldMap(activeX, activeY);
+	}
+
 	public void setActiveByPosition(float x, float y){
 		int newActiveX, newActiveY;
 		newActiveX = (int)(x / (Consts.fieldSizeX * Consts.devScaleY * zoom));
 		newActiveY = (int)(y / (Consts.fieldSizeX * Consts.devScaleY * zoom));
 
-		if(newActiveX >= 0 && newActiveX < gameWorld.getMapSizeX()
-				&& newActiveY >= 0 && newActiveY < gameWorld.getMapSizeY()){
+		if(x >= 0 && newActiveX < gameWorld.getMapSizeX()
+				&& y >= 0 && newActiveY < gameWorld.getMapSizeY()){
 			activeX = newActiveX;
 			activeY = newActiveY;
 		}
@@ -98,16 +103,18 @@ public class GameView {
 	 * renders the GameWorld
 	 * @param spriteBatch
 	 */
-	public void render(SpriteBatch spriteBatch){
+	public void render(SpriteBatch spriteBatch, Player activePlayer){
 		aFieldSizeX = (Consts.fieldSizeX * Consts.devScaleY * zoom);
 		aFieldSizeY = (Consts.fieldSizeY * Consts.devScaleY * zoom);
 
 		GameObject gameObject;
 		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
 			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
+				spriteBatch.setColor(Color.WHITE);
 				renderField(spriteBatch, Assets.background, x, y);
 				gameObject = gameWorld.getWorldMap(x, y);
 				if(gameObject != null){
+					spriteBatch.setColor(gameObject.getPlayer().getColor());
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);
 
 					Assets.liberationSmall.bitmapFont.setColor(Consts.hpColor);
@@ -118,11 +125,8 @@ public class GameView {
 				}
 
 				if(x == activeX && y == activeY){
-					Assets.liberationSmall.bitmapFont.setColor(Consts.hpColor);
-					glyphLayout.setText(Assets.liberationSmall.bitmapFont, "active");
-					Assets.liberationSmall.bitmapFont.draw(spriteBatch, glyphLayout,
-							x * aFieldSizeX + (aFieldSizeX - glyphLayout.width) / 2f,
-							y * aFieldSizeY + glyphLayout.height * 1.2f);
+					spriteBatch.setColor(activePlayer.getColor());
+					renderField(spriteBatch, Assets.selection, x, y);
 				}
 			}
 		}

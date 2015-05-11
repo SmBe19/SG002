@@ -18,8 +18,11 @@ public interface GUIElement {
 
 	/**
 	 * called once per frame to check if the object is clicked
+	 * @param touchPos the position where the user clicked last
+	 * @param wasClick true if there was already a click in this frame.
+	 * @return true if the element was clicked
 	 */
-	void updateClickable(Vector2 touchPos);
+	boolean updateClickable(Vector2 touchPos, boolean wasClick);
 
 	/**
 	 * adds a {@link ClickHandler}
@@ -45,4 +48,12 @@ public interface GUIElement {
 	 * @param height
 	 */
 	void resize(float width, float height);
+
+	boolean isVisible();
+
+	void setVisible(boolean visible);
+
+	boolean isActive();
+
+	void setActive(boolean active);
 }

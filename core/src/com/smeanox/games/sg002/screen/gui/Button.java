@@ -1,5 +1,6 @@
 package com.smeanox.games.sg002.screen.gui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -18,6 +19,9 @@ public class Button extends AbstractGUIElement {
 	private BitmapFontRapper font;
 	private String text;
 	private Color textColor;
+	private Color backgroundColor;
+	private Color backgroundColorHover;
+	private Color backgroundColorInactive;
 	private GlyphLayout glyphLayout;
 
 	public Button(){
@@ -25,12 +29,16 @@ public class Button extends AbstractGUIElement {
 		glyphLayout = new GlyphLayout();
 	}
 
-	public Button(Sprite sprite, BitmapFontRapper font, String text, Color textColor) {
+	public Button(Sprite sprite, BitmapFontRapper font, String text, Color textColor,
+				  Color backgroundColor, Color backgroundColorHover, Color backgroundColorInactive) {
 		this();
 		this.sprite = sprite;
 		this.font = font;
 		this.text = text;
 		this.textColor = textColor;
+		this.backgroundColor = backgroundColor;
+		this.backgroundColorHover = backgroundColorHover;
+		this.backgroundColorInactive = backgroundColorInactive;
 		if(sprite != null){
 			size.set(sprite.getWidth(), sprite.getHeight());
 			position.set(sprite.getX(), sprite.getY());
@@ -71,6 +79,30 @@ public class Button extends AbstractGUIElement {
 
 	public void setTextColor(Color textColor) {
 		this.textColor = textColor;
+	}
+
+	public Color getBackgroundColor() {
+		return backgroundColor;
+	}
+
+	public void setBackgroundColor(Color backgroundColor) {
+		this.backgroundColor = backgroundColor;
+	}
+
+	public Color getBackgroundColorHover() {
+		return backgroundColorHover;
+	}
+
+	public void setBackgroundColorHover(Color backgroundColorHover) {
+		this.backgroundColorHover = backgroundColorHover;
+	}
+
+	public Color getBackgroundColorInactive() {
+		return backgroundColorInactive;
+	}
+
+	public void setBackgroundColorInactive(Color backgroundColorInactive) {
+		this.backgroundColorInactive = backgroundColorInactive;
 	}
 
 	/**
@@ -121,7 +153,12 @@ public class Button extends AbstractGUIElement {
 	 */
 	@Override
 	public void render(float delta, SpriteBatch spriteBatch) {
+		if(!visible){
+			return;
+		}
 		if(sprite != null){
+			sprite.setColor(active ? (boundingBox.contains(lastTouchPos)
+					? backgroundColorHover : backgroundColor) : backgroundColorInactive);
 			sprite.draw(spriteBatch);
 		}
 		if(font != null){

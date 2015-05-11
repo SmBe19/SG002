@@ -8,8 +8,8 @@ import com.smeanox.games.sg002.util.Consts;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = Consts.devWidth;
-		config.height = Consts.devHeight;
+		config.width = Consts.devWidth * 2;
+		config.height = Consts.devHeight * 2;
 		new LwjglApplication(new SG002(), config);
 	}
 }

@@ -29,6 +29,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.smeanox.games.sg002.player.LocalPlayer;
+import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.screen.gui.Button;
 import com.smeanox.games.sg002.screen.gui.ClickHandler;
 import com.smeanox.games.sg002.screen.gui.Resizer;
@@ -51,7 +52,9 @@ public class MenuScreen extends AbstractScreen {
 		// build menu
 		Button b;
 		// start game
-		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, Language.getStrings().get("menu.startGame"), Color.BLACK);
+		b = new Button(new Sprite(Assets.button), Assets.liberationMedium,
+				Language.getStrings().get("menu.startGame"), Color.BLACK, Color.WHITE, Color.LIGHT_GRAY,
+				Color.DARK_GRAY);
 		b.setResizer(new Resizer() {
 			@Override
 			public Rectangle getNewSize(float width, float height) {
@@ -64,14 +67,18 @@ public class MenuScreen extends AbstractScreen {
 				Scenario scenario = Scenario.getScanarioById("main");
 				GameController gameController = new GameController(scenario);
 				for(int i = 0; i < scenario.getMaxPlayerCount(); i++){
-					gameController.addPlayer(new LocalPlayer());
+					Player player = new LocalPlayer();
+					gameController.addPlayer(player);
+					player.setColor(Consts.playerColors[i % Consts.playerColors.length]);
+					player.setShowGUI(player instanceof LocalPlayer);
 				}
 				ScreenManager.showGame(gameController);
 			}
 		});
 		addGUIElement(b);
 		// game name
-		b = new Button(null, Assets.liberationLarge, Language.getStrings().get("game.name"), Color.ORANGE);
+		b = new Button(null, Assets.liberationLarge, Language.getStrings().get("game.name"),
+				Color.ORANGE, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
 		b.setResizer(new Resizer() {
 			@Override
 			public Rectangle getNewSize(float width, float height) {
@@ -88,7 +95,7 @@ public class MenuScreen extends AbstractScreen {
 	@Override
 	public void render(float delta) {
 		clearScreen();
-		updateGUI(delta);
+		updateGUI(delta, false);
 		renderGUI(delta);
 	}
 }

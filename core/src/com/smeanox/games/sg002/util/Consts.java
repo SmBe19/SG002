@@ -31,7 +31,12 @@ public class Consts {
 	public static final int fieldSizeY = 512;
 
 	/** The color to display the hp in */
-	public static final Color hpColor = Color.BLUE;
+	public static final Color hpColor = Color.RED;
+
+	/** The color for the different players */
+	public static final Color playerColors[] = new Color[]{Color.BLUE, Color.RED, Color.GREEN,
+			Color.ORANGE, Color.YELLOW, Color.CYAN, Color.MAGENTA, Color.OLIVE, Color.NAVY,
+			Color.PURPLE, Color.MAROON};
 
 	/** The amount the zoom factor is multiplied by per click */
 	public static final float zoomStep = 1.1f;

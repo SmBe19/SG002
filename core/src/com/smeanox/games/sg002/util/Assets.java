@@ -25,6 +25,9 @@ public class Assets {
 	/** background */
 	public static Texture background;
 
+	/** selection */
+	public static Texture selection;
+
 	/** liberation font */
 	public static FreeType liberation;
 	public static BitmapFontRapper liberationSmall;
@@ -63,6 +66,7 @@ public class Assets {
 
 		manager.load("images/button.png", Texture.class);
 		manager.load("images/background.png", Texture.class);
+		manager.load("images/selection.png", Texture.class);
 	}
 
 	/**
@@ -102,6 +106,7 @@ public class Assets {
 	private static void finishedLoading(){
 		button = manager.get("images/button.png", Texture.class);
 		background = manager.get("images/background.png", Texture.class);
+		selection = manager.get("images/selection.png", Texture.class);
 
 		setGameObjectTypeTextures();
 

@@ -15,31 +15,48 @@ public abstract class AbstractGUIElement implements GUIElement {
 	private LinkedList<ClickHandler> clickHandlers;
 	protected Rectangle boundingBox;
 
+	protected boolean visible;
+	protected boolean active;
+
 	protected Vector2 position;
 	protected Vector2 size;
 
 	protected Resizer resizer;
 
 	private boolean wasDown = false;
+	protected Vector2 lastTouchPos;
 
 	public AbstractGUIElement(){
 		size = new Vector2(0, 0);
 		position = new Vector2(0, 0);
 		boundingBox = new Rectangle();
+		visible = true;
+		active = true;
+		lastTouchPos = new Vector2();
 	}
 
 	/**
 	 * called once per frame to check if the object is clicked
+	 * @param wasClick true if there was already a click in this frame.
+	 * @return true if the element was clicked
 	 */
 	@Override
-	public void updateClickable(Vector2 touchPos) {
-		if(wasDown && !Gdx.input.isTouched()){
+	public boolean updateClickable(Vector2 touchPos, boolean wasClick) {
+		boolean wasClicked = false;
+		if(visible && !wasClick && wasDown && !Gdx.input.isTouched()){
 			if(boundingBox != null && boundingBox.contains(touchPos.x, touchPos.y)) {
-				fireOnClick();
+				if(active) {
+					fireOnClick();
+				}
+				wasClicked = true;
 			}
 		}
 
 		wasDown = Gdx.input.isTouched();
+
+		lastTouchPos.set(touchPos);
+
+		return wasClicked;
 	}
 
 	protected void fireOnClick(){
@@ -158,5 +175,25 @@ public abstract class AbstractGUIElement implements GUIElement {
 	@Override
 	public void resize(float width, float height) {
 		setBoundingBox(resizer.getNewSize(width, height));
+	}
+	@Override
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	@Override
+	public boolean isVisible() {
+		return visible;
+	}
+
+
+	@Override
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	@Override
+	public boolean isActive() {
+		return active;
 	}
 }

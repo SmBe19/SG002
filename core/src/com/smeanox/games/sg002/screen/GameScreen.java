@@ -35,8 +35,10 @@ import com.smeanox.games.sg002.screen.gui.ClickHandler;
 import com.smeanox.games.sg002.screen.gui.Resizer;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
+import com.smeanox.games.sg002.util.Language;
 import com.smeanox.games.sg002.view.GameView;
 import com.smeanox.games.sg002.world.GameController;
+import com.smeanox.games.sg002.world.GameObject;
 
 /**
  * Main game screen. That's where the action happens.
@@ -51,6 +53,10 @@ public class GameScreen extends AbstractScreen {
 	private Vector2 vector2;
 	private Vector3 vector3;
 
+	private Button moveButton;
+	private Button fightButton;
+	private Button produceButton;
+
 	public GameScreen(GameController gameController){
 		super();
 		this.gameController = gameController;
@@ -59,7 +65,8 @@ public class GameScreen extends AbstractScreen {
 		// GUI
 		Button b;
 		// +
-		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, "+", Color.BLACK);
+		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, "+", Color.BLACK,
+				Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
 		b.setResizer(new Resizer() {
 			@Override
 			public Rectangle getNewSize(float width, float height) {
@@ -74,11 +81,12 @@ public class GameScreen extends AbstractScreen {
 		});
 		addGUIElement(b);
 		// -
-		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, "-", Color.BLACK);
+		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, "-", Color.BLACK,
+				Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
 		b.setResizer(new Resizer() {
 			@Override
 			public Rectangle getNewSize(float width, float height) {
-				return new Rectangle(-width/2 + 60 * Consts.devScaleX, -height/2 + 10 * Consts.devScaleY, 40 * Consts.devScaleX, 40 * Consts.devScaleY);
+				return new Rectangle(-width / 2 + 60 * Consts.devScaleX, -height / 2 + 10 * Consts.devScaleY, 40 * Consts.devScaleX, 40 * Consts.devScaleY);
 			}
 		});
 		b.addClickHandler(new ClickHandler() {
@@ -88,9 +96,65 @@ public class GameScreen extends AbstractScreen {
 			}
 		});
 		addGUIElement(b);
+		// move
+		b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
+				Language.getStrings().get("gameScreen.move"), Color.BLACK, Color.WHITE,
+				Color.LIGHT_GRAY, Color.DARK_GRAY);
+		b.setResizer(new Resizer() {
+			@Override
+			public Rectangle getNewSize(float width, float height) {
+				return new Rectangle(-width / 2 + 20 * Consts.devScaleX, height / 2 - 50 * Consts.devScaleY, 150 * Consts.devScaleX, 40 * Consts.devScaleY);
+			}
+		});
+		b.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick() {
+				// TODO add ClickHandler
+			}
+		});
+		addGUIElement(b);
+		moveButton = b;
+		// fight
+		b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
+				Language.getStrings().get("gameScreen.fight"), Color.BLACK, Color.WHITE,
+				Color.LIGHT_GRAY, Color.DARK_GRAY);
+		b.setResizer(new Resizer() {
+			@Override
+			public Rectangle getNewSize(float width, float height) {
+				return new Rectangle(-width / 2 + 190 * Consts.devScaleX, height / 2 - 50 * Consts.devScaleY, 150 * Consts.devScaleX, 40 * Consts.devScaleY);
+			}
+		});
+		b.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick() {
+				// TODO add ClickHandler
+			}
+		});
+		addGUIElement(b);
+		fightButton = b;
+		// produce
+		b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
+				Language.getStrings().get("gameScreen.produce"), Color.BLACK, Color.WHITE,
+				Color.LIGHT_GRAY, Color.DARK_GRAY);
+		b.setResizer(new Resizer() {
+			@Override
+			public Rectangle getNewSize(float width, float height) {
+				return new Rectangle(-width / 2 + 360 * Consts.devScaleX, height / 2 - 50 * Consts.devScaleY, 150 * Consts.devScaleX, 40 * Consts.devScaleY);
+			}
+		});
+		b.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick() {
+				// TODO add ClickHandler
+			}
+		});
+		addGUIElement(b);
+		produceButton = b;
 
 		vector2 = new Vector2();
 		vector3 = new Vector3();
+
+		setActionButtonsVisible(false);
 
 		gameController.startGame();
 	}
@@ -101,13 +165,13 @@ public class GameScreen extends AbstractScreen {
 	 */
 	@Override
 	public void render(float delta) {
-		updateGUI(delta);
-		updateInput(delta);
+		boolean wasClick = updateGUI(delta, wasDrag);
+		updateInput(delta, wasClick);
 		gameController.update(delta);
 
 		clearScreen();
 		spriteBatch.begin();
-		gameView.render(spriteBatch);
+		gameView.render(spriteBatch, gameController.getActivePlayer());
 		spriteBatch.end();
 		renderGUI(delta);
 	}
@@ -115,21 +179,58 @@ public class GameScreen extends AbstractScreen {
 	/**
 	 * Updates the Input
 	 * @param delta The time in seconds since the last render.
+	 * @param wasClick true if there was already a click in this frame
 	 */
-	private void updateInput(float delta){
+	private void updateInput(float delta, boolean wasClick){
 		if(wasTouchDown && Gdx.input.isTouched()) {
-			moveCamera(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY());
-			if(Math.abs(Gdx.input.getDeltaX() * Gdx.input.getDeltaY()) > 10){
-				wasDrag = true;
+			if(!wasClick){
+				moveCamera(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY());
+				if(Math.abs(Gdx.input.getDeltaX() * Gdx.input.getDeltaY()) > 10){
+					wasDrag = true;
+				}
 			}
 		} else {
 			if(!wasDrag && wasTouchDown && !Gdx.input.isTouched()){
-				gameView.setActiveByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
+				if(!wasClick) {
+					if(gameController.getActivePlayer().isShowGUI()) {
+						gameView.setActiveByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
+						if(gameView.getActiveGameObject() != null
+								&& gameView.getActiveGameObject().getPlayer() == gameController.getActivePlayer()) {
+							setActionButtonsVisible(true);
+							setActionButtonsActive(gameView.getActiveGameObject());
+						} else {
+							setActionButtonsVisible(false);
+						}
+					}
+				}
 			}
 			wasDrag = false;
 		}
 
 		wasTouchDown = Gdx.input.isTouched();
+	}
+
+	private void setActionButtonsVisible(boolean visible){
+		moveButton.setVisible(visible);
+		fightButton.setVisible(visible);
+		produceButton.setVisible(visible);
+	}
+
+	private void setActionButtonsActive(boolean active){
+		moveButton.setActive(active);
+		fightButton.setActive(active);
+		produceButton.setActive(active);
+	}
+
+	/**
+	 * activates only the buttons the active gameObject supports
+	 * @param activeGameObject the active GameObject
+	 */
+	private void setActionButtonsActive(GameObject activeGameObject){
+		setActionButtonsActive(false);
+		moveButton.setActive(activeGameObject.getGameObjectType().getRadiusWalkMax() > 0);
+		fightButton.setActive(activeGameObject.getGameObjectType().isCanFight());
+		produceButton.setActive(activeGameObject.getGameObjectType().isCanProduce());
 	}
 
 	private void zoomIn(){

@@ -97,12 +97,18 @@ public abstract class AbstractScreen implements Screen {
 	/**
 	 * Updates all GUI elements
 	 * @param delta The time in seconds since the last render.
+	 * @param wasClick true if there was already a click in this frame.
+	 * @return true if some gui element was clicked.
 	 */
-	protected void updateGUI(float delta){
+	protected boolean updateGUI(float delta, boolean wasClick){
+		boolean wasClicked = false;
 		vector2 = unprojectGUI(Gdx.input.getX(), Gdx.input.getY());
 		for(GUIElement guiElement : guiElements){
-			guiElement.updateClickable(vector2);
+			if(guiElement.updateClickable(vector2, wasClick || wasClicked)){
+				wasClicked = true;
+			}
 		}
+		return wasClicked;
 	}
 
 	/**
