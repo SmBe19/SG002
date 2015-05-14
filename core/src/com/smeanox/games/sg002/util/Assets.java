@@ -27,6 +27,8 @@ public class Assets {
 
 	/** selection */
 	public static Texture selection;
+	/** grid */
+	public static Texture grid;
 	/** possible field for movement */
 	public static Texture possibleFieldMove;
 	/** possible field for fight */
@@ -75,6 +77,7 @@ public class Assets {
 		manager.load("images/button.png", Texture.class);
 		manager.load("images/background.png", Texture.class);
 		manager.load("images/selection.png", Texture.class);
+		manager.load("images/grid.png", Texture.class);
 		manager.load("images/possibleFieldMove.png", Texture.class);
 		manager.load("images/possibleFieldFight.png", Texture.class);
 		manager.load("images/possibleFieldProduce.png", Texture.class);
@@ -118,6 +121,7 @@ public class Assets {
 		button = manager.get("images/button.png", Texture.class);
 		background = manager.get("images/background.png", Texture.class);
 		selection = manager.get("images/selection.png", Texture.class);
+		grid = manager.get("images/grid.png", Texture.class);
 		possibleFieldMove = manager.get("images/possibleFieldMove.png", Texture.class);
 		possibleFieldFight = manager.get("images/possibleFieldFight.png", Texture.class);
 		possibleFieldProduce = manager.get("images/possibleFieldProduce.png", Texture.class);
@@ -165,6 +169,9 @@ public class Assets {
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LiberationSans-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+
+		// add € sign
+		parameter.characters =  FreeTypeFontGenerator.DEFAULT_CHARS + "\u20AC";
 
 		parameter.size = (int)Math.ceil(Consts.fontSizeMicro * Consts.devScaleY);
 		liberationMicro.bitmapFont = generator.generateFont(parameter);

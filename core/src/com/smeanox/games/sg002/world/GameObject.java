@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.world;
 
 import com.smeanox.games.sg002.player.Player;
+import com.smeanox.games.sg002.util.Consts;
 
 /**
  * Describes an active GameObject
@@ -61,6 +62,18 @@ public class GameObject {
 		this.player = player;
 	}
 
+	private int getDiff(int x, int y){
+		int diffX, diffY, diffTot;
+		diffX = Math.abs(positionX - x);
+		diffY = Math.abs(positionY - y);
+		if(Consts.walkDiagonal){
+			diffTot = Math.max(diffX, diffY);
+		} else {
+			diffTot = diffX + diffY;
+		}
+		return diffTot;
+	}
+
 	/**
 	 * Checks if the new position is within reach to walk
 	 * @param x
@@ -68,10 +81,8 @@ public class GameObject {
 	 * @return true if the object can move to this position
 	 */
 	public boolean canMoveTo(int x, int y){
-		int diffX, diffY;
-		diffX = Math.abs(positionX - x);
-		diffY = Math.abs(positionY - y);
-		return (diffX + diffY) >= gameObjectType.getRadiusWalkMin() && (diffX + diffY) <= gameObjectType.getRadiusWalkMax();
+		int diffTot = getDiff(x, y);
+		return diffTot >= gameObjectType.getRadiusWalkMin() && diffTot <= gameObjectType.getRadiusWalkMax();
 	}
 
 	/**
@@ -81,10 +92,8 @@ public class GameObject {
 	 * @return true if the object can produce to this position
 	 */
 	public boolean canProduceTo(int x, int y){
-		int diffX, diffY;
-		diffX = Math.abs(positionX - x);
-		diffY = Math.abs(positionY - y);
-		return (diffX + diffY) >= gameObjectType.getRadiusProduceMin() && (diffX + diffY) <= gameObjectType.getRadiusProduceMax();
+		int diffTot = getDiff(x, y);
+		return diffTot >= gameObjectType.getRadiusProduceMin() && diffTot <= gameObjectType.getRadiusProduceMax();
 	}
 
 	/**
@@ -94,10 +103,8 @@ public class GameObject {
 	 * @return true if the object can fight this position
 	 */
 	public boolean canFightTo(int x, int y){
-		int diffX, diffY;
-		diffX = Math.abs(positionX - x);
-		diffY = Math.abs(positionY - y);
-		return (diffX + diffY) >= gameObjectType.getRadiusFightMin() && (diffX + diffY) <= gameObjectType.getRadiusFightMax();
+		int diffTot = getDiff(x, y);
+		return diffTot >= gameObjectType.getRadiusFightMin() && diffTot <= gameObjectType.getRadiusFightMax();
 	}
 
 	/**

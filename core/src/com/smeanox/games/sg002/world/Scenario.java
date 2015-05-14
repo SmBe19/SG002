@@ -16,14 +16,17 @@ public class Scenario {
 	private int maxPlayerCount;
 	private int mapSizeX;
 	private int mapSizeY;
+	private boolean walkDiagonal;
 
-	public Scenario(String id, String name, int startMoney, int maxPlayerCount, int mapSizeX, int mapSizeY) {
+	public Scenario(String id, String name, int startMoney, int maxPlayerCount, int mapSizeX,
+					int mapSizeY, boolean walkDiagonal) {
 		this.id = id;
 		this.name = name;
 		this.startMoney = startMoney;
 		this.maxPlayerCount = maxPlayerCount;
 		this.mapSizeX = mapSizeX;
 		this.mapSizeY = mapSizeY;
+		this.walkDiagonal = walkDiagonal;
 
 		idToScenario.put(id, this);
 	}
@@ -42,6 +45,10 @@ public class Scenario {
 
 	public int getMapSizeY() {
 		return mapSizeY;
+	}
+
+	public boolean isWalkDiagonal(){
+		return walkDiagonal;
 	}
 
 	/**

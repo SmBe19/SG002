@@ -159,9 +159,7 @@ public class GameScreen extends AbstractScreen {
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				aAction.actionType = Action.ActionType.MOVE;
-				setProduceButtonsVisible(false);
-				cancelButton.setActive(true);
+				startMove();
 			}
 		});
 		addGUIElement(b);
@@ -179,9 +177,7 @@ public class GameScreen extends AbstractScreen {
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				aAction.actionType = Action.ActionType.FIGHT;
-				setProduceButtonsVisible(false);
-				cancelButton.setActive(true);
+				startFight();
 			}
 		});
 		addGUIElement(b);
@@ -199,10 +195,7 @@ public class GameScreen extends AbstractScreen {
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				aAction.actionType = Action.ActionType.NONE;
-				setProduceButtonsVisible(true);
-				cancelButton.setActive(true);
-				setProduceButtonsActive(gameView.getActiveGameObject());
+				startProduce();
 			}
 		});
 		addGUIElement(b);
@@ -220,9 +213,7 @@ public class GameScreen extends AbstractScreen {
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				setProduceButtonsVisible(false);
-				aAction.actionType = Action.ActionType.NONE;
-				cancelButton.setActive(false);
+				cancelAction();
 			}
 		});
 		addGUIElement(b);
@@ -240,7 +231,7 @@ public class GameScreen extends AbstractScreen {
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				gameController.getActivePlayer().proposeEndPlaying();
+				proposeEndPlaying();
 			}
 		});
 		addGUIElement(b);
@@ -257,25 +248,24 @@ public class GameScreen extends AbstractScreen {
 		for(final GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()){
 			final int aNumFinal = aNum;
 			b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
-					gameObjectType.getName(), Color.BLACK, Color.WHITE,
-					Color.LIGHT_GRAY, Color.DARK_GRAY);
+					gameObjectType.getName() + " ("
+							+ Language.getStrings().format("gameScreen.currency", gameObjectType.getValue()) + ")",
+					Color.BLACK, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
 			b.setResizer(new Resizer() {
 				@Override
 				public Rectangle getNewSize(float width, float height) {
 					int aCol, aRow;
 					aCol = aNumFinal % cols;
 					aRow = aNumFinal / cols;
-					return new Rectangle(-(cols*205*Consts.devScaleX / 2) + aCol * 205*Consts.devScaleX,
+					return new Rectangle(-(cols*255*Consts.devScaleX / 2) + aCol * 255*Consts.devScaleX,
 							-(rows*40*Consts.devScaleY / 2) + aRow*40*Consts.devScaleY,
-							200*Consts.devScaleX, 40*Consts.devScaleY);
+							250*Consts.devScaleX, 40*Consts.devScaleY);
 				}
 			});
 			b.addClickHandler(new ClickHandler() {
 				@Override
 				public void onClick() {
-					aAction.actionType = Action.ActionType.PRODUCE;
-					aAction.produceGameObjectType = gameObjectType;
-					setProduceButtonsVisible(false);
+					selectProduceGameObjectType(gameObjectType);
 				}
 			});
 			addGUIElement(b);
@@ -322,34 +312,13 @@ public class GameScreen extends AbstractScreen {
 						switch (aAction.actionType){
 							case NONE:
 								gameView.setActiveByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
-								if (gameView.getActiveGameObject() != null
-										&& gameView.getActiveGameObject().getPlayer() == gameController.getActivePlayer()
-										&& !gameController.getGameWorld().wasUsed(gameView.getActiveX(), gameView.getActiveY())) {
-									setActionButtonsVisible(true);
-									setActionButtonsActive(gameView.getActiveGameObject());
-									setProduceButtonsVisible(false);
-
-									aAction.startX = gameView.getActiveX();
-									aAction.startY = gameView.getActiveY();
-								} else {
-									setActionButtonsVisible(false);
-									setProduceButtonsVisible(false);
-									aAction.actionType = Action.ActionType.NONE;
-								}
+								selectField(gameView.getActiveX(), gameView.getActiveY());
 								break;
 							case MOVE:
 							case FIGHT:
 							case PRODUCE:
 								vector2 = gameView.getFieldByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
-								aAction.endX = (int)vector2.x;
-								aAction.endY = (int)vector2.y;
-								if(gameController.getActivePlayer().proposeAction(aAction)) {
-									updateMoney();
-
-									setActionButtonsVisible(false);
-									setProduceButtonsVisible(false);
-									aAction.actionType = Action.ActionType.NONE;
-								}
+								finishAction((int)vector2.x, (int)vector2.y);
 								break;
 						}
 					}
@@ -432,5 +401,71 @@ public class GameScreen extends AbstractScreen {
 		vector3.y /= Consts.zoomStep;
 		setCameraPosition(vector3.x, vector3.y);
 		gameView.zoomOut();
+	}
+
+	private void startMove(){
+		aAction.actionType = Action.ActionType.MOVE;
+		setProduceButtonsVisible(false);
+		cancelButton.setActive(true);
+	}
+
+	private void startFight(){
+		aAction.actionType = Action.ActionType.FIGHT;
+		setProduceButtonsVisible(false);
+		cancelButton.setActive(true);
+	}
+
+	private void startProduce(){
+		aAction.actionType = Action.ActionType.NONE;
+		setProduceButtonsVisible(true);
+		cancelButton.setActive(true);
+		setProduceButtonsActive(gameView.getActiveGameObject());
+	}
+
+	private void cancelAction(){
+		setProduceButtonsVisible(false);
+		aAction.actionType = Action.ActionType.NONE;
+		cancelButton.setActive(false);
+	}
+
+	private void proposeEndPlaying(){
+		gameController.getActivePlayer().proposeEndPlaying();
+	}
+
+	private void selectProduceGameObjectType(GameObjectType gameObjectType){
+		aAction.actionType = Action.ActionType.PRODUCE;
+		aAction.produceGameObjectType = gameObjectType;
+		setProduceButtonsVisible(false);
+	}
+
+	private void selectField(int x, int y){
+		gameView.setActiveX(x);
+		gameView.setActiveY(y);
+		if (gameView.getActiveGameObject() != null
+				&& gameView.getActiveGameObject().getPlayer() == gameController.getActivePlayer()
+				&& !gameController.getGameWorld().wasUsed(x, y)) {
+			setActionButtonsVisible(true);
+			setActionButtonsActive(gameView.getActiveGameObject());
+			setProduceButtonsVisible(false);
+
+			aAction.startX = x;
+			aAction.startY = y;
+		} else {
+			setActionButtonsVisible(false);
+			setProduceButtonsVisible(false);
+			aAction.actionType = Action.ActionType.NONE;
+		}
+	}
+
+	private void finishAction(int x, int y){
+		aAction.endX = x;
+		aAction.endY = y;
+		if(gameController.getActivePlayer().proposeAction(aAction)) {
+			updateMoney();
+
+			setActionButtonsVisible(false);
+			setProduceButtonsVisible(false);
+			aAction.actionType = Action.ActionType.NONE;
+		}
 	}
 }

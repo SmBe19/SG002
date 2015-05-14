@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Assets;
@@ -23,6 +24,7 @@ public class GameView {
 	private float aFieldSizeY;
 	private int activeX;
 	private int activeY;
+	private TextureRegion backgroundRegions[][];
 
 	public GameView(GameWorld gameWorld){
 		this.gameWorld = gameWorld;
@@ -30,6 +32,21 @@ public class GameView {
 		activeY = -1;
 		zoom = 0.1f;
 		glyphLayout = new GlyphLayout();
+		initBackgroundRegions();
+	}
+
+	private void initBackgroundRegions(){
+		backgroundRegions = new TextureRegion[Consts.backgroundFieldsY][Consts.backgroundFieldsX];
+		int backgroundRegionWidth, backgroundRegionHeight;
+		backgroundRegionWidth = Assets.background.getWidth() / Consts.backgroundFieldsX;
+		backgroundRegionHeight = Assets.background.getHeight() / Consts.backgroundFieldsY;
+		for(int y = 0; y < Consts.backgroundFieldsY; y++){
+			for(int x = 0; x < Consts.backgroundFieldsX; x++){
+				backgroundRegions[Consts.backgroundFieldsY - y - 1][x] = new TextureRegion(Assets.background,
+						x * backgroundRegionWidth, y * backgroundRegionHeight,
+						backgroundRegionWidth, backgroundRegionHeight);
+			}
+		}
 	}
 
 	public float getZoom() {
@@ -111,6 +128,33 @@ public class GameView {
 	}
 
 	/**
+	 * renders the background
+	 * @param spriteBatch spriteBatch
+	 */
+	private void renderBackground(SpriteBatch spriteBatch){
+		spriteBatch.setColor(Color.WHITE);
+		for(int y = 0; y < gameWorld.getMapSizeY(); y++) {
+			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
+				spriteBatch.draw(backgroundRegions[y % Consts.backgroundFieldsY][x % Consts.backgroundFieldsX],
+						x * aFieldSizeX, y * aFieldSizeY, aFieldSizeX, aFieldSizeY);
+			}
+		}
+	}
+
+	/**
+	 * renders the grid
+	 * @param spriteBatch spriteBatch
+	 */
+	private void renderGrid(SpriteBatch spriteBatch){
+		spriteBatch.setColor(Consts.gridColor);
+		for(int y = 0; y < gameWorld.getMapSizeY(); y++) {
+			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
+				renderField(spriteBatch, Assets.grid, x, y);
+			}
+		}
+	}
+
+	/**
 	 * renders the GameWorld
 	 * @param spriteBatch
 	 */
@@ -118,20 +162,18 @@ public class GameView {
 		aFieldSizeX = (Consts.fieldSizeX * Consts.devScaleY * zoom);
 		aFieldSizeY = (Consts.fieldSizeY * Consts.devScaleY * zoom);
 
+		renderBackground(spriteBatch);
+		renderGrid(spriteBatch);
+
 		GameObject gameObject;
 		GameObject activeGameObject = gameWorld.getWorldMap(activeX, activeY);
 		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
 			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
-				spriteBatch.setColor(Color.WHITE);
-				renderField(spriteBatch, Assets.background, x, y);
 				gameObject = gameWorld.getWorldMap(x, y);
 				if(gameObject != null){
 					spriteBatch.setColor(gameObject.getPlayer().getColor());
 					if(gameWorld.wasUsed(x, y)){
-						spriteBatch.setColor(gameObject.getPlayer().getColor().r,
-								gameObject.getPlayer().getColor().g,
-								gameObject.getPlayer().getColor().b,
-								0.5f);
+						spriteBatch.setColor(Consts.usedColor);
 					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);
 
@@ -147,15 +189,15 @@ public class GameView {
 					renderField(spriteBatch, Assets.selection, x, y);
 				} else {
 					if (activeGameObject != null && activeGameObject.canMoveTo(x, y)) {
-						spriteBatch.setColor(activeGameObject.getPlayer().getColor());
+						spriteBatch.setColor(Consts.canMoveColor);
 						renderField(spriteBatch, Assets.possibleFieldMove, x, y);
 					}
 					if (activeGameObject != null && activeGameObject.canFightTo(x, y)) {
-						spriteBatch.setColor(activeGameObject.getPlayer().getColor());
+						spriteBatch.setColor(Consts.canFightColor);
 						renderField(spriteBatch, Assets.possibleFieldFight, x, y);
 					}
 					if (activeGameObject != null && activeGameObject.canProduceTo(x, y)) {
-						spriteBatch.setColor(activeGameObject.getPlayer().getColor());
+						spriteBatch.setColor(Consts.canProduceColor);
 						renderField(spriteBatch, Assets.possibleFieldProduce, x, y);
 					}
 				}

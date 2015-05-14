@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.world;
 
 import com.smeanox.games.sg002.player.Player;
+import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
 
 import java.util.Iterator;
@@ -22,6 +23,7 @@ public class GameController {
 	public GameController(Scenario scenario){
 		this.scenario = scenario;
 		players = new LinkedList<Player>();
+		Consts.walkDiagonal = scenario.isWalkDiagonal();
 		gameWorld = new GameWorld(scenario);
 	}
 
@@ -52,8 +54,8 @@ public class GameController {
 			playerIterator = players.iterator();
 		}
 		activePlayer = playerIterator.next();
-		fireOnNextPlayer(activePlayer);
 		gameWorld.startRound(activePlayer);
+		fireOnNextPlayer(activePlayer);
 		activePlayer.startPlaying();
 	}
 

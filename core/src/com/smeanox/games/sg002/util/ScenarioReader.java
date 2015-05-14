@@ -37,7 +37,8 @@ public class ScenarioReader {
 						scenario.getIntAttribute("startMoney"),
 						scenario.getIntAttribute("maxPlayerCount"),
 						scenario.getIntAttribute("mapSizeX"),
-						scenario.getIntAttribute("mapSizeY"));
+						scenario.getIntAttribute("mapSizeY"),
+						scenario.getBooleanAttribute("walkDiagonal"));
 				ids.add(scenario.getAttribute("id"));
 			}
 		} catch (IOException e) {

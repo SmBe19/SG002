@@ -1,5 +1,6 @@
 <Config>
     <Scenarios>
-        <Scenario id="main" name="scenario.main.name" startMoney="1000" maxPlayerCount="4" mapSizeX="10" mapSizeY="10"/>
+        <Scenario id="main" name="scenario.main.name" startMoney="1000" maxPlayerCount="4"
+                  mapSizeX="10" mapSizeY="10" walkDiagonal="true"/>
     </Scenarios>
 </Config>
