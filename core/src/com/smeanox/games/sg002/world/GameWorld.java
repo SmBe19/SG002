@@ -36,6 +36,9 @@ public class GameWorld {
 	}
 
 	public GameObject getWorldMap(int x, int y){
+		if(x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY){
+			return null;
+		}
 		return worldMap[y][x];
 	}
 
@@ -55,6 +58,8 @@ public class GameWorld {
 		} while(getWorldMap(x, y) != null);
 
 		worldMap[y][x] = new GameObject(gameObjectType, player);
+		worldMap[y][x].setPositionX(x);
+		worldMap[y][x].setPositionY(y);
 	}
 
 	/**
@@ -64,6 +69,36 @@ public class GameWorld {
 	public void startRound(Player activePlayer){
 		this.activePlayer = activePlayer;
 		usedGameObjects.clear();
+		activePlayer.addMoney(calcMoneyPerRound(activePlayer));
+	}
+
+	private int calcMoneyPerRound(Player activePlayer){
+		int sol = 0;
+		for(int y = 0; y < mapSizeY; y++){
+			for(int x = 0; x < mapSizeX; x++){
+				if(getWorldMap(x, y) != null && getWorldMap(x, y).getPlayer() == activePlayer){
+					sol += getWorldMap(x, y).getGameObjectType().getValuePerRound();
+				}
+			}
+		}
+		return sol;
+	}
+
+	/**
+	 * executes the given action
+	 * @param action the action
+	 * @return true if the action was successful
+	 */
+	public boolean doAction(Action action){
+		switch (action.actionType){
+			case MOVE:
+				return move(action.startX, action.startY, action.endX, action.endY);
+			case FIGHT:
+				return fight(action.startX, action.startY, action.endX, action.endY) < 0;
+			case PRODUCE:
+				return produce(action.startX, action.startY, action.endX, action.endY, action.produceGameObjectType);
+		}
+		return false;
 	}
 
 	/**
@@ -97,6 +132,13 @@ public class GameWorld {
 	 * @return true if it can be moved
 	 */
 	public boolean canMove(int startX, int startY, int endX, int endY){
+		if(startX < 0 || startY < 0 || startX >= mapSizeX || startY >= mapSizeY){
+			return false;
+		}
+		if(endX < 0 || endY < 0 || endX >= mapSizeX || endY >= mapSizeY){
+			return false;
+		}
+
 		GameObject gameObject = getWorldMap(startX, startY);
 		// there is no GameObject at the start
 		if(gameObject == null){
@@ -146,6 +188,13 @@ public class GameWorld {
 	 * @return true if it can produce
 	 */
 	public boolean canProduce(int startX, int startY, int endX, int endY, GameObjectType gameObjectType){
+		if(startX < 0 || startY < 0 || startX >= mapSizeX || startY >= mapSizeY){
+			return false;
+		}
+		if(endX < 0 || endY < 0 || endX >= mapSizeX || endY >= mapSizeY){
+			return false;
+		}
+
 		GameObject gameObject = getWorldMap(startX, startY);
 		// there is no GameObject at the start
 		if(gameObject == null){
@@ -205,6 +254,13 @@ public class GameWorld {
 	 * @return true if it can fight
 	 */
 	public boolean canFight(int startX, int startY, int endX, int endY){
+		if(startX < 0 || startY < 0 || startX >= mapSizeX || startY >= mapSizeY){
+			return false;
+		}
+		if(endX < 0 || endY < 0 || endX >= mapSizeX || endY >= mapSizeY){
+			return false;
+		}
+
 		GameObject gameObject = getWorldMap(startX, startY);
 		// there is no GameObject at the start
 		if(gameObject == null){
@@ -231,7 +287,7 @@ public class GameWorld {
 	 * @param startY start coordinates
 	 * @param endX end coordinates
 	 * @param endY end coordinates
-	 * @return tha amount of damage that was dealt
+	 * @return the difference in HP
 	 */
 	public int fight(int startX, int startY, int endX, int endY){
 		if(!canFight(startX, startY, endX, endY)){
@@ -239,6 +295,7 @@ public class GameWorld {
 		}
 		int damage = getWorldMap(startX, startY).fight(getWorldMap(endX, endY));
 		if(getWorldMap(endX, endY).getHp() <= 0){
+			activePlayer.addMoney(getWorldMap(endX, endY).getGameObjectType().getValueOnDestruction());
 			removeGameObject(endX, endY);
 		}
 		usedGameObjects.add(getWorldMap(startX, startY));

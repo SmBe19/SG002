@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.player;
 
 import com.badlogic.gdx.graphics.Color;
+import com.smeanox.games.sg002.world.Action;
 import com.smeanox.games.sg002.world.GameController;
 
 /**
@@ -28,6 +29,14 @@ public abstract class Player {
 	protected abstract void play();
 
 	public abstract void update(float delta);
+
+	public boolean proposeAction(Action action){
+		return false;
+	}
+
+	public boolean proposeEndPlaying(){
+		return false;
+	}
 
 	public void setGameController(GameController gameController) {
 		this.gameController = gameController;

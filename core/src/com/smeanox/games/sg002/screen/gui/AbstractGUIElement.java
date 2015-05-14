@@ -59,43 +59,6 @@ public abstract class AbstractGUIElement implements GUIElement {
 		return wasClicked;
 	}
 
-	protected void fireOnClick(){
-		if(clickHandlers != null) {
-			for (ClickHandler c : clickHandlers) {
-				c.onClick();
-			}
-		}
-	}
-
-	/**
-	 * adds a {@link ClickHandler}
-	 *
-	 * @param handler the ClickHandler
-	 */
-	@Override
-	public void addClickHandler(ClickHandler handler) {
-		if(clickHandlers == null){
-			clickHandlers = new LinkedList<ClickHandler>();
-		}
-		clickHandlers.add(handler);
-	}
-
-	/**
-	 * removes a {@link ClickHandler}
-	 *
-	 * @param handler the ClickHandler
-	 */
-	@Override
-	public void removeClickHandler(ClickHandler handler) {
-		if(clickHandlers == null){
-			return;
-		}
-		clickHandlers.remove(handler);
-		if(clickHandlers.isEmpty()){
-			clickHandlers = null;
-		}
-	}
-
 	/**
 	 * Returns the bounding box of this object
 	 * @return the bounding box
@@ -195,5 +158,42 @@ public abstract class AbstractGUIElement implements GUIElement {
 	@Override
 	public boolean isActive() {
 		return active;
+	}
+
+	protected void fireOnClick(){
+		if(clickHandlers != null) {
+			for (ClickHandler c : clickHandlers) {
+				c.onClick();
+			}
+		}
+	}
+
+	/**
+	 * adds a {@link ClickHandler}
+	 *
+	 * @param handler the ClickHandler
+	 */
+	@Override
+	public void addClickHandler(ClickHandler handler) {
+		if(clickHandlers == null){
+			clickHandlers = new LinkedList<ClickHandler>();
+		}
+		clickHandlers.add(handler);
+	}
+
+	/**
+	 * removes a {@link ClickHandler}
+	 *
+	 * @param handler the ClickHandler
+	 */
+	@Override
+	public void removeClickHandler(ClickHandler handler) {
+		if(clickHandlers == null){
+			return;
+		}
+		clickHandlers.remove(handler);
+		if(clickHandlers.isEmpty()){
+			clickHandlers = null;
+		}
 	}
 }

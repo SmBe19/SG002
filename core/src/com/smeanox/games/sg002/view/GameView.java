@@ -68,6 +68,17 @@ public class GameView {
 		return gameWorld.getWorldMap(activeX, activeY);
 	}
 
+	public Vector2 getFieldByPosition(float x, float y){
+		int newActiveX, newActiveY;
+		newActiveX = (int)(x / (Consts.fieldSizeX * Consts.devScaleY * zoom));
+		newActiveY = (int)(y / (Consts.fieldSizeX * Consts.devScaleY * zoom));
+		return new Vector2(newActiveX, newActiveY);
+	}
+
+	public Vector2 getFieldByPosition(Vector2 vector2){
+		return getFieldByPosition(vector2.x, vector2.y);
+	}
+
 	public void setActiveByPosition(float x, float y){
 		int newActiveX, newActiveY;
 		newActiveX = (int)(x / (Consts.fieldSizeX * Consts.devScaleY * zoom));
@@ -108,6 +119,7 @@ public class GameView {
 		aFieldSizeY = (Consts.fieldSizeY * Consts.devScaleY * zoom);
 
 		GameObject gameObject;
+		GameObject activeGameObject = gameWorld.getWorldMap(activeX, activeY);
 		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
 			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
 				spriteBatch.setColor(Color.WHITE);
@@ -115,18 +127,37 @@ public class GameView {
 				gameObject = gameWorld.getWorldMap(x, y);
 				if(gameObject != null){
 					spriteBatch.setColor(gameObject.getPlayer().getColor());
+					if(gameWorld.wasUsed(x, y)){
+						spriteBatch.setColor(gameObject.getPlayer().getColor().r,
+								gameObject.getPlayer().getColor().g,
+								gameObject.getPlayer().getColor().b,
+								0.5f);
+					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);
 
-					Assets.liberationSmall.bitmapFont.setColor(Consts.hpColor);
-					glyphLayout.setText(Assets.liberationSmall.bitmapFont, "" + gameObject.getHp());
-					Assets.liberationSmall.bitmapFont.draw(spriteBatch, glyphLayout,
+					Assets.liberationMicroShadow.bitmapFont.setColor(Consts.hpColor);
+					glyphLayout.setText(Assets.liberationMicroShadow.bitmapFont, "" + gameObject.getHp());
+					Assets.liberationMicroShadow.bitmapFont.draw(spriteBatch, glyphLayout,
 							x * aFieldSizeX + (aFieldSizeX - glyphLayout.width) / 2f,
-							y * aFieldSizeY + aFieldSizeY * 0.9f);
+							y * aFieldSizeY + aFieldSizeY * 0.95f);
 				}
 
 				if(x == activeX && y == activeY){
 					spriteBatch.setColor(activePlayer.getColor());
 					renderField(spriteBatch, Assets.selection, x, y);
+				} else {
+					if (activeGameObject != null && activeGameObject.canMoveTo(x, y)) {
+						spriteBatch.setColor(activeGameObject.getPlayer().getColor());
+						renderField(spriteBatch, Assets.possibleFieldMove, x, y);
+					}
+					if (activeGameObject != null && activeGameObject.canFightTo(x, y)) {
+						spriteBatch.setColor(activeGameObject.getPlayer().getColor());
+						renderField(spriteBatch, Assets.possibleFieldFight, x, y);
+					}
+					if (activeGameObject != null && activeGameObject.canProduceTo(x, y)) {
+						spriteBatch.setColor(activeGameObject.getPlayer().getColor());
+						renderField(spriteBatch, Assets.possibleFieldProduce, x, y);
+					}
 				}
 			}
 		}

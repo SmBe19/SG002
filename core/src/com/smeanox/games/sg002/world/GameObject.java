@@ -114,7 +114,7 @@ public class GameObject {
 	/**
 	 * Fights the given GameObject
 	 * @param gameObject the GameObject to fight against
-	 * @return the damage dealt
+	 * @return the difference in HP
 	 */
 	public int fight(GameObject gameObject){
 		if(!canFight(gameObject)){

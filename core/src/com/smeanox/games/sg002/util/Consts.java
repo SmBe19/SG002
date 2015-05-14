@@ -18,6 +18,8 @@ public class Consts {
 	/** The scale between devHeight and screenHeight */
 	public static float devScaleY = 1.0f;
 
+	/** The font size for micre */
+	public static final int fontSizeMicro = 12;
 	/** The font size for small */
 	public static final int fontSizeSmall = 22;
 	/** The font size for medium */
@@ -31,7 +33,7 @@ public class Consts {
 	public static final int fieldSizeY = 512;
 
 	/** The color to display the hp in */
-	public static final Color hpColor = Color.RED;
+	public static final Color hpColor = Color.WHITE;
 
 	/** The color for the different players */
 	public static final Color playerColors[] = new Color[]{Color.BLUE, Color.RED, Color.GREEN,

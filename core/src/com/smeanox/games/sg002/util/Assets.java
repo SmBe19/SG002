@@ -2,8 +2,8 @@ package com.smeanox.games.sg002.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -27,9 +27,17 @@ public class Assets {
 
 	/** selection */
 	public static Texture selection;
+	/** possible field for movement */
+	public static Texture possibleFieldMove;
+	/** possible field for fight */
+	public static Texture possibleFieldFight;
+	/** possible field for production */
+	public static Texture possibleFieldProduce;
 
 	/** liberation font */
 	public static FreeType liberation;
+	public static BitmapFontRapper liberationMicroShadow;
+	public static BitmapFontRapper liberationMicro;
 	public static BitmapFontRapper liberationSmall;
 	public static BitmapFontRapper liberationMedium;
 	public static BitmapFontRapper liberationLarge;
@@ -67,6 +75,9 @@ public class Assets {
 		manager.load("images/button.png", Texture.class);
 		manager.load("images/background.png", Texture.class);
 		manager.load("images/selection.png", Texture.class);
+		manager.load("images/possibleFieldMove.png", Texture.class);
+		manager.load("images/possibleFieldFight.png", Texture.class);
+		manager.load("images/possibleFieldProduce.png", Texture.class);
 	}
 
 	/**
@@ -107,6 +118,9 @@ public class Assets {
 		button = manager.get("images/button.png", Texture.class);
 		background = manager.get("images/background.png", Texture.class);
 		selection = manager.get("images/selection.png", Texture.class);
+		possibleFieldMove = manager.get("images/possibleFieldMove.png", Texture.class);
+		possibleFieldFight = manager.get("images/possibleFieldFight.png", Texture.class);
+		possibleFieldProduce = manager.get("images/possibleFieldProduce.png", Texture.class);
 
 		setGameObjectTypeTextures();
 
@@ -123,6 +137,12 @@ public class Assets {
 	 * Creates fonts on the fly for the active screen size
 	 */
 	public static void createFonts(){
+		if(liberationMicroShadow == null) {
+			liberationMicroShadow = new BitmapFontRapper();
+		}
+		if(liberationMicro == null) {
+			liberationMicro = new BitmapFontRapper();
+		}
 		if(liberationSmall == null) {
 			liberationSmall = new BitmapFontRapper();
 		}
@@ -146,12 +166,20 @@ public class Assets {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LiberationSans-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
+		parameter.size = (int)Math.ceil(Consts.fontSizeMicro * Consts.devScaleY);
+		liberationMicro.bitmapFont = generator.generateFont(parameter);
 		parameter.size = (int)Math.ceil(Consts.fontSizeSmall * Consts.devScaleY);
 		liberationSmall.bitmapFont = generator.generateFont(parameter);
 		parameter.size = (int)Math.ceil(Consts.fontSizeMedium * Consts.devScaleY);
 		liberationMedium.bitmapFont = generator.generateFont(parameter);
 		parameter.size = (int) Math.ceil(Consts.fontSizeLarge * Consts.devScaleY);
 		liberationLarge.bitmapFont = generator.generateFont(parameter);
+
+		parameter.size = (int)Math.ceil(Consts.fontSizeMicro * Consts.devScaleY);
+		parameter.shadowColor = Color.BLACK;
+		parameter.shadowOffsetX = (int)Math.ceil(0.5 * Consts.devScaleX);
+		parameter.shadowOffsetY = (int)Math.ceil(0.5 * Consts.devScaleY);
+		liberationMicroShadow.bitmapFont = generator.generateFont(parameter);
 
 		generator.dispose();
 	}

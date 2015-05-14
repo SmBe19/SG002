@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.screen.gui.Button;
 import com.smeanox.games.sg002.screen.gui.ClickHandler;
 import com.smeanox.games.sg002.screen.gui.Resizer;
@@ -37,8 +38,14 @@ import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.util.Language;
 import com.smeanox.games.sg002.view.GameView;
+import com.smeanox.games.sg002.world.Action;
 import com.smeanox.games.sg002.world.GameController;
 import com.smeanox.games.sg002.world.GameObject;
+import com.smeanox.games.sg002.world.GameObjectType;
+import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
+
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Main game screen. That's where the action happens.
@@ -47,6 +54,7 @@ import com.smeanox.games.sg002.world.GameObject;
 public class GameScreen extends AbstractScreen {
 	private GameView gameView;
 	private GameController gameController;
+	private Action aAction;
 
 	private boolean wasTouchDown;
 	private boolean wasDrag;
@@ -56,12 +64,41 @@ public class GameScreen extends AbstractScreen {
 	private Button moveButton;
 	private Button fightButton;
 	private Button produceButton;
+	private Button cancelButton;
+	private Button nextPlayerButton;
+	private Button moneyLabel;
+	private LinkedList<Button> produceButtons;
+	private HashMap<GameObjectType, Button> gameObjectTypeToProduceButton;
 
 	public GameScreen(GameController gameController){
 		super();
 		this.gameController = gameController;
 		gameView = new GameView(gameController.getGameWorld());
+		aAction = new Action();
+		aAction.actionType = Action.ActionType.NONE;
 
+		gameController.addNextPlayerHandler(new NextPlayerHandler() {
+			@Override
+			public void onNextPlayer(Player nextPlayer) {
+				updateMoney();
+			}
+		});
+
+		createUI();
+
+		vector2 = new Vector2();
+		vector3 = new Vector3();
+
+		moveCamera((gameController.getGameWorld().getMapSizeX() * Consts.fieldSizeX * gameView.getZoom()),
+				(gameController.getGameWorld().getMapSizeY() * Consts.fieldSizeY * gameView.getZoom()));
+
+		setActionButtonsVisible(false);
+		setProduceButtonsVisible(false);
+
+		gameController.startGame();
+	}
+
+	private void createUI() {
 		// GUI
 		Button b;
 		// +
@@ -96,6 +133,19 @@ public class GameScreen extends AbstractScreen {
 			}
 		});
 		addGUIElement(b);
+
+		// money
+		b = new Button(null, Assets.liberationMedium, Language.getStrings().format("gameScreen.currency", 0),
+				Color.BLACK, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
+		b.setResizer(new Resizer() {
+			@Override
+			public Rectangle getNewSize(float width, float height) {
+				return new Rectangle(width/2 - 200*Consts.devScaleX, -height/2 + 20*Consts.devScaleY, 150*Consts.devScaleX, 40*Consts.devScaleY);
+			}
+		});
+		addGUIElement(b);
+		moneyLabel = b;
+
 		// move
 		b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
 				Language.getStrings().get("gameScreen.move"), Color.BLACK, Color.WHITE,
@@ -109,7 +159,9 @@ public class GameScreen extends AbstractScreen {
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				// TODO add ClickHandler
+				aAction.actionType = Action.ActionType.MOVE;
+				setProduceButtonsVisible(false);
+				cancelButton.setActive(true);
 			}
 		});
 		addGUIElement(b);
@@ -127,7 +179,9 @@ public class GameScreen extends AbstractScreen {
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				// TODO add ClickHandler
+				aAction.actionType = Action.ActionType.FIGHT;
+				setProduceButtonsVisible(false);
+				cancelButton.setActive(true);
 			}
 		});
 		addGUIElement(b);
@@ -139,24 +193,96 @@ public class GameScreen extends AbstractScreen {
 		b.setResizer(new Resizer() {
 			@Override
 			public Rectangle getNewSize(float width, float height) {
-				return new Rectangle(-width / 2 + 360 * Consts.devScaleX, height / 2 - 50 * Consts.devScaleY, 150 * Consts.devScaleX, 40 * Consts.devScaleY);
+				return new Rectangle(-width / 2 + 20 * Consts.devScaleX, height / 2 - 100 * Consts.devScaleY, 150 * Consts.devScaleX, 40 * Consts.devScaleY);
 			}
 		});
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				// TODO add ClickHandler
+				aAction.actionType = Action.ActionType.NONE;
+				setProduceButtonsVisible(true);
+				cancelButton.setActive(true);
+				setProduceButtonsActive(gameView.getActiveGameObject());
 			}
 		});
 		addGUIElement(b);
 		produceButton = b;
+		// cancel
+		b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
+				Language.getStrings().get("gameScreen.cancel"), Color.BLACK, Color.WHITE,
+				Color.LIGHT_GRAY, Color.DARK_GRAY);
+		b.setResizer(new Resizer() {
+			@Override
+			public Rectangle getNewSize(float width, float height) {
+				return new Rectangle(-width / 2 + 190 * Consts.devScaleX, height / 2 - 100 * Consts.devScaleY, 150 * Consts.devScaleX, 40 * Consts.devScaleY);
+			}
+		});
+		b.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick() {
+				setProduceButtonsVisible(false);
+				aAction.actionType = Action.ActionType.NONE;
+				cancelButton.setActive(false);
+			}
+		});
+		addGUIElement(b);
+		cancelButton = b;
+		// nextPlayer
+		b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
+				Language.getStrings().get("gameScreen.nextPlayer"), Color.BLACK, Color.WHITE,
+				Color.LIGHT_GRAY, Color.DARK_GRAY);
+		b.setResizer(new Resizer() {
+			@Override
+			public Rectangle getNewSize(float width, float height) {
+				return new Rectangle(width / 2 - 220 * Consts.devScaleX, height / 2 - 50 * Consts.devScaleY, 200 * Consts.devScaleX, 40 * Consts.devScaleY);
+			}
+		});
+		b.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick() {
+				gameController.getActivePlayer().proposeEndPlaying();
+			}
+		});
+		addGUIElement(b);
+		nextPlayerButton = b;
 
-		vector2 = new Vector2();
-		vector3 = new Vector3();
-
-		setActionButtonsVisible(false);
-
-		gameController.startGame();
+		// produce buttons
+		produceButtons = new LinkedList<Button>();
+		gameObjectTypeToProduceButton = new HashMap<GameObjectType, Button>();
+		int aNum;
+		final int cols, rows;
+		aNum = 0;
+		cols = (int)Math.round(Math.sqrt(GameObjectType.getAllGameObjectTypes().size()/2.0));
+		rows = (int)Math.ceil((double)GameObjectType.getAllGameObjectTypes().size()/cols);
+		for(final GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()){
+			final int aNumFinal = aNum;
+			b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
+					gameObjectType.getName(), Color.BLACK, Color.WHITE,
+					Color.LIGHT_GRAY, Color.DARK_GRAY);
+			b.setResizer(new Resizer() {
+				@Override
+				public Rectangle getNewSize(float width, float height) {
+					int aCol, aRow;
+					aCol = aNumFinal % cols;
+					aRow = aNumFinal / cols;
+					return new Rectangle(-(cols*205*Consts.devScaleX / 2) + aCol * 205*Consts.devScaleX,
+							-(rows*40*Consts.devScaleY / 2) + aRow*40*Consts.devScaleY,
+							200*Consts.devScaleX, 40*Consts.devScaleY);
+				}
+			});
+			b.addClickHandler(new ClickHandler() {
+				@Override
+				public void onClick() {
+					aAction.actionType = Action.ActionType.PRODUCE;
+					aAction.produceGameObjectType = gameObjectType;
+					setProduceButtonsVisible(false);
+				}
+			});
+			addGUIElement(b);
+			produceButtons.add(b);
+			gameObjectTypeToProduceButton.put(gameObjectType, b);
+			aNum++;
+		}
 	}
 
 	/**
@@ -193,13 +319,38 @@ public class GameScreen extends AbstractScreen {
 			if(!wasDrag && wasTouchDown && !Gdx.input.isTouched()){
 				if(!wasClick) {
 					if(gameController.getActivePlayer().isShowGUI()) {
-						gameView.setActiveByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
-						if(gameView.getActiveGameObject() != null
-								&& gameView.getActiveGameObject().getPlayer() == gameController.getActivePlayer()) {
-							setActionButtonsVisible(true);
-							setActionButtonsActive(gameView.getActiveGameObject());
-						} else {
-							setActionButtonsVisible(false);
+						switch (aAction.actionType){
+							case NONE:
+								gameView.setActiveByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
+								if (gameView.getActiveGameObject() != null
+										&& gameView.getActiveGameObject().getPlayer() == gameController.getActivePlayer()
+										&& !gameController.getGameWorld().wasUsed(gameView.getActiveX(), gameView.getActiveY())) {
+									setActionButtonsVisible(true);
+									setActionButtonsActive(gameView.getActiveGameObject());
+									setProduceButtonsVisible(false);
+
+									aAction.startX = gameView.getActiveX();
+									aAction.startY = gameView.getActiveY();
+								} else {
+									setActionButtonsVisible(false);
+									setProduceButtonsVisible(false);
+									aAction.actionType = Action.ActionType.NONE;
+								}
+								break;
+							case MOVE:
+							case FIGHT:
+							case PRODUCE:
+								vector2 = gameView.getFieldByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
+								aAction.endX = (int)vector2.x;
+								aAction.endY = (int)vector2.y;
+								if(gameController.getActivePlayer().proposeAction(aAction)) {
+									updateMoney();
+
+									setActionButtonsVisible(false);
+									setProduceButtonsVisible(false);
+									aAction.actionType = Action.ActionType.NONE;
+								}
+								break;
 						}
 					}
 				}
@@ -210,16 +361,26 @@ public class GameScreen extends AbstractScreen {
 		wasTouchDown = Gdx.input.isTouched();
 	}
 
+	/**
+	 * Updates the money label
+	 */
+	private void updateMoney(){
+		moneyLabel.setText(Language.getStrings().format("gameScreen.currency", gameController.getActivePlayer().getMoney()));
+		moneyLabel.setTextColor(gameController.getActivePlayer().getColor());
+	}
+
 	private void setActionButtonsVisible(boolean visible){
 		moveButton.setVisible(visible);
 		fightButton.setVisible(visible);
 		produceButton.setVisible(visible);
+		cancelButton.setVisible(visible);
 	}
 
 	private void setActionButtonsActive(boolean active){
 		moveButton.setActive(active);
 		fightButton.setActive(active);
 		produceButton.setActive(active);
+		cancelButton.setActive(active);
 	}
 
 	/**
@@ -231,6 +392,30 @@ public class GameScreen extends AbstractScreen {
 		moveButton.setActive(activeGameObject.getGameObjectType().getRadiusWalkMax() > 0);
 		fightButton.setActive(activeGameObject.getGameObjectType().isCanFight());
 		produceButton.setActive(activeGameObject.getGameObjectType().isCanProduce());
+		cancelButton.setActive(false);
+	}
+
+	private void setProduceButtonsVisible(boolean visible){
+		for(Button b : produceButtons){
+			b.setVisible(visible);
+		}
+	}
+
+	private void setProduceButtonsActive(boolean active){
+		for(Button b : produceButtons){
+			b.setActive(active);
+		}
+	}
+
+	/**
+	 * activates only the buttons the active gameObject supports
+	 * @param activeGameObject the active GameObject
+	 */
+	private void setProduceButtonsActive(GameObject activeGameObject){
+		setProduceButtonsActive(false);
+		for(GameObjectType got : activeGameObject.getGameObjectType().getCanProduceList()){
+			gameObjectTypeToProduceButton.get(got).setActive(true);
+		}
 	}
 
 	private void zoomIn(){

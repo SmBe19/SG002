@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.world;
 
 import com.smeanox.games.sg002.player.Player;
+import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,6 +16,8 @@ public class GameController {
 	private LinkedList<Player> players;
 	private Iterator<Player> playerIterator;
 	private Player activePlayer;
+
+	private LinkedList<NextPlayerHandler> nextPlayerHandlers;
 
 	public GameController(Scenario scenario){
 		this.scenario = scenario;
@@ -49,6 +52,7 @@ public class GameController {
 			playerIterator = players.iterator();
 		}
 		activePlayer = playerIterator.next();
+		fireOnNextPlayer(activePlayer);
 		gameWorld.startRound(activePlayer);
 		activePlayer.startPlaying();
 	}
@@ -69,5 +73,40 @@ public class GameController {
 
 	public GameWorld getGameWorld() {
 		return gameWorld;
+	}
+
+	protected void fireOnNextPlayer(Player nextPlayer){
+		if(nextPlayerHandlers != null) {
+			for (NextPlayerHandler c : nextPlayerHandlers) {
+				c.onNextPlayer(nextPlayer);
+			}
+		}
+	}
+
+	/**
+	 * adds a {@link NextPlayerHandler}
+	 *
+	 * @param handler the NextPlayerHandler
+	 */
+	public void addNextPlayerHandler(NextPlayerHandler handler) {
+		if(nextPlayerHandlers == null){
+			nextPlayerHandlers = new LinkedList<NextPlayerHandler>();
+		}
+		nextPlayerHandlers.add(handler);
+	}
+
+	/**
+	 * removes a {@link NextPlayerHandler}
+	 *
+	 * @param handler the NextPlayerHandler
+	 */
+	public void removeNextPlayerHandler(NextPlayerHandler handler) {
+		if(nextPlayerHandlers == null){
+			return;
+		}
+		nextPlayerHandlers.remove(handler);
+		if(nextPlayerHandlers.isEmpty()){
+			nextPlayerHandlers = null;
+		}
 	}
 }
