@@ -6,9 +6,12 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.smeanox.games.sg002.screen.gui.AbstractGUIElement;
 import com.smeanox.games.sg002.screen.gui.GUIElement;
+import com.smeanox.games.sg002.screen.gui.Resizer;
 import com.smeanox.games.sg002.util.Consts;
 
 import java.util.LinkedList;
@@ -147,6 +150,69 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
+	 * layouts the given objects
+	 *
+	 * @param toLayout      list of objects to layout
+	 * @param cols          number of columns
+	 * @param rows          number of rows
+	 * @param orientationX  -1 -> left; 0 -> center; 1 -> right
+	 * @param orientationY  -1 -> bottom; 0 -> center; 1 -> top
+	 * @param startX        offset to the center of the screen relative to the size
+	 * @param startY        offset to the center of the screen relative to the size
+	 * @param elementWidth  width of one element
+	 * @param elementHeight height of one element
+	 * @param gapX          gap between two elements
+	 * @param gapY          gab between two elements
+	 */
+	protected void layout(LinkedList<? extends AbstractGUIElement> toLayout,
+						final int cols, final int rows,
+						int orientationX, int orientationY,
+						final float startX, final float startY,
+						final float elementWidth, final float elementHeight,
+						final float gapX, final float gapY) {
+		int aNum = 0;
+		final float offsetPosX, offsetPosY;
+		if (orientationX < 0) {
+			// left
+			offsetPosX = 0;
+		} else if (orientationX > 0) {
+			// right
+			offsetPosX = -((cols * (elementWidth + gapX) - gapX));
+		} else {
+			// center
+			offsetPosX = -((cols * (elementWidth + gapX) - gapX) / 2);
+		}
+		if (orientationY < 0) {
+			// bottom
+			offsetPosY = 0;
+		} else if (orientationY > 0) {
+			// top
+			offsetPosY = -((rows * (elementHeight + gapY) - gapY));
+		} else {
+			// center
+			offsetPosY = -((rows * (elementHeight + gapY) - gapY) / 2);
+		}
+		for (AbstractGUIElement e : toLayout) {
+			final int aNumFinal = aNum;
+			e.setResizer(new Resizer() {
+				@Override
+				public Rectangle getNewSize(float width, float height) {
+					int aCol, aRow;
+					aCol = aNumFinal % cols;
+					aRow = aNumFinal / cols;
+					float x, y, sWidth, sHeight;
+					x = (offsetPosX + aCol * (elementWidth + gapX)) * Consts.devScaleX + startX * width;
+					y = (offsetPosY + aRow * (elementHeight + gapY)) * Consts.devScaleY + startY * height;
+					sWidth = elementWidth * Consts.devScaleX;
+					sHeight = elementHeight * Consts.devScaleY;
+					return new Rectangle(x, y, sWidth, sHeight);
+				}
+			});
+			aNum++;
+		}
+	}
+
+	/**
 	 * moves the camera
 	 * @param x offset
 	 * @param y offset
@@ -157,10 +223,23 @@ public abstract class AbstractScreen implements Screen {
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
 
+	/**
+	 * sets the camera position
+	 * @param x position
+	 * @param y position
+	 */
 	protected void setCameraPosition(float x, float y){
 		camera.position.set(x, y, 0);
 		camera.update();
 		spriteBatch.setProjectionMatrix(camera.combined);
+	}
+
+	/**
+	 * sets the camera position
+	 * @param postition postition
+	 */
+	protected void setCameraPosition(Vector2 postition){
+		setCameraPosition(postition.x, postition.y);
 	}
 
 	/**

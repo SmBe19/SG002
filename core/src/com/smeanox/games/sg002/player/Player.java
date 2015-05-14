@@ -11,6 +11,7 @@ import com.smeanox.games.sg002.world.GameController;
 public abstract class Player {
 	protected GameController gameController;
 
+	protected String name;
 	protected int money;
 	protected boolean isPlaying;
 	protected Color color;
@@ -40,6 +41,14 @@ public abstract class Player {
 
 	public void setGameController(GameController gameController) {
 		this.gameController = gameController;
+	}
+
+	public final String getName(){
+		return name;
+	}
+
+	public final void setName(String name){
+		this.name = name;
 	}
 
 	public final int getMoney() {

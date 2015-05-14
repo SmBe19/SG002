@@ -8,3 +8,10 @@
  * {@link com.smeanox.games.sg002.player.Player} (Controller)
  */
 package com.smeanox.games.sg002;
+
+/*
+TODO: Save / Load
+TODO: Balancing
+TODO: AI
+TODO: Multyplayer
+ */

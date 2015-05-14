@@ -61,6 +61,9 @@ public class Consts {
 	/** Whether the GameObjects can move diagonal (different radius form) */
 	public static boolean walkDiagonal = false;
 
+	/** The minimal distance between two start GameObjects */
+	public static int startGameObjectMinDistance = 2;
+
 	private Consts(){
 	}
 

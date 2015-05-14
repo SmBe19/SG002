@@ -24,8 +24,9 @@
 
 package com.smeanox.games.sg002.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.smeanox.games.sg002.player.LocalPlayer;
@@ -39,53 +40,139 @@ import com.smeanox.games.sg002.util.Language;
 import com.smeanox.games.sg002.world.GameController;
 import com.smeanox.games.sg002.world.Scenario;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 /**
  * Menu screen
  * @author Benjamin Schmid
  */
 public class MenuScreen extends AbstractScreen {
 
+	private Scenario scenario;
+	private int playerCount;
+	private int processedPlayerNames;
+	private boolean displayDialog;
+	private LinkedList<String> playerNames;
+
+	private Button playerCountLabel;
+	private Button scenarioLabel;
+	private Button scenarioInfoLabel;
+
+	private Iterator<Scenario> scenarioIterator;
+
 	/** Constructor */
 	public MenuScreen(){
 		super();
 
-		// build menu
-		Button b;
+		playerCount = 2;
+		displayDialog = false;
+
+		generateGUI();
+
+		scenarioIterator = Scenario.getAllScenarios().iterator();
+		nextScenario();
+	}
+
+	private void generateGUI(){
+		LinkedList<Button> toLayout = new LinkedList<Button>();Button b;
+
+		// playerCountLabel
+		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, "playerCount",
+				Color.BLACK, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
+		b.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick() {
+				increasePlayerCount();
+			}
+		});
+		addGUIElement(b);
+		playerCountLabel = b;
+		toLayout.add(b);
+		// scenarioInfLabel
+		b = new Button(null, Assets.liberationSmall, "scenarioInfo",
+				Color.WHITE, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
+		addGUIElement(b);
+		scenarioInfoLabel = b;
+		toLayout.add(b);
+		// scenarioLabel
+		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, "scenarioName",
+				Color.BLACK, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
+		b.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick() {
+				nextScenario();
+			}
+		});
+		addGUIElement(b);
+		scenarioLabel = b;
+		toLayout.add(b);
 		// start game
 		b = new Button(new Sprite(Assets.button), Assets.liberationMedium,
 				Language.getStrings().get("menu.startGame"), Color.BLACK, Color.WHITE, Color.LIGHT_GRAY,
 				Color.DARK_GRAY);
-		b.setResizer(new Resizer() {
-			@Override
-			public Rectangle getNewSize(float width, float height) {
-				return new Rectangle(0 - 200 * Consts.devScaleX, height * 0.1f - 50 * Consts.devScaleY, 400 * Consts.devScaleX, 100 * Consts.devScaleY);
-			}
-		});
 		b.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick() {
-				Scenario scenario = Scenario.getScanarioById("main");
-				GameController gameController = new GameController(scenario);
-				for(int i = 0; i < scenario.getMaxPlayerCount(); i++){
-					Player player = new LocalPlayer();
-					gameController.addPlayer(player);
-					player.setColor(Consts.playerColors[i % Consts.playerColors.length]);
-					player.setShowGUI(player instanceof LocalPlayer);
-				}
-				ScreenManager.showGame(gameController);
+				prepareStart();
 			}
 		});
 		addGUIElement(b);
+		toLayout.add(b);
 		// game name
 		b = new Button(null, Assets.liberationLarge, Language.getStrings().get("game.name"),
 				Color.ORANGE, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
-		b.setResizer(new Resizer() {
-			@Override
-			public Rectangle getNewSize(float width, float height) {
-				return new Rectangle(0 - 200 * Consts.devScaleX, height * 0.4f - 50 * Consts.devScaleY, 400 * Consts.devScaleX, 100 * Consts.devScaleY);
-			}
-		});
 		addGUIElement(b);
+		toLayout.add(b);
+
+		layout(toLayout, 1, 5, 0, 0, 0, 0, 300, 60, 0, 30);
+
+		toLayout.clear();
+	}
+
+	/**
+	 * cycles through scenarios
+	 */
+	private void nextScenario(){
+		if(!scenarioIterator.hasNext()){
+			scenarioIterator = Scenario.getAllScenarios().iterator();
+		}
+		scenario = scenarioIterator.next();
+		playerCount = Math.min(playerCount, scenario.getMaxPlayerCount());
+
+		setScenarioLabelText();
+		setPlayerCountText();
+	}
+
+	/**
+	 * increases the playerCount and resets it if its too high
+	 */
+	private void increasePlayerCount(){
+		playerCount++;
+		if(playerCount > scenario.getMaxPlayerCount()){
+			playerCount = 2;
+		}
+
+		setPlayerCountText();
+	}
+
+	/**
+	 * Sets the text on the scenarioLabel to the active scenario's name
+	 */
+	private void setScenarioLabelText(){
+		scenarioLabel.setText(scenario.getName());
+		scenarioInfoLabel.setText(Language.getStrings().format("menu.scenarioInfo",
+				scenario.getMapSizeX(), scenario.getMapSizeY(), scenario.getStartMoney(), scenario.getMaxPlayerCount()));
+	}
+
+	private void setPlayerCountText(){
+		playerCountLabel.setText(Language.getStrings().format("menu.playerCount", playerCount, scenario.getMaxPlayerCount()));
+	}
+
+	/**
+	 * loads a saved game
+	 */
+	private void resumeGame(){
 	}
 
 	/**
@@ -97,5 +184,56 @@ public class MenuScreen extends AbstractScreen {
 		clearScreen();
 		updateGUI(delta, false);
 		renderGUI(delta);
+
+		if(processedPlayerNames >= playerCount){
+			startGame();
+		} else if(displayDialog){
+			Gdx.input.getTextInput(new PlayerNameListener(processedPlayerNames),
+					Language.getStrings().get("menu.playerName.dialog"),
+					playerNames.get(processedPlayerNames), "");
+			displayDialog = false;
+		}
+	}
+
+	private void prepareStart(){
+		playerNames = new LinkedList<String>();
+		for(int i = 0; i < playerCount; i++){
+			playerNames.add(Language.getStrings().format("menu.playerName.default", (i+1)));
+		}
+		displayDialog = true;
+		processedPlayerNames = 0;
+	}
+
+	private void startGame(){
+		GameController gameController = new GameController(scenario);
+		for(int i = 0; i < playerCount; i++){
+			Player player = new LocalPlayer();
+			gameController.addPlayer(player);
+			player.setColor(Consts.playerColors[i % Consts.playerColors.length]);
+			player.setShowGUI(player instanceof LocalPlayer);
+			player.setName(playerNames.get(i));
+		}
+		ScreenManager.showGame(gameController);
+	}
+
+	private class PlayerNameListener implements Input.TextInputListener{
+		private int player;
+
+		public PlayerNameListener(int player){
+			this.player = player;
+		}
+
+		@Override
+		public void input(String text) {
+			playerNames.set(player, text);
+			processedPlayerNames++;
+			displayDialog = true;
+		}
+
+		@Override
+		public void canceled() {
+			processedPlayerNames = -1;
+			displayDialog = false;
+		}
 	}
 }

@@ -19,7 +19,6 @@ public class ScenarioReader {
 	private ScenarioReader(){
 	}
 
-
 	/**
 	 * Reads all the Scenarios from the given file
 	 * @param file file to read from
@@ -38,7 +37,8 @@ public class ScenarioReader {
 						scenario.getIntAttribute("maxPlayerCount"),
 						scenario.getIntAttribute("mapSizeX"),
 						scenario.getIntAttribute("mapSizeY"),
-						scenario.getBooleanAttribute("walkDiagonal"));
+						scenario.getBooleanAttribute("walkDiagonal"),
+						scenario.getIntAttribute("startGameObjectMinDistance"));
 				ids.add(scenario.getAttribute("id"));
 			}
 		} catch (IOException e) {

@@ -23,7 +23,10 @@ public class GameController {
 	public GameController(Scenario scenario){
 		this.scenario = scenario;
 		players = new LinkedList<Player>();
+
 		Consts.walkDiagonal = scenario.isWalkDiagonal();
+		Consts.startGameObjectMinDistance = scenario.getStartGameObjectMinDistance();
+
 		gameWorld = new GameWorld(scenario);
 	}
 

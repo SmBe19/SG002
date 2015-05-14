@@ -2,6 +2,7 @@ package com.smeanox.games.sg002.world;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.smeanox.games.sg002.player.Player;
+import com.smeanox.games.sg002.util.Consts;
 
 import java.util.HashSet;
 
@@ -55,11 +56,34 @@ public class GameWorld {
 		do{
 			x = MathUtils.random(mapSizeX-1);
 			y = MathUtils.random(mapSizeY-1);
-		} while(getWorldMap(x, y) != null);
+		} while(!canAddStartGameObject(x, y));
 
 		worldMap[y][x] = new GameObject(gameObjectType, player);
 		worldMap[y][x].setPositionX(x);
 		worldMap[y][x].setPositionY(y);
+	}
+
+	/**
+	 * Checks if the startGameObject can be placed here
+	 * @param px position
+	 * @param py position
+	 * @return true if it is possible
+	 */
+	private boolean canAddStartGameObject(int px, int py){
+		if(px < 0 || py < 0 || px >= mapSizeX || py >= mapSizeY){
+			return false;
+		}
+		for(int y = py - Consts.startGameObjectMinDistance; y <= py + Consts.startGameObjectMinDistance; y++){
+			for(int x = px - Consts.startGameObjectMinDistance; x <= px + Consts.startGameObjectMinDistance; x++){
+				if(x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY){
+					continue;
+				}
+				if(getWorldMap(x, y) != null){
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**

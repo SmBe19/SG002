@@ -88,12 +88,19 @@ public class GameView {
 	public Vector2 getFieldByPosition(float x, float y){
 		int newActiveX, newActiveY;
 		newActiveX = (int)(x / (Consts.fieldSizeX * Consts.devScaleY * zoom));
-		newActiveY = (int)(y / (Consts.fieldSizeX * Consts.devScaleY * zoom));
+		newActiveY = (int)(y / (Consts.fieldSizeY * Consts.devScaleY * zoom));
 		return new Vector2(newActiveX, newActiveY);
 	}
 
 	public Vector2 getFieldByPosition(Vector2 vector2){
 		return getFieldByPosition(vector2.x, vector2.y);
+	}
+
+	public Vector2 getPositionByField(int x, int y){
+		float positionX, positionY;
+		positionX = x * Consts.fieldSizeX * Consts.devScaleY * zoom;
+		positionY = y * Consts.fieldSizeX * Consts.devScaleY * zoom;
+		return new Vector2(positionX, positionY);
 	}
 
 	public void setActiveByPosition(float x, float y){

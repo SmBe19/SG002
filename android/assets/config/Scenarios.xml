@@ -1,6 +1,16 @@
 <Config>
     <Scenarios>
-        <Scenario id="main" name="scenario.main.name" startMoney="1000" maxPlayerCount="4"
-                  mapSizeX="10" mapSizeY="10" walkDiagonal="true"/>
+        <Scenario id="small" name="scenario.small.name" startMoney="1000" maxPlayerCount="2"
+                  mapSizeX="10" mapSizeY="10" walkDiagonal="true" startGameObjectMinDistance="2"/>
+        <Scenario id="big" name="scenario.big.name" startMoney="1000" maxPlayerCount="8"
+                  mapSizeX="20" mapSizeY="20" walkDiagonal="true" startGameObjectMinDistance="4"/>
+        <Scenario id="bigPlenty" name="scenario.bigPlenty.name" startMoney="100000" maxPlayerCount="8"
+                  mapSizeX="20" mapSizeY="20" walkDiagonal="true" startGameObjectMinDistance="4"/>
+        <Scenario id="bigLittle" name="scenario.bigLittle.name" startMoney="50" maxPlayerCount="8"
+                  mapSizeX="20" mapSizeY="20" walkDiagonal="true" startGameObjectMinDistance="4"/>
+        <Scenario id="vast" name="scenario.vast.name" startMoney="1000" maxPlayerCount="32"
+                  mapSizeX="50" mapSizeY="50" walkDiagonal="true" startGameObjectMinDistance="5"/>
+        <Scenario id="giant" name="scenario.giant.name" startMoney="1000" maxPlayerCount="64"
+                  mapSizeX="200" mapSizeY="200" walkDiagonal="true" startGameObjectMinDistance="8"/>
     </Scenarios>
 </Config>
