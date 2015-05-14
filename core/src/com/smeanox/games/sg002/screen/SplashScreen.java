@@ -16,7 +16,7 @@ public class SplashScreen extends AbstractScreen {
 	public static Sprite smeanox;
 
 	/** how long the splash screen is shown in seconds */
-	private final float splashDuration = 0.4f;
+	private final float splashDuration = 4f;
 	/** how many seconds already passed */
 	private float timePassed;
 

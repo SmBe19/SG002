@@ -1,7 +1,10 @@
 package com.smeanox.games.sg002.world;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Describes a Scenario
@@ -75,10 +78,31 @@ public class Scenario {
 	}
 
 	/**
-	 * returns all Scenarios
-	 * @return a Collection of all Scenarios
+	 * returns all Scenarios sorted
+	 * @return a List of all Scenarios
 	 */
 	public static Collection<Scenario> getAllScenarios(){
 		return idToScenario.values();
+	}
+
+	/**
+	 * returns all Scenarios sorted
+	 * @return a List of all Scenarios
+	 */
+	public static LinkedList<Scenario> getAllScenariosSorted(){
+		LinkedList<Scenario> scenarios = new LinkedList<Scenario>(idToScenario.values());
+		Collections.sort(scenarios, new Comparator<Scenario>() {
+			@Override
+			public int compare(Scenario o1, Scenario o2) {
+				if(o1.getMaxPlayerCount() != o2.getMaxPlayerCount()){
+					return o1.getMaxPlayerCount() - o2.getMaxPlayerCount();
+				}
+				if(o1.getStartMoney() != o2.getStartMoney()){
+					return o1.getStartMoney() - o2.getStartMoney();
+				}
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		return scenarios;
 	}
 }

@@ -57,9 +57,13 @@ public class GameController {
 			playerIterator = players.iterator();
 		}
 		activePlayer = playerIterator.next();
-		gameWorld.startRound(activePlayer);
-		fireOnNextPlayer(activePlayer);
-		activePlayer.startPlaying();
+		if(gameWorld.isPlayerStillAlive(activePlayer)) {
+			gameWorld.startRound(activePlayer);
+			fireOnNextPlayer(activePlayer);
+			activePlayer.startPlaying();
+		} else {
+			finishedRound();
+		}
 	}
 
 	/**

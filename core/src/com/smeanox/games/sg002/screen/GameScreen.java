@@ -224,7 +224,7 @@ public class GameScreen extends AbstractScreen {
 		int cols, rows;
 		cols = (int) Math.round(Math.sqrt(GameObjectType.getAllGameObjectTypes().size() / 2.0));
 		rows = (int) Math.ceil((double) GameObjectType.getAllGameObjectTypes().size() / cols);
-		for (final GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()) {
+		for (final GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypesSorted()) {
 			b = new Button(new Sprite(Assets.button), Assets.liberationSmall,
 					gameObjectType.getName() + " ("
 							+ Language.getStrings().format("gameScreen.currency", gameObjectType.getValue()) + ")",
@@ -363,14 +363,16 @@ public class GameScreen extends AbstractScreen {
 	}
 
 	/**
-	 * activates only the buttons the active gameObject supports
+	 * activates only the buttons the active gameObject supports and the player can afford
 	 *
 	 * @param activeGameObject the active GameObject
 	 */
 	private void setProduceButtonsActive(GameObject activeGameObject) {
 		setProduceButtonsActive(false);
 		for (GameObjectType got : activeGameObject.getGameObjectType().getCanProduceList()) {
-			gameObjectTypeToProduceButton.get(got).setActive(true);
+			if(gameController.getActivePlayer().getMoney() >= got.getValue()) {
+				gameObjectTypeToProduceButton.get(got).setActive(true);
+			}
 		}
 	}
 

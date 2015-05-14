@@ -28,12 +28,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 import com.smeanox.games.sg002.player.LocalPlayer;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.screen.gui.Button;
 import com.smeanox.games.sg002.screen.gui.ClickHandler;
-import com.smeanox.games.sg002.screen.gui.Resizer;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.util.Language;
@@ -70,7 +68,7 @@ public class MenuScreen extends AbstractScreen {
 
 		generateGUI();
 
-		scenarioIterator = Scenario.getAllScenarios().iterator();
+		scenarioIterator = Scenario.getAllScenariosSorted().iterator();
 		nextScenario();
 	}
 
@@ -135,7 +133,7 @@ public class MenuScreen extends AbstractScreen {
 	 */
 	private void nextScenario(){
 		if(!scenarioIterator.hasNext()){
-			scenarioIterator = Scenario.getAllScenarios().iterator();
+			scenarioIterator = Scenario.getAllScenariosSorted().iterator();
 		}
 		scenario = scenarioIterator.next();
 		playerCount = Math.min(playerCount, scenario.getMaxPlayerCount());

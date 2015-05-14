@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * Defines stats &amp; co. for a GameObjectTye
@@ -170,10 +173,25 @@ public class GameObjectType {
 
 	/**
 	 * returns all GameObjectTypes
-	 * @return a Collection of all GameObjectTypes
+	 * @return a List of all GameObjectTypes
 	 */
 	public static Collection<GameObjectType> getAllGameObjectTypes(){
 		return idToGameObjectType.values();
+	}
+
+	/**
+	 * returns all GameObjectTypes sorted
+	 * @return a List of all GameObjectTypes
+	 */
+	public static LinkedList<GameObjectType> getAllGameObjectTypesSorted(){
+		LinkedList<GameObjectType> gameObjectTypes = new LinkedList<GameObjectType>(idToGameObjectType.values());
+		Collections.sort(gameObjectTypes, new Comparator<GameObjectType>() {
+			@Override
+			public int compare(GameObjectType o1, GameObjectType o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		return gameObjectTypes;
 	}
 
 	public static GameObjectType getStartGameObjectType() {

@@ -126,6 +126,22 @@ public class GameWorld {
 	}
 
 	/**
+	 * Checks if a player is still alive
+	 * @param player the player
+	 * @return true if the player didn't lose yet
+	 */
+	public boolean isPlayerStillAlive(Player player){
+		for(int y = 0; y < mapSizeY; y++){
+			for(int x = 0; x < mapSizeX; x++){
+				if(getWorldMap(x, y) != null && getWorldMap(x, y).getPlayer() == player){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Checks if the given GameObject was used
 	 * @param x coordinates
 	 * @param y coordinates
@@ -320,9 +336,22 @@ public class GameWorld {
 		int damage = getWorldMap(startX, startY).fight(getWorldMap(endX, endY));
 		if(getWorldMap(endX, endY).getHp() <= 0){
 			activePlayer.addMoney(getWorldMap(endX, endY).getGameObjectType().getValueOnDestruction());
+			Player otherPlayer = getWorldMap(endX, endY).getPlayer();
 			removeGameObject(endX, endY);
+			if(!isPlayerStillAlive(otherPlayer)){
+				conquerPlayer(activePlayer, otherPlayer);
+			}
 		}
 		usedGameObjects.add(getWorldMap(startX, startY));
 		return damage;
+	}
+
+	/**
+	 * Conquers a player
+	 * @param conqueror the winner
+	 * @param loser the loser
+	 */
+	private void conquerPlayer(Player conqueror, Player loser){
+		conqueror.addMoney(loser.getMoney());
 	}
 }

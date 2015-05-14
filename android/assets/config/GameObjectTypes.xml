@@ -1,8 +1,8 @@
 <Config>
     <GameObjectTypes>
         <GameObjectType id="townCenter" name="gameObjectType.townCenter.name" texture="images/townCenter.png" start="true">
-            <HP defaultHP="1000"/>
-            <Value value="100" valuePerRound="100" valueOnDestruction="100"/>
+            <HP defaultHP="250"/>
+            <Value value="500" valuePerRound="10" valueOnDestruction="100"/>
             <Radius radiusWalkMin="0" radiusWalkMax="0" radiusProduceMin="1" radiusProduceMax="2" radiusFightMin="0" radiusFightMax="0"/>
             <DamageTable canFight="false"/>
             <CanProduce canProduce="true">
@@ -13,7 +13,7 @@
             </CanProduce>
         </GameObjectType>
         <GameObjectType id="villager" name="gameObjectType.villager.name" texture="images/villager.png">
-            <HP defaultHP="20"/>
+            <HP defaultHP="30"/>
             <Value value="10" valuePerRound="1" valueOnDestruction="1"/>
             <Radius radiusWalkMin="0" radiusWalkMax="2" radiusProduceMin="1" radiusProduceMax="1" radiusFightMin="0" radiusFightMax="2"/>
             <DamageTable canFight="true">
@@ -30,51 +30,51 @@
             </CanProduce>
         </GameObjectType>
         <GameObjectType id="goldMine" name="gameObjectType.goldMine.name" texture="images/goldMine.png">
-            <HP defaultHP="100"/>
-            <Value value="25" valuePerRound="250" valueOnDestruction="50"/>
+            <HP defaultHP="50"/>
+            <Value value="500" valuePerRound="200" valueOnDestruction="50"/>
             <Radius radiusWalkMin="0" radiusWalkMax="0" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="0" radiusFightMax="0"/>
             <DamageTable canFight="false"/>
             <CanProduce canProduce="false"/>
         </GameObjectType>
         <GameObjectType id="knight" name="gameObjectType.knight.name" texture="images/knight.png">
-            <HP defaultHP="50"/>
-            <Value value="100" valuePerRound="5" valueOnDestruction="5"/>
-            <Radius radiusWalkMin="0" radiusWalkMax="5" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="0" radiusFightMax="3"/>
+            <HP defaultHP="75"/>
+            <Value value="100" valuePerRound="5" valueOnDestruction="75"/>
+            <Radius radiusWalkMin="0" radiusWalkMax="4" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="0" radiusFightMax="2"/>
             <DamageTable canFight="true">
-                <Damage gameObjectType="townCenter" value="10"/>
-                <Damage gameObjectType="villager" value="5"/>
-                <Damage gameObjectType="goldMine" value="10"/>
-                <Damage gameObjectType="knight" value="10"/>
+                <Damage gameObjectType="townCenter" value="40"/>
+                <Damage gameObjectType="villager" value="10"/>
+                <Damage gameObjectType="goldMine" value="20"/>
+                <Damage gameObjectType="knight" value="20"/>
                 <Damage gameObjectType="archer" value="5"/>
-                <Damage gameObjectType="infantry" value="20"/>
+                <Damage gameObjectType="infantry" value="25"/>
             </DamageTable>
             <CanProduce canProduce="false"/>
         </GameObjectType>
         <GameObjectType id="archer" name="gameObjectType.archer.name" texture="images/archer.png">
             <HP defaultHP="25"/>
-            <Value value="50" valuePerRound="5" valueOnDestruction="5"/>
-            <Radius radiusWalkMin="0" radiusWalkMax="3" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="3" radiusFightMax="5"/>
+            <Value value="50" valuePerRound="5" valueOnDestruction="30"/>
+            <Radius radiusWalkMin="0" radiusWalkMax="3" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="4" radiusFightMax="5"/>
             <DamageTable canFight="true">
-                <Damage gameObjectType="townCenter" value="10"/>
-                <Damage gameObjectType="villager" value="5"/>
+                <Damage gameObjectType="townCenter" value="20"/>
+                <Damage gameObjectType="villager" value="10"/>
                 <Damage gameObjectType="goldMine" value="10"/>
-                <Damage gameObjectType="knight" value="20"/>
-                <Damage gameObjectType="archer" value="10"/>
-                <Damage gameObjectType="infantry" value="5"/>
+                <Damage gameObjectType="knight" value="30"/>
+                <Damage gameObjectType="archer" value="20"/>
+                <Damage gameObjectType="infantry" value="10"/>
             </DamageTable>
             <CanProduce canProduce="false"/>
         </GameObjectType>
         <GameObjectType id="infantry" name="gameObjectType.infantry.name" texture="images/infantry.png">
-            <HP defaultHP="20"/>
-            <Value value="20" valuePerRound="5" valueOnDestruction="5"/>
+            <HP defaultHP="50"/>
+            <Value value="25" valuePerRound="5" valueOnDestruction="20"/>
             <Radius radiusWalkMin="0" radiusWalkMax="2" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="0" radiusFightMax="2"/>
             <DamageTable canFight="true">
-                <Damage gameObjectType="townCenter" value="10"/>
-                <Damage gameObjectType="villager" value="5"/>
-                <Damage gameObjectType="goldMine" value="10"/>
-                <Damage gameObjectType="knight" value="5"/>
-                <Damage gameObjectType="archer" value="20"/>
-                <Damage gameObjectType="infantry" value="10"/>
+                <Damage gameObjectType="townCenter" value="30"/>
+                <Damage gameObjectType="villager" value="10"/>
+                <Damage gameObjectType="goldMine" value="30"/>
+                <Damage gameObjectType="knight" value="15"/>
+                <Damage gameObjectType="archer" value="25"/>
+                <Damage gameObjectType="infantry" value="20"/>
             </DamageTable>
             <CanProduce canProduce="false"/>
         </GameObjectType>

@@ -44,6 +44,8 @@ public class Assets {
 	public static BitmapFontRapper liberationMedium;
 	public static BitmapFontRapper liberationLarge;
 
+	private static boolean finishedCompletly;
+
 	private Assets(){
 	}
 
@@ -81,6 +83,8 @@ public class Assets {
 		manager.load("images/possibleFieldMove.png", Texture.class);
 		manager.load("images/possibleFieldFight.png", Texture.class);
 		manager.load("images/possibleFieldProduce.png", Texture.class);
+
+		finishedCompletly = false;
 	}
 
 	/**
@@ -98,7 +102,10 @@ public class Assets {
 	 */
 	public static boolean loadAssets(){
 		if(manager.update()){
-			finishedLoading();
+			if(!finishedCompletly) {
+				finishedLoading();
+				return false;
+			}
 			return true;
 		}
 		return false;
@@ -129,6 +136,8 @@ public class Assets {
 		setGameObjectTypeTextures();
 
 		createFonts();
+
+		finishedCompletly = true;
 	}
 
 	private static void setGameObjectTypeTextures(){
