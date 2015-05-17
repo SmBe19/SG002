@@ -1,9 +1,12 @@
 package com.smeanox.games.sg002.world;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlWriter;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Consts;
 
+import java.io.IOException;
 import java.util.HashSet;
 
 /**
@@ -20,12 +23,16 @@ public class GameWorld {
 	private HashSet<GameObject> usedGameObjects;
 
 	public GameWorld(Scenario scenario){
+		initScenario(scenario);
+
+		usedGameObjects = new HashSet<GameObject>();
+	}
+
+	public void initScenario(Scenario scenario){
 		mapSizeX = scenario.getMapSizeX();
 		mapSizeY = scenario.getMapSizeY();
 
 		worldMap = new GameObject[mapSizeY][mapSizeX];
-
-		usedGameObjects = new HashSet<GameObject>();
 	}
 
 	public int getMapSizeX() {
@@ -353,5 +360,51 @@ public class GameWorld {
 	 */
 	private void conquerPlayer(Player conqueror, Player loser){
 		conqueror.addMoney(loser.getMoney());
+	}
+
+	/**
+	 * Saves the GameWorld
+	 * @param writer the XmlWriter
+	 */
+	public void save(XmlWriter writer) throws IOException {
+		writer.element("GameObjects");
+		for(int y = 0; y < mapSizeY; y++){
+			for(int x = 0; x < mapSizeX; x++){
+				if(getWorldMap(x, y) != null){
+					writer.element("GameObject");
+					if(getWorldMap(x, y).getPositionX() != x || getWorldMap(x, y).getPositionY() != y){
+						throw new IOException("Position in worldMap and gameObject doesn't correspond!");
+					}
+					getWorldMap(x, y).save(writer);
+					writer.pop();
+				}
+			}
+		}
+		writer.pop();
+		writer.element("UsedGameObjects");
+		for(GameObject gameObject : usedGameObjects){
+			writer.element("UsedGameObject");
+			writer.attribute("x", gameObject.getPositionX());
+			writer.attribute("y", gameObject.getPositionY());
+			writer.pop();
+		}
+		writer.pop();
+	}
+
+	/**
+	 * loads the GameWorld
+	 * @param reader the XmlReader.Element
+	 */
+	public void load(XmlReader.Element reader){
+		worldMap = new GameObject[mapSizeY][mapSizeX];
+		XmlReader.Element gameObjects = reader.getChildByName("GameObjects");
+		for(XmlReader.Element gameObjectXML : gameObjects.getChildrenByName("GameObject")){
+			GameObject gameObject = new GameObject(gameObjectXML);
+			worldMap[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
+		}
+		XmlReader.Element usedGameObjectsXML = reader.getChildByName("UsedGameObjects");
+		for(XmlReader.Element usedGameObject : usedGameObjectsXML.getChildrenByName("UsedGameObject")){
+			usedGameObjects.add(getWorldMap(usedGameObject.getIntAttribute("x"), usedGameObject.getIntAttribute("y")));
+		}
 	}
 }

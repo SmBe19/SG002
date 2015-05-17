@@ -25,6 +25,7 @@
 package com.smeanox.games.sg002.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
@@ -59,6 +60,8 @@ public class GameScreen extends AbstractScreen {
 	private boolean wasDrag;
 	private Vector2 vector2;
 	private Vector3 vector3;
+	private boolean wasSaveDown;
+	private boolean wasLoadDown;
 
 	private Button moveButton;
 	private Button fightButton;
@@ -82,6 +85,8 @@ public class GameScreen extends AbstractScreen {
 			public void onNextPlayer(Player nextPlayer) {
 				updateLabels();
 				centerCameraOnActivePlayer();
+				cancelAction();
+				setActionButtonsVisible(false);
 			}
 		});
 
@@ -297,7 +302,16 @@ public class GameScreen extends AbstractScreen {
 			wasDrag = false;
 		}
 
+		if(wasSaveDown && !Gdx.input.isKeyPressed(Input.Keys.F5)){
+			gameController.saveGame("quicksave.xml");
+		}
+		if(wasLoadDown && !Gdx.input.isKeyPressed(Input.Keys.F6)){
+			gameController.loadGame("quicksave.xml");
+		}
+
 		wasTouchDown = Gdx.input.isTouched();
+		wasSaveDown = Gdx.input.isKeyPressed(Input.Keys.F5);
+		wasLoadDown = Gdx.input.isKeyPressed(Input.Keys.F6);
 	}
 
 	private void centerCameraOnActivePlayer(){

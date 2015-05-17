@@ -1,7 +1,11 @@
 package com.smeanox.games.sg002.world;
 
+import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlWriter;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Consts;
+
+import java.io.IOException;
 
 /**
  * Describes an active GameObject
@@ -15,6 +19,10 @@ public class GameObject {
 
 	// Stats
 	private int hp;
+
+	public GameObject(XmlReader.Element reader){
+		load(reader);
+	}
 
 	public GameObject(GameObjectType gameObjectType, Player player){
 		this.gameObjectType = gameObjectType;
@@ -131,5 +139,29 @@ public class GameObject {
 		int damage = -gameObjectType.getDamage(gameObject.getGameObjectType());
 		gameObject.addHp(damage);
 		return damage;
+	}
+
+	/**
+	 * Saves the GameObject
+	 * @param writer the XmlWriter
+	 */
+	public void save(XmlWriter writer) throws IOException {
+		writer.attribute("x", positionX);
+		writer.attribute("y", positionY);
+		writer.attribute("hp", hp);
+		writer.attribute("gameObjectType", gameObjectType.getId());
+		writer.attribute("player", player.getId());
+	}
+
+	/**
+	 * Loads the GameObjec
+	 * @param reader the XmlReader.Element
+	 */
+	public void load(XmlReader.Element reader){
+		positionX = reader.getIntAttribute("x");
+		positionY = reader.getIntAttribute("y");
+		hp = reader.getIntAttribute("hp");
+		gameObjectType = GameObjectType.getGameObjectTypeById(reader.getAttribute("gameObjectType"));
+		player = Player.getPlayerById(reader.getIntAttribute("player"));
 	}
 }
