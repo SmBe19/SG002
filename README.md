@@ -31,7 +31,7 @@ The military units have the following fighting properties:
 
 <table>
 	<tr>
-		<td>unit</td><td>strong</td><td>weak</td>
+		<th>unit</th><th>strong</th><th>weak</th>
 	</tr>
 	<tr>
 		<td>knight</td><td>pikeman</td><td>archer</td>
@@ -46,6 +46,7 @@ The military units have the following fighting properties:
 
 ## Keyboard shortcuts
 
+```
 ESC ....... Back
 F5 ........ QuickSave
 F6 ........ QuickLoad
@@ -60,6 +61,7 @@ C ......... create menu
 M ......... move menu
 F ......... attack menu ("fight")
 BACKSPACE . cancel action
+```
 
 ## More to come
 
