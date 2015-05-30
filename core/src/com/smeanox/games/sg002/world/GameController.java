@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.smeanox.games.sg002.player.Player;
@@ -13,7 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Controlls the game flow
+ * Controls the game flow
  * @author Benjamin Schmid
  */
 public class GameController {
@@ -161,6 +162,10 @@ public class GameController {
 	public void loadGame(String fileName){
 		try {
 			XmlReader reader = new XmlReader();
+			FileHandle file = Gdx.files.local(fileName);
+			if(!file.exists()){
+				return;
+			}
 			XmlReader.Element root = reader.parse(Gdx.files.local(fileName));
 			Scenario scenarioLoad = Scenario.getScanarioById(root.getAttribute("scenario"));
 			initScenario(scenarioLoad);
@@ -181,6 +186,7 @@ public class GameController {
 
 			forwardToPlayer(activePlayer);
 
+			// TODO remove me
 			System.out.println("finished loading");
 		} catch (IOException e) {
 			e.printStackTrace();

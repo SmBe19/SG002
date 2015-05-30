@@ -63,3 +63,6 @@ build/
 
 ## OS Specific
 .DS_Store
+
+## Game
+quicksave.xml

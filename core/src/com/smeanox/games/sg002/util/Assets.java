@@ -179,7 +179,7 @@ public class Assets {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/LiberationSans-Regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
-		// add € sign
+		// add Eur sign
 		parameter.characters =  FreeTypeFontGenerator.DEFAULT_CHARS + "\u20AC";
 
 		parameter.size = (int)Math.ceil(Consts.fontSizeMicro * Consts.devScaleY);

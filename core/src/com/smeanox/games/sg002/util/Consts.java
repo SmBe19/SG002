@@ -1,7 +1,10 @@
 package com.smeanox.games.sg002.util;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+
+import java.util.LinkedList;
 
 /**
  * Contains all constants
@@ -63,6 +66,50 @@ public class Consts {
 
 	/** The minimal distance between two start GameObjects */
 	public static int startGameObjectMinDistance = 2;
+
+	/** The name of the file used for QuickSaving */
+	public static final String quickSaveFileName = "quicksave.xml";
+
+	/** Keyboard Shortcuts */
+	public static class KeyboardShortcuts {
+		public static final int backKey = Input.Keys.ESCAPE;
+		public static final int quickSave = Input.Keys.F5;
+		public static final int quickLoad = Input.Keys.F6;
+		public static final int nextPlayer = Input.Keys.ENTER;
+		public static final int produceArcher = Input.Keys.A;
+		public static final int produceGoldMine = Input.Keys.G;
+		public static final int produceKnight = Input.Keys.K;
+		public static final int produceInfantry = Input.Keys.I;
+		public static final int produceTownCenter = Input.Keys.T;
+		public static final int produceVillager = Input.Keys.V;
+		public static final int produce = Input.Keys.C;
+		public static final int move = Input.Keys.M;
+		public static final int fight = Input.Keys.F;
+		public static final int cancel = Input.Keys.BACKSPACE;
+
+		private static LinkedList<Integer> allShortcuts;
+
+		public static LinkedList<Integer> getAllShortcuts(){
+			if(allShortcuts == null){
+				allShortcuts = new LinkedList<Integer>();
+				allShortcuts.add(backKey);
+				allShortcuts.add(quickLoad);
+				allShortcuts.add(quickSave);
+				allShortcuts.add(nextPlayer);
+				allShortcuts.add(produceArcher);
+				allShortcuts.add(produceGoldMine);
+				allShortcuts.add(produceKnight);
+				allShortcuts.add(produceInfantry);
+				allShortcuts.add(produceTownCenter);
+				allShortcuts.add(produceVillager);
+				allShortcuts.add(produce);
+				allShortcuts.add(move);
+				allShortcuts.add(fight);
+				allShortcuts.add(cancel);
+			}
+			return allShortcuts;
+		}
+	}
 
 	private Consts(){
 	}

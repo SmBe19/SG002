@@ -10,8 +10,8 @@
 package com.smeanox.games.sg002;
 
 /*
-TODO: Save / Load
 TODO: Balancing
 TODO: AI
+TODO: Extern AI
 TODO: Multiplayer
  */

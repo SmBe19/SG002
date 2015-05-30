@@ -13,9 +13,10 @@ public class ScreenManager {
 
 	private static Game game;
 
-	private static Screen splashScreen;
-	private static Screen gameScreen;
-	private static Screen menuScreen;
+	private static SplashScreen splashScreen;
+	private static GameScreen gameScreen;
+	private static MenuScreen menuScreen;
+	private static PauseScreen pauseScreen;
 
 	private ScreenManager(){
 	}
@@ -49,6 +50,18 @@ public class ScreenManager {
 	}
 
 	/**
+	 * Sets the pause menu as active screen
+	 * @param gameController the GameController to use
+	 */
+	public static void showPauseMenu(GameController gameController){
+		if(pauseScreen == null){
+			pauseScreen = new PauseScreen();
+		}
+		pauseScreen.setGameController(gameController);
+		game.setScreen(pauseScreen);
+	}
+
+	/**
 	 * Sets the game screen as active screen
 	 */
 	public static void showGame(){
@@ -57,6 +70,7 @@ public class ScreenManager {
 
 	/**
 	 * Sets the game screen as active screen with the given scenario loaded
+	 * @param gameController the GameController to start the game with
 	 */
 	public static void showGame(GameController gameController){
 		gameScreen = null;

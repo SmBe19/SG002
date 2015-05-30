@@ -30,6 +30,8 @@ public class SG002 extends Game {
 		GameObjectTypeReader.readGameObjectTypes(Gdx.files.internal("config/GameObjectTypes.xml"));
 		ScenarioReader.readScenarios(Gdx.files.internal("config/Scenarios.xml"));
 
+		Gdx.input.setCatchBackKey(true);
+
 		ScreenManager.init(this);
 		ScreenManager.showSplash();
 	}

@@ -59,6 +59,8 @@ public class MenuScreen extends AbstractScreen {
 
 	private Iterator<Scenario> scenarioIterator;
 
+	private boolean wasBackDown;
+
 	/** Constructor */
 	public MenuScreen(){
 		super();
@@ -191,6 +193,14 @@ public class MenuScreen extends AbstractScreen {
 					playerNames.get(processedPlayerNames), "");
 			displayDialog = false;
 		}
+
+		if(wasBackDown && !(Gdx.input.isKeyPressed(Input.Keys.BACK)
+				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))){
+			Gdx.app.exit();
+		}
+
+		wasBackDown = Gdx.input.isKeyPressed(Input.Keys.BACK)
+				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey);
 	}
 
 	private void prepareStart(){
