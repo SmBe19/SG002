@@ -37,7 +37,7 @@ The military units have the following fighting properties:
 		<td>knight</td><td>pikeman</td><td>archer</td>
 	</tr>
 	<tr>
-		<td>pikeman</td><td>archer</td><td>archer</td>
+		<td>pikeman</td><td>archer</td><td>knight</td>
 	</tr>
 	<tr>
 		<td>archer</td><td>knight</td><td>pikeman</td>
@@ -47,20 +47,20 @@ The military units have the following fighting properties:
 ## Keyboard shortcuts
 
 ```
-ESC ....... Back
-F5 ........ QuickSave
-F6 ........ QuickLoad
-ENTER ..... Next player
-A ......... create archer
-G ......... create gold mine
-K ......... create knight
-I ......... create pikeman ("infantry")
-T ......... create town center
-V ......... create villager
-C ......... create menu
-M ......... move menu
-F ......... attack menu ("fight")
-BACKSPACE . cancel action
+ESC ......... Back
+F5 .......... QuickSave
+F6 .......... QuickLoad
+ENTER ....... Next player
+A ........... create archer
+G ........... create gold mine
+K ........... create knight
+I ........... create pikeman ("infantry")
+T ........... create town center
+V ........... create villager
+C ........... create menu
+M ........... move menu
+F ........... attack menu ("fight")
+BACKSPACE ... cancel action
 ```
 
 ## More to come
