@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.XmlWriter;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.smeanox.games.sg002.world.Action;
 import com.smeanox.games.sg002.world.GameController;
+import com.smeanox.games.sg002.world.GameWorld;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.HashMap;
  */
 public abstract class Player {
 	protected GameController gameController;
+	protected GameWorld gameWorld;
 
 	protected static HashMap<Integer, Player> idToPlayer = new HashMap<Integer, Player>();
 
@@ -26,28 +28,56 @@ public abstract class Player {
 	protected Color color;
 	protected boolean showGUI;
 
+	/**
+	 * Inform the player that he can start playing
+	 */
 	public final void startPlaying(){
 		isPlaying = true;
+		gameWorld = gameController.getGameWorld();
 		play();
 	}
 
+	/**
+	 * Inform the gameController that the player finished playing
+	 */
 	protected final void endPlaying(){
 		isPlaying = false;
 		gameController.finishedRound();
 	}
 
+	/**
+	 * Perform the moves for this round
+	 */
 	protected abstract void play();
 
+	/**
+	 * Update the AI
+	 * @param delta time passed since last update
+	 */
 	public abstract void update(float delta);
 
+	/**
+	 * Propose the action to be performed (e.g. the GUI can propose an action)
+	 * @param action the action to perform
+	 * @return true if the action was performed
+	 */
 	public boolean proposeAction(Action action){
 		return false;
 	}
 
+	/**
+	 * Propose to end the round (e.g. the GUI can propose this)
+	 * @return true if the it was performed
+	 */
 	public boolean proposeEndPlaying(){
 		return false;
 	}
 
+	/**
+	 * Save the Player to the given writer
+	 * @param writer the writer to save to
+	 * @throws IOException
+	 */
 	public final void save(XmlWriter writer) throws IOException {
 		writer.attribute("class", this.getClass().getName());
 		writer.attribute("id", id);
@@ -58,9 +88,18 @@ public abstract class Player {
 		saveImpl(writer);
 	}
 
+	/**
+	 * Save implementation specific things
+	 * @param writer the writer to save to
+	 * @throws IOException
+	 */
 	protected void saveImpl(XmlWriter writer) throws IOException{
 	}
 
+	/**
+	 * Load the Player from the given reader
+	 * @param reader the reader to read from
+	 */
 	public final void load(XmlReader.Element reader){
 		id = reader.getIntAttribute("id");
 		name = reader.getAttribute("name");
@@ -70,6 +109,10 @@ public abstract class Player {
 		loadImpl(reader);
 	}
 
+	/**
+	 * Load implementation specific things
+	 * @param reader the reader to read from
+	 */
 	protected void loadImpl(XmlReader.Element reader){
 	}
 

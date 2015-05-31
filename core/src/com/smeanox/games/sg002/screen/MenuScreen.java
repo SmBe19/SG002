@@ -28,6 +28,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.smeanox.games.sg002.player.AIPlayer_BenNo1;
 import com.smeanox.games.sg002.player.LocalPlayer;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.screen.gui.Button;
@@ -215,7 +216,17 @@ public class MenuScreen extends AbstractScreen {
 	private void startGame(){
 		GameController gameController = new GameController(scenario);
 		for(int i = 0; i < playerCount; i++){
-			Player player = new LocalPlayer();
+			Player player;
+			// FIXME make nicer
+			if("BenNo1".equals(playerNames.get(i))) {
+				player = new AIPlayer_BenNo1();
+			} else {
+				player = new LocalPlayer();
+			}
+			// FIXME Remove me
+			if(i > 0){
+				//player = new AIPlayer_BenNo1();
+			}
 			gameController.addPlayer(player);
 			player.setColor(Consts.playerColors[i % Consts.playerColors.length]);
 			player.setShowGUI(player instanceof LocalPlayer);

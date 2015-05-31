@@ -63,6 +63,10 @@ F ........... attack menu ("fight")
 BACKSPACE ... cancel action
 ```
 
+## Miscellaneous
+
+Use `BenNo1` as the name for a player to let the AI control this player.
+
 ## More to come
 
  * Improved artwork

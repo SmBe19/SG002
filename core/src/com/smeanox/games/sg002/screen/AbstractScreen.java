@@ -155,8 +155,8 @@ public abstract class AbstractScreen implements Screen {
 	 * @param toLayout      list of objects to layout
 	 * @param cols          number of columns
 	 * @param rows          number of rows
-	 * @param orientationX  -1 -> left; 0 -> center; 1 -> right
-	 * @param orientationY  -1 -> bottom; 0 -> center; 1 -> top
+	 * @param orientationX  -1 - left; 0 - center; 1 - right
+	 * @param orientationY  -1 - bottom; 0 - center; 1 - top
 	 * @param startX        offset to the center of the screen relative to the size
 	 * @param startY        offset to the center of the screen relative to the size
 	 * @param elementWidth  width of one element
