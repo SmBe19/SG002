@@ -436,9 +436,9 @@ public class GameScreen extends AbstractScreen {
 	 */
 	private void setActionButtonsActive(GameObject activeGameObject) {
 		setActionButtonsActive(false);
-		moveButton.setActive(activeGameObject.getGameObjectType().getRadiusWalkMax() > 0);
-		fightButton.setActive(activeGameObject.getGameObjectType().isCanFight());
-		produceButton.setActive(activeGameObject.getGameObjectType().isCanProduce());
+		moveButton.setActive(activeGameObject.isCanDoAction(Action.ActionType.MOVE));
+		fightButton.setActive(activeGameObject.isCanDoAction(Action.ActionType.FIGHT));
+		produceButton.setActive(activeGameObject.isCanDoAction(Action.ActionType.PRODUCE));
 		cancelButton.setActive(false);
 	}
 
