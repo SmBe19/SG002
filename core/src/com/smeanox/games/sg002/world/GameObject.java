@@ -4,8 +4,13 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Consts;
+import com.smeanox.games.sg002.world.Action.ActionType;
+
+import org.xml.sax.XMLReader;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Describes an active GameObject
@@ -19,6 +24,8 @@ public class GameObject {
 
 	// Stats
 	private int hp;
+
+	private Set<ActionType> usedActions = new HashSet();
 
 	public GameObject(XmlReader.Element reader){
 		load(reader);
@@ -70,6 +77,36 @@ public class GameObject {
 		this.player = player;
 	}
 
+	public boolean isCanDoAction(ActionType action){
+		return !usedActions.contains(action) && getGameObjectType().isCanDoAction(action);
+	}
+
+	/**
+	 * reenables all actions
+	 */
+	public void resetUsedActions(){
+		usedActions.clear();
+	}
+
+	/**
+	 * Checks whether the specified action was already used in this round
+	 * @param action
+	 * @return true if it was already used
+	 */
+	public boolean wasUsed(ActionType action){
+		if (action == null) return false;
+		return usedActions.contains(action);
+	}
+	/**
+	 * Uses a specific action
+	 * @param action
+	 * @return true if it was already used
+	 */
+	public void use(ActionType action){
+		if (action == null) return;
+		usedActions.add(action);
+	}
+
 	private int getDiff(int x, int y){
 		int diffX, diffY, diffTot;
 		diffX = Math.abs(positionX - x);
@@ -90,7 +127,8 @@ public class GameObject {
 	 */
 	public boolean canMoveTo(int x, int y){
 		int diffTot = getDiff(x, y);
-		return diffTot >= gameObjectType.getRadiusWalkMin() && diffTot <= gameObjectType.getRadiusWalkMax();
+		return diffTot >= gameObjectType.getRadiusWalkMin() && diffTot <= gameObjectType.getRadiusWalkMax() &&
+				!usedActions.contains(ActionType.MOVE);
 	}
 
 	/**
@@ -101,7 +139,8 @@ public class GameObject {
 	 */
 	public boolean canProduceTo(int x, int y){
 		int diffTot = getDiff(x, y);
-		return diffTot >= gameObjectType.getRadiusProduceMin() && diffTot <= gameObjectType.getRadiusProduceMax();
+		return diffTot >= gameObjectType.getRadiusProduceMin() && diffTot <= gameObjectType.getRadiusProduceMax() &&
+				!usedActions.contains(ActionType.PRODUCE);
 	}
 
 	/**
@@ -112,7 +151,8 @@ public class GameObject {
 	 */
 	public boolean canFightTo(int x, int y){
 		int diffTot = getDiff(x, y);
-		return diffTot >= gameObjectType.getRadiusFightMin() && diffTot <= gameObjectType.getRadiusFightMax();
+		return diffTot >= gameObjectType.getRadiusFightMin() && diffTot <= gameObjectType.getRadiusFightMax() &&
+				!usedActions.contains(ActionType.FIGHT);
 	}
 
 	/**
@@ -151,10 +191,17 @@ public class GameObject {
 		writer.attribute("hp", hp);
 		writer.attribute("gameObjectType", gameObjectType.getId());
 		writer.attribute("player", player.getId());
+		writer.element("usedActions");
+		for (ActionType action : usedActions){
+			writer.element("action");
+			writer.attribute("name",action.name());
+			writer.pop();
+		}
+		writer.pop();
 	}
 
 	/**
-	 * Loads the GameObjec
+	 * Loads the GameObject
 	 * @param reader the XmlReader.Element
 	 */
 	public void load(XmlReader.Element reader){
@@ -163,5 +210,8 @@ public class GameObject {
 		hp = reader.getIntAttribute("hp");
 		gameObjectType = GameObjectType.getGameObjectTypeById(reader.getAttribute("gameObjectType"));
 		player = Player.getPlayerById(reader.getIntAttribute("player"));
+		for (XmlReader.Element element : reader.getChildByName("usedActions").getChildrenByName("action")){
+			usedActions.add(ActionType.valueOf(element.getAttribute("name")));
+		}
 	}
 }

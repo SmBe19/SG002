@@ -20,12 +20,12 @@ public class GameWorld {
 	private GameObject[][] worldMap;
 
 	private Player activePlayer;
-	private HashSet<GameObject> usedGameObjects;
+	private HashSet<GameObject> gameObjects;
 
 	public GameWorld(Scenario scenario){
 		initScenario(scenario);
 
-		usedGameObjects = new HashSet<GameObject>();
+		gameObjects = new HashSet<GameObject>();
 	}
 
 	public void initScenario(Scenario scenario){
@@ -43,11 +43,11 @@ public class GameWorld {
 		return mapSizeY;
 	}
 
-	public GameObject getWorldMap(int x, int y){
+	public GameObject getWorldMap(int y, int x){
 		if(x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY){
 			return null;
 		}
-		return worldMap[y][x];
+		return worldMap[x][y];
 	}
 
 	public GameObject[][] getWorldMap() {
@@ -68,6 +68,7 @@ public class GameWorld {
 		worldMap[y][x] = new GameObject(gameObjectType, player);
 		worldMap[y][x].setPositionX(x);
 		worldMap[y][x].setPositionY(y);
+		gameObjects.add(worldMap[y][x]);
 	}
 
 	/**
@@ -99,7 +100,9 @@ public class GameWorld {
 	 */
 	public void startRound(Player activePlayer){
 		this.activePlayer = activePlayer;
-		usedGameObjects.clear();
+		for (GameObject go : gameObjects){
+			go.resetUsedActions();
+		}
 		activePlayer.addMoney(calcMoneyPerRound(activePlayer));
 	}
 
@@ -148,18 +151,6 @@ public class GameWorld {
 		return false;
 	}
 
-	/**
-	 * Checks if the given GameObject was used
-	 * @param x coordinates
-	 * @param y coordinates
-	 * @return true if it was used
-	 */
-	public boolean wasUsed(int x, int y){
-		if(getWorldMap(x, y) == null){
-			return false;
-		}
-		return usedGameObjects.contains(getWorldMap(x, y));
-	}
 
 	/**
 	 * removes the GameObject from the map
@@ -168,6 +159,27 @@ public class GameWorld {
 	 */
 	public void removeGameObject(int x, int y){
 		worldMap[y][x] = null;
+	}
+
+	/**
+	 * Checks whether a gameObject has any remaining actions
+	 * @param x coordinates
+	 * @param y coordinates
+	 * @return
+	 */
+	public boolean wasUsed(int y, int x){
+		try {
+			/*if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
+				return true;//what happened here?
+			}
+			if (worldMap[x][y] == null) return true; //this shouldn't happen either*/
+			return !worldMap[x][y].isCanDoAction(Action.ActionType.MOVE) &&
+					!worldMap[x][y].isCanDoAction(Action.ActionType.PRODUCE) &&
+					!worldMap[x][y].isCanDoAction(Action.ActionType.FIGHT);
+		}catch (Exception ex){
+			ex.printStackTrace();
+		}
+		return true;
 	}
 
 	/**
@@ -200,7 +212,7 @@ public class GameWorld {
 			return false;
 		}
 		// the gameObject has been used already
-		if(usedGameObjects.contains(gameObject)){
+		if(gameObject.wasUsed(Action.ActionType.MOVE)){
 			return false;
 		}
 		return true;
@@ -222,7 +234,7 @@ public class GameWorld {
 		worldMap[startY][startX] = null;
 		getWorldMap(endX, endY).setPositionX(endX);
 		getWorldMap(endX, endY).setPositionY(endY);
-		usedGameObjects.add(getWorldMap(endX, endY));
+		getWorldMap(endX, endY).use(Action.ActionType.MOVE);
 		return true;
 	}
 
@@ -264,7 +276,7 @@ public class GameWorld {
 			return false;
 		}
 		// the gameObject has been used already
-		if(usedGameObjects.contains(gameObject)){
+		if(gameObject.wasUsed(Action.ActionType.PRODUCE)){
 			return false;
 		}
 		return true;
@@ -287,8 +299,11 @@ public class GameWorld {
 		newGameObject.setPositionY(endY);
 		worldMap[endY][endX] = newGameObject;
 		activePlayer.addMoney(-gameObjectType.getValue());
-		usedGameObjects.add(getWorldMap(startX, startY));
-		usedGameObjects.add(newGameObject);
+		getWorldMap(startX, startY).use(Action.ActionType.PRODUCE);
+		gameObjects.add(newGameObject);
+		for (Action.ActionType a : Action.ActionType.values()){
+			newGameObject.use(a);//not able to do anything after being built
+		}
 		return true;
 	}
 
@@ -322,7 +337,7 @@ public class GameWorld {
 			return false;
 		}
 		// the gameObject has been used already
-		if(usedGameObjects.contains(gameObject)){
+		if(gameObject.wasUsed(Action.ActionType.FIGHT)){
 			return false;
 		}
 		return true;
@@ -349,7 +364,7 @@ public class GameWorld {
 				conquerPlayer(activePlayer, otherPlayer);
 			}
 		}
-		usedGameObjects.add(getWorldMap(startX, startY));
+		getWorldMap(startX, startY).use(Action.ActionType.FIGHT);
 		return damage;
 	}
 
@@ -381,14 +396,16 @@ public class GameWorld {
 			}
 		}
 		writer.pop();
+		/*
 		writer.element("UsedGameObjects");
-		for(GameObject gameObject : usedGameObjects){
+		for(GameObject gameObject : gameObjects){
 			writer.element("UsedGameObject");
 			writer.attribute("x", gameObject.getPositionX());
 			writer.attribute("y", gameObject.getPositionY());
 			writer.pop();
 		}
 		writer.pop();
+		*/
 	}
 
 	/**
@@ -401,10 +418,12 @@ public class GameWorld {
 		for(XmlReader.Element gameObjectXML : gameObjects.getChildrenByName("GameObject")){
 			GameObject gameObject = new GameObject(gameObjectXML);
 			worldMap[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
+			this.gameObjects.add(gameObject);
 		}
+		/*
 		XmlReader.Element usedGameObjectsXML = reader.getChildByName("UsedGameObjects");
 		for(XmlReader.Element usedGameObject : usedGameObjectsXML.getChildrenByName("UsedGameObject")){
 			usedGameObjects.add(getWorldMap(usedGameObject.getIntAttribute("x"), usedGameObject.getIntAttribute("y")));
-		}
+		}*/
 	}
 }

@@ -205,4 +205,16 @@ public class GameObjectType {
 	public static void setStartGameObjectType(GameObjectType startGameObjectType) {
 		GameObjectType.startGameObjectType = startGameObjectType;
 	}
+
+	public boolean isCanDoAction(Action.ActionType action){
+		switch(action){
+			case MOVE:
+				return getRadiusWalkMax() > 0;
+			case FIGHT:
+				return isCanFight();
+			case PRODUCE:
+				return isCanProduce();
+		}
+		return false;
+	}
 }

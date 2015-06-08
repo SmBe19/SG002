@@ -3,6 +3,7 @@ package com.smeanox.games.sg002.util;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 
 import java.util.LinkedList;
 
@@ -20,6 +21,8 @@ public class Consts {
 	public static float devScaleX = 1.0f;
 	/** The scale between devHeight and screenHeight */
 	public static float devScaleY = 1.0f;
+
+	public static Texture.TextureFilter textureFilter = Texture.TextureFilter.Nearest;
 
 	/** The font size for micro */
 	public static final int fontSizeMicro = 16;
