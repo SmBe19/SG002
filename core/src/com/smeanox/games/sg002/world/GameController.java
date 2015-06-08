@@ -96,7 +96,7 @@ public class GameController {
 				break;
 			}
 		}
-		startRound(activePlayer);
+		startRound(activePlayer, false);
 	}
 
 	/**
@@ -104,7 +104,16 @@ public class GameController {
 	 * @param player the active player
 	 */
 	private void startRound(Player player){
-		gameWorld.startRound(player);
+		startRound(player, true);
+	}
+
+	/**
+	 * Starts a new round
+	 * @param player the active player
+	 * @param reenableUsedActions whether usedActions should be cleared
+	 */
+	private void startRound(Player player, boolean reenableUsedActions){
+		gameWorld.startRound(player, reenableUsedActions);
 		fireOnNextPlayer(player);
 		player.startPlaying();
 	}

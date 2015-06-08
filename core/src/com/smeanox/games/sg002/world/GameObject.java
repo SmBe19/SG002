@@ -6,8 +6,6 @@ import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.Action.ActionType;
 
-import org.xml.sax.XMLReader;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;

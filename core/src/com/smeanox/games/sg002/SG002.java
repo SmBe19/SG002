@@ -2,9 +2,6 @@ package com.smeanox.games.sg002;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.smeanox.games.sg002.screen.ScreenManager;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
