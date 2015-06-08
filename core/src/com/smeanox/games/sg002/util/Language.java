@@ -5,7 +5,6 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.Locale;
-import java.util.MissingResourceException;
 
 /**
  * Manages localized strings

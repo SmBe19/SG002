@@ -43,11 +43,11 @@ public class GameWorld {
 		return mapSizeY;
 	}
 
-	public GameObject getWorldMap(int y, int x){
+	public GameObject getWorldMap(int x, int y){
 		if(x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY){
 			return null;
 		}
-		return worldMap[x][y];
+		return worldMap[y][x];
 	}
 
 	public GameObject[][] getWorldMap() {
@@ -176,7 +176,7 @@ public class GameWorld {
 			return !worldMap[x][y].isCanDoAction(Action.ActionType.MOVE) &&
 					!worldMap[x][y].isCanDoAction(Action.ActionType.PRODUCE) &&
 					!worldMap[x][y].isCanDoAction(Action.ActionType.FIGHT);
-		}catch (Exception ex){
+		} catch (NullPointerException | IndexOutOfBoundsException ex){
 			ex.printStackTrace();
 		}
 		return true;
@@ -396,16 +396,6 @@ public class GameWorld {
 			}
 		}
 		writer.pop();
-		/*
-		writer.element("UsedGameObjects");
-		for(GameObject gameObject : gameObjects){
-			writer.element("UsedGameObject");
-			writer.attribute("x", gameObject.getPositionX());
-			writer.attribute("y", gameObject.getPositionY());
-			writer.pop();
-		}
-		writer.pop();
-		*/
 	}
 
 	/**
@@ -420,10 +410,5 @@ public class GameWorld {
 			worldMap[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
 			this.gameObjects.add(gameObject);
 		}
-		/*
-		XmlReader.Element usedGameObjectsXML = reader.getChildByName("UsedGameObjects");
-		for(XmlReader.Element usedGameObject : usedGameObjectsXML.getChildrenByName("UsedGameObject")){
-			usedGameObjects.add(getWorldMap(usedGameObject.getIntAttribute("x"), usedGameObject.getIntAttribute("y")));
-		}*/
 	}
 }

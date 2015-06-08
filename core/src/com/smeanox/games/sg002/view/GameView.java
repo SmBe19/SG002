@@ -2,7 +2,6 @@ package com.smeanox.games.sg002.view;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -12,8 +11,6 @@ import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameWorld;
-
-import java.lang.reflect.Field;
 
 /**
  * Renders the GameWorld
@@ -169,7 +166,7 @@ public class GameView {
 	 * @param spriteBatch
 	 */
 	public void render(SpriteBatch spriteBatch, Player activePlayer){
-		aFieldSizeX = (Consts.fieldSizeX * Consts.devScaleX * zoom);
+		aFieldSizeX = (Consts.fieldSizeX * Consts.devScaleY * zoom);
 		aFieldSizeY = (Consts.fieldSizeY * Consts.devScaleY * zoom);
 		Assets.liberationMicroShadow.bitmapFont.getData().setScale(zoom*1.3f);
 

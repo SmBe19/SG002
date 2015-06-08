@@ -225,7 +225,7 @@ public class MenuScreen extends AbstractScreen {
 			}
 			// FIXME Remove me
 			if(i > 0){
-				//player = new AIPlayer_BenNo1();
+				player = new AIPlayer_BenNo1();
 			}
 			gameController.addPlayer(player);
 			player.setColor(Consts.playerColors[i % Consts.playerColors.length]);
