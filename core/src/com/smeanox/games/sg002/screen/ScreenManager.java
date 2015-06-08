@@ -1,9 +1,7 @@
 package com.smeanox.games.sg002.screen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
 import com.smeanox.games.sg002.world.GameController;
-import com.smeanox.games.sg002.world.Scenario;
 
 /**
  * Manages the different Screens

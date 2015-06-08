@@ -97,11 +97,14 @@ public class GameWorld {
 	/**
 	 * Called when a player starts his round
 	 * @param activePlayer the player
+	 * @param reenableUsedActions whether usedActions should be cleared
 	 */
-	public void startRound(Player activePlayer){
+	public void startRound(Player activePlayer, boolean reenableUsedActions){
 		this.activePlayer = activePlayer;
-		for (GameObject go : gameObjects){
-			go.resetUsedActions();
+		if (reenableUsedActions) {
+			for (GameObject go : gameObjects) {
+				go.resetUsedActions();
+			}
 		}
 		activePlayer.addMoney(calcMoneyPerRound(activePlayer));
 	}
@@ -176,7 +179,9 @@ public class GameWorld {
 			return !worldMap[x][y].isCanDoAction(Action.ActionType.MOVE) &&
 					!worldMap[x][y].isCanDoAction(Action.ActionType.PRODUCE) &&
 					!worldMap[x][y].isCanDoAction(Action.ActionType.FIGHT);
-		} catch (NullPointerException | IndexOutOfBoundsException ex){
+		} catch (NullPointerException ex){
+			ex.printStackTrace();
+		} catch (IndexOutOfBoundsException ex){ // java 6 compatibility
 			ex.printStackTrace();
 		}
 		return true;
