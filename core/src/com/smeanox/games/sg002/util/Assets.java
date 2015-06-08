@@ -2,6 +2,7 @@ package com.smeanox.games.sg002.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
@@ -57,7 +58,10 @@ public class Assets {
 			manager = new AssetManager();
 		}
 
-		manager.load("smeanox.png", Texture.class);
+		TextureLoader.TextureParameter param = new TextureLoader.TextureParameter();
+		param.minFilter = Consts.textureFilter;
+		param.genMipMaps = param.minFilter == Texture.TextureFilter.MipMapLinearLinear;
+		manager.load("smeanox.png", Texture.class, param);
 
 		manager.finishLoading();
 
@@ -76,13 +80,17 @@ public class Assets {
 		liberationMedium = new BitmapFontRapper();
 		liberationLarge = new BitmapFontRapper();
 
-		manager.load("images/button.png", Texture.class);
-		manager.load("images/background.png", Texture.class);
-		manager.load("images/selection.png", Texture.class);
-		manager.load("images/grid.png", Texture.class);
-		manager.load("images/possibleFieldMove.png", Texture.class);
-		manager.load("images/possibleFieldFight.png", Texture.class);
-		manager.load("images/possibleFieldProduce.png", Texture.class);
+		TextureLoader.TextureParameter param = new TextureLoader.TextureParameter();
+		param.minFilter = Consts.textureFilter;
+		param.genMipMaps =  param.minFilter == Texture.TextureFilter.MipMapLinearLinear;
+
+		manager.load("images/button.png", Texture.class,param);
+		manager.load("images/background.png", Texture.class,param);
+		manager.load("images/selection.png", Texture.class,param);
+		manager.load("images/grid.png", Texture.class,param);
+		manager.load("images/possibleFieldMove.png", Texture.class,param);
+		manager.load("images/possibleFieldFight.png", Texture.class,param);
+		manager.load("images/possibleFieldProduce.png", Texture.class, param);
 
 		finishedCompletly = false;
 	}
@@ -132,6 +140,7 @@ public class Assets {
 		possibleFieldMove = manager.get("images/possibleFieldMove.png", Texture.class);
 		possibleFieldFight = manager.get("images/possibleFieldFight.png", Texture.class);
 		possibleFieldProduce = manager.get("images/possibleFieldProduce.png", Texture.class);
+
 
 		setGameObjectTypeTextures();
 
@@ -191,10 +200,12 @@ public class Assets {
 		parameter.size = (int) Math.ceil(Consts.fontSizeLarge * Consts.devScaleY);
 		liberationLarge.bitmapFont = generator.generateFont(parameter);
 
-		parameter.size = (int)Math.ceil(Consts.fontSizeMicro * Consts.devScaleY);
+		parameter.size = (int)Math.ceil(Consts.fontSizeMicro * 10 *  Consts.devScaleY);
 		parameter.shadowColor = Color.BLACK;
 		parameter.shadowOffsetX = (int)Math.ceil(0.5 * Consts.devScaleX);
 		parameter.shadowOffsetY = (int)Math.ceil(0.5 * Consts.devScaleY);
+		parameter.minFilter = Consts.textureFilter;
+		parameter.genMipMaps = parameter.minFilter == Texture.TextureFilter.MipMapLinearLinear;
 		liberationMicroShadow.bitmapFont = generator.generateFont(parameter);
 
 		generator.dispose();
