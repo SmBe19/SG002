@@ -170,15 +170,15 @@ public class GameWorld {
 	 * @param y coordinates
 	 * @return
 	 */
-	public boolean wasUsed(int y, int x){
+	public boolean wasUsed(int x, int y){
 		try {
 			/*if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
 				return true;//what happened here?
 			}
 			if (worldMap[x][y] == null) return true; //this shouldn't happen either*/
-			return !worldMap[x][y].isCanDoAction(Action.ActionType.MOVE) &&
-					!worldMap[x][y].isCanDoAction(Action.ActionType.PRODUCE) &&
-					!worldMap[x][y].isCanDoAction(Action.ActionType.FIGHT);
+			return !worldMap[y][x].isCanDoAction(Action.ActionType.MOVE) &&
+					!worldMap[y][x].isCanDoAction(Action.ActionType.PRODUCE) &&
+					!worldMap[y][x].isCanDoAction(Action.ActionType.FIGHT);
 		} catch (NullPointerException ex){
 			ex.printStackTrace();
 		} catch (IndexOutOfBoundsException ex){ // java 6 compatibility
