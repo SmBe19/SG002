@@ -36,6 +36,8 @@ public class Assets {
 	public static Texture possibleFieldFight;
 	/** possible field for production */
 	public static Texture possibleFieldProduce;
+	/** possible field for goldmine */
+	public static Texture gold;
 
 	/** liberation font */
 	public static FreeType liberation;
@@ -91,6 +93,7 @@ public class Assets {
 		manager.load("images/possibleFieldMove.png", Texture.class,param);
 		manager.load("images/possibleFieldFight.png", Texture.class,param);
 		manager.load("images/possibleFieldProduce.png", Texture.class, param);
+		manager.load("images/gold.png", Texture.class, param);
 
 		finishedCompletly = false;
 	}
@@ -101,7 +104,11 @@ public class Assets {
 	 * @param type class of the asset
 	 */
 	public static void addToLoadQueue(String filename, Class type){
-		manager.load(filename, type);
+
+		TextureLoader.TextureParameter param = new TextureLoader.TextureParameter();
+		param.minFilter = Consts.textureFilter;
+		param.genMipMaps =  param.minFilter == Texture.TextureFilter.MipMapLinearLinear;
+		manager.load(filename, type, param);
 	}
 
 	/**
@@ -140,6 +147,7 @@ public class Assets {
 		possibleFieldMove = manager.get("images/possibleFieldMove.png", Texture.class);
 		possibleFieldFight = manager.get("images/possibleFieldFight.png", Texture.class);
 		possibleFieldProduce = manager.get("images/possibleFieldProduce.png", Texture.class);
+		gold = manager.get("images/gold.png", Texture.class);
 
 
 		setGameObjectTypeTextures();

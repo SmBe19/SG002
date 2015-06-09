@@ -1,5 +1,6 @@
 package com.smeanox.games.sg002.world;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
@@ -22,6 +23,8 @@ public class GameWorld {
 	private Player activePlayer;
 	private HashSet<GameObject> gameObjects;
 
+	private Scenario scenario;
+
 	public GameWorld(Scenario scenario){
 		initScenario(scenario);
 
@@ -33,6 +36,7 @@ public class GameWorld {
 		mapSizeY = scenario.getMapSizeY();
 
 		worldMap = new GameObject[mapSizeY][mapSizeX];
+		this.scenario = scenario;
 	}
 
 	public int getMapSizeX() {
@@ -59,12 +63,14 @@ public class GameWorld {
 	 * @param player
 	 */
 	public void addStartGameObjects(Player player, GameObjectType gameObjectType){
-		int x, y;
+		int x, y;/*
 		do{
-			x = MathUtils.random(mapSizeX-1);
-			y = MathUtils.random(mapSizeY-1);
+			x = scenario.getRandom().nextInt(mapSizeX-1);
+			y = scenario.getRandom().nextInt(mapSizeY-1);
 		} while(!canAddStartGameObject(x, y));
-
+*/
+		x = scenario.getStartPos(player.getId()).x;
+		y = scenario.getStartPos(player.getId()).y;
 		worldMap[y][x] = new GameObject(gameObjectType, player);
 		worldMap[y][x].setPositionX(x);
 		worldMap[y][x].setPositionY(y);
