@@ -12,42 +12,46 @@ import java.util.Map;
 
 /**
  * Reads a given XML file and creates the gameObjectTypes
+ *
  * @author Benjamin Schmid
  */
 public class GameObjectTypeReader {
-	private GameObjectTypeReader(){
+	private GameObjectTypeReader() {
 	}
 
 	/**
 	 * Reads all the GameObjectTypes from the given file
+	 *
 	 * @param file file to read from
 	 * @return list with all the read ids
 	 */
-	public static ArrayList<String> readGameObjectTypes(FileHandle file){
+	public static ArrayList<String> readGameObjectTypes(FileHandle file) {
 		ArrayList<String> ids = new ArrayList<String>();
 		HashMap<GameObjectType, XmlReader.Element> damageTables = new HashMap<GameObjectType, XmlReader.Element>();
 		HashMap<GameObjectType, XmlReader.Element> canProduces = new HashMap<GameObjectType, XmlReader.Element>();
 		XmlReader reader = new XmlReader();
 		try {
 			XmlReader.Element root = reader.parse(file);
-			for(XmlReader.Element gameObjectType : root.getChildByName("GameObjectTypes").getChildrenByName("GameObjectType")){
+			for (XmlReader.Element gameObjectType : root.getChildByName("GameObjectTypes").getChildrenByName("GameObjectType")) {
 				XmlReader.Element damageTable = gameObjectType.getChildByName("DamageTable");
 				XmlReader.Element canProduce = gameObjectType.getChildByName("CanProduce");
 
 				GameObjectType aGameObjectType = readGameObjectType(gameObjectType);
 				damageTables.put(aGameObjectType, damageTable);
 				canProduces.put(aGameObjectType, canProduce);
-				Assets.addToLoadQueue(gameObjectType.getAttribute("texture"), Texture.class);
+				if (!Consts.headlessMode) {
+					Assets.addToLoadQueue(gameObjectType.getAttribute("texture"), Texture.class);
+				}
 				ids.add(gameObjectType.getAttribute("id"));
 
-				if(gameObjectType.getBooleanAttribute("start", false)){
+				if (gameObjectType.getBooleanAttribute("start", false)) {
 					GameObjectType.setStartGameObjectType(aGameObjectType);
 				}
 			}
 
-			for(Map.Entry<GameObjectType, XmlReader.Element> entry : damageTables.entrySet()){
-				if(entry.getKey().isCanFight()){
-					for(XmlReader.Element damageTableEntry : entry.getValue().getChildrenByName("Damage")){
+			for (Map.Entry<GameObjectType, XmlReader.Element> entry : damageTables.entrySet()) {
+				if (entry.getKey().isCanFight()) {
+					for (XmlReader.Element damageTableEntry : entry.getValue().getChildrenByName("Damage")) {
 						entry.getKey().addDamageTableEntry(
 								GameObjectType.getGameObjectTypeById(
 										damageTableEntry.getAttribute("gameObjectType")),
@@ -56,9 +60,9 @@ public class GameObjectTypeReader {
 				}
 			}
 
-			for(Map.Entry<GameObjectType, XmlReader.Element> entry : canProduces.entrySet()){
-				if(entry.getKey().isCanProduce()){
-					for(XmlReader.Element canProduceEntry : entry.getValue().getChildrenByName("Produce")){
+			for (Map.Entry<GameObjectType, XmlReader.Element> entry : canProduces.entrySet()) {
+				if (entry.getKey().isCanProduce()) {
+					for (XmlReader.Element canProduceEntry : entry.getValue().getChildrenByName("Produce")) {
 						entry.getKey().addCanProduceEntry(
 								GameObjectType.getGameObjectTypeById(
 										canProduceEntry.getAttribute("gameObjectType")));
@@ -68,14 +72,14 @@ public class GameObjectTypeReader {
 		} catch (IOException e) {
 			System.out.println("Config file (GameObjectTypes) not found: " + file.name());
 			e.printStackTrace();
-		} catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			System.out.println("Config file (GameObjectTypes) is bad: " + file.name());
 			e.printStackTrace();
 		}
 		return ids;
 	}
 
-	private static GameObjectType readGameObjectType(XmlReader.Element element){
+	private static GameObjectType readGameObjectType(XmlReader.Element element) {
 		XmlReader.Element hp = element.getChildByName("HP");
 		XmlReader.Element value = element.getChildByName("Value");
 		XmlReader.Element radius = element.getChildByName("Radius");
@@ -84,21 +88,21 @@ public class GameObjectTypeReader {
 
 		return new GameObjectType(
 				element.getAttribute("id"),
-			Language.getStrings().get(element.getAttribute("name")),
+				Language.getStrings().get(element.getAttribute("name")),
 				element.getAttribute("texture"),
-			hp.getIntAttribute("defaultHP"),
-			value.getIntAttribute("value"),
-			value.getIntAttribute("valuePerRound"),
-			value.getIntAttribute("valueOnDestruction"),
-			radius.getIntAttribute("radiusWalkMin"),
-			radius.getIntAttribute("radiusWalkMax"),
-			radius.getIntAttribute("radiusProduceMin"),
-			radius.getIntAttribute("radiusProduceMax"),
-			radius.getIntAttribute("radiusFightMin"),
-			radius.getIntAttribute("radiusFightMax"),
-			damageTable.getBooleanAttribute("canFight"),
-			new HashMap<GameObjectType, Integer>(),
-			canProduce.getBooleanAttribute("canProduce"),
-			new ArrayList<GameObjectType>());
+				hp.getIntAttribute("defaultHP"),
+				value.getIntAttribute("value"),
+				value.getIntAttribute("valuePerRound"),
+				value.getIntAttribute("valueOnDestruction"),
+				radius.getIntAttribute("radiusWalkMin"),
+				radius.getIntAttribute("radiusWalkMax"),
+				radius.getIntAttribute("radiusProduceMin"),
+				radius.getIntAttribute("radiusProduceMax"),
+				radius.getIntAttribute("radiusFightMin"),
+				radius.getIntAttribute("radiusFightMax"),
+				damageTable.getBooleanAttribute("canFight"),
+				new HashMap<GameObjectType, Integer>(),
+				canProduce.getBooleanAttribute("canProduce"),
+				new ArrayList<GameObjectType>());
 	}
 }

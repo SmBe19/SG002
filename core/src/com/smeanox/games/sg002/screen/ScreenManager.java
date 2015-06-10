@@ -5,6 +5,7 @@ import com.smeanox.games.sg002.world.GameController;
 
 /**
  * Manages the different Screens
+ *
  * @author Benjamin Schmid
  */
 public class ScreenManager {
@@ -16,22 +17,23 @@ public class ScreenManager {
 	private static MenuScreen menuScreen;
 	private static PauseScreen pauseScreen;
 
-	private ScreenManager(){
+	private ScreenManager() {
 	}
 
 	/**
 	 * Initializes the screen manager
+	 *
 	 * @param game the game to set the screens to
 	 */
-	public static void init(Game game){
+	public static void init(Game game) {
 		ScreenManager.game = game;
 	}
 
 	/**
 	 * Sets the splash screen as active screen
 	 */
-	public static void showSplash(){
-		if(splashScreen == null){
+	public static void showSplash() {
+		if (splashScreen == null) {
 			splashScreen = new SplashScreen();
 		}
 		game.setScreen(splashScreen);
@@ -40,8 +42,8 @@ public class ScreenManager {
 	/**
 	 * Sets the splash screen as active screen
 	 */
-	public static void showMenu(){
-		if(menuScreen == null){
+	public static void showMenu() {
+		if (menuScreen == null) {
 			menuScreen = new MenuScreen();
 		}
 		game.setScreen(menuScreen);
@@ -49,10 +51,11 @@ public class ScreenManager {
 
 	/**
 	 * Sets the pause menu as active screen
+	 *
 	 * @param gameController the GameController to use
 	 */
-	public static void showPauseMenu(GameController gameController){
-		if(pauseScreen == null){
+	public static void showPauseMenu(GameController gameController) {
+		if (pauseScreen == null) {
 			pauseScreen = new PauseScreen();
 		}
 		pauseScreen.setGameController(gameController);
@@ -62,15 +65,16 @@ public class ScreenManager {
 	/**
 	 * Sets the game screen as active screen
 	 */
-	public static void showGame(){
+	public static void showGame() {
 		game.setScreen(gameScreen);
 	}
 
 	/**
 	 * Sets the game screen as active screen with the given scenario loaded
+	 *
 	 * @param gameController the GameController to start the game with
 	 */
-	public static void showGame(GameController gameController){
+	public static void showGame(GameController gameController) {
 		gameScreen = null;
 		gameScreen = new GameScreen(gameController);
 		game.setScreen(gameScreen);

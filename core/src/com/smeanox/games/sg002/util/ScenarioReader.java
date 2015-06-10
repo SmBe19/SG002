@@ -9,23 +9,25 @@ import java.util.ArrayList;
 
 /**
  * Reads a given XML file and creates the Scenarios
+ *
  * @author Benjamin Schmid
  */
 public class ScenarioReader {
-	private ScenarioReader(){
+	private ScenarioReader() {
 	}
 
 	/**
 	 * Reads all the Scenarios from the given file
+	 *
 	 * @param file file to read from
 	 * @return list with all the read ids
 	 */
-	public static ArrayList<String> readScenarios(FileHandle file){
+	public static ArrayList<String> readScenarios(FileHandle file) {
 		ArrayList<String> ids = new ArrayList<String>();
 		XmlReader reader = new XmlReader();
 		try {
 			XmlReader.Element root = reader.parse(file);
-			for(XmlReader.Element scenario : root.getChildByName("Scenarios").getChildrenByName("Scenario")){
+			for (XmlReader.Element scenario : root.getChildByName("Scenarios").getChildrenByName("Scenario")) {
 				new Scenario(
 						scenario.getAttribute("id"),
 						Language.getStrings().get(scenario.getAttribute("name")),
@@ -40,7 +42,7 @@ public class ScenarioReader {
 		} catch (IOException e) {
 			System.out.println("Config file (GameObjectTypes) not found: " + file.name());
 			e.printStackTrace();
-		} catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			System.out.println("Config file (GameObjectTypes) is bad: " + file.name());
 			e.printStackTrace();
 		}

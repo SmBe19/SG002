@@ -12,6 +12,7 @@ import java.util.Set;
 
 /**
  * Describes an active GameObject
+ *
  * @author Benjamin Schmid
  */
 public class GameObject {
@@ -25,11 +26,11 @@ public class GameObject {
 
 	private Set<ActionType> usedActions = new HashSet();
 
-	public GameObject(XmlReader.Element reader){
+	public GameObject(XmlReader.Element reader) {
 		load(reader);
 	}
 
-	public GameObject(GameObjectType gameObjectType, Player player){
+	public GameObject(GameObjectType gameObjectType, Player player) {
 		this.gameObjectType = gameObjectType;
 		this.player = player;
 		this.hp = gameObjectType.getDefaultHP();
@@ -47,7 +48,7 @@ public class GameObject {
 		this.hp = hp;
 	}
 
-	public void addHp(int hp){
+	public void addHp(int hp) {
 		this.hp += hp;
 	}
 
@@ -75,41 +76,44 @@ public class GameObject {
 		this.player = player;
 	}
 
-	public boolean isCanDoAction(ActionType action){
+	public boolean isCanDoAction(ActionType action) {
 		return !usedActions.contains(action) && getGameObjectType().isCanDoAction(action);
 	}
 
 	/**
 	 * reenables all actions
 	 */
-	public void resetUsedActions(){
+	public void resetUsedActions() {
 		usedActions.clear();
 	}
 
 	/**
 	 * Checks whether the specified action was already used in this round
+	 *
 	 * @param action
 	 * @return true if it was already used
 	 */
-	public boolean wasUsed(ActionType action){
+	public boolean wasUsed(ActionType action) {
 		if (action == null) return false;
 		return usedActions.contains(action);
 	}
+
 	/**
 	 * Uses a specific action
+	 *
 	 * @param action
 	 * @return true if it was already used
 	 */
-	public void use(ActionType action){
+	public void use(ActionType action) {
 		if (action == null) return;
 		usedActions.add(action);
 	}
 
-	private int getDiff(int x, int y){
+	private int getDiff(int x, int y) {
 		int diffX, diffY, diffTot;
 		diffX = Math.abs(positionX - x);
 		diffY = Math.abs(positionY - y);
-		if(Consts.walkDiagonal){
+		if (Consts.walkDiagonal) {
 			diffTot = Math.max(diffX, diffY);
 		} else {
 			diffTot = diffX + diffY;
@@ -119,11 +123,12 @@ public class GameObject {
 
 	/**
 	 * Checks if the new position is within reach to walk
+	 *
 	 * @param x
 	 * @param y
 	 * @return true if the object can move to this position
 	 */
-	public boolean canMoveTo(int x, int y){
+	public boolean canMoveTo(int x, int y) {
 		int diffTot = getDiff(x, y);
 		return diffTot >= gameObjectType.getRadiusWalkMin() && diffTot <= gameObjectType.getRadiusWalkMax() &&
 				!usedActions.contains(ActionType.MOVE);
@@ -131,11 +136,12 @@ public class GameObject {
 
 	/**
 	 * Checks if the new position is within reach to produce
+	 *
 	 * @param x
 	 * @param y
 	 * @return true if the object can produce to this position
 	 */
-	public boolean canProduceTo(int x, int y){
+	public boolean canProduceTo(int x, int y) {
 		int diffTot = getDiff(x, y);
 		return diffTot >= gameObjectType.getRadiusProduceMin() && diffTot <= gameObjectType.getRadiusProduceMax() &&
 				!usedActions.contains(ActionType.PRODUCE);
@@ -143,11 +149,12 @@ public class GameObject {
 
 	/**
 	 * Checks if the new position is within reach to fight
+	 *
 	 * @param x
 	 * @param y
 	 * @return true if the object can fight this position
 	 */
-	public boolean canFightTo(int x, int y){
+	public boolean canFightTo(int x, int y) {
 		int diffTot = getDiff(x, y);
 		return diffTot >= gameObjectType.getRadiusFightMin() && diffTot <= gameObjectType.getRadiusFightMax() &&
 				!usedActions.contains(ActionType.FIGHT);
@@ -155,10 +162,11 @@ public class GameObject {
 
 	/**
 	 * Checks if the gameObject can be fought
+	 *
 	 * @param gameObject the GameObject to fight against
 	 * @return true if the GameObject can be fought
 	 */
-	public boolean canFight(GameObject gameObject){
+	public boolean canFight(GameObject gameObject) {
 		return gameObjectType.isCanFight()
 				&& canFightTo(gameObject.getPositionX(), gameObject.getPositionY())
 				&& gameObject.getPlayer() != player;
@@ -166,11 +174,12 @@ public class GameObject {
 
 	/**
 	 * Fights the given GameObject
+	 *
 	 * @param gameObject the GameObject to fight against
 	 * @return the difference in HP
 	 */
-	public int fight(GameObject gameObject){
-		if(!canFight(gameObject)){
+	public int fight(GameObject gameObject) {
+		if (!canFight(gameObject)) {
 			return 0;
 		}
 
@@ -181,6 +190,7 @@ public class GameObject {
 
 	/**
 	 * Saves the GameObject
+	 *
 	 * @param writer the XmlWriter
 	 */
 	public void save(XmlWriter writer) throws IOException {
@@ -190,9 +200,9 @@ public class GameObject {
 		writer.attribute("gameObjectType", gameObjectType.getId());
 		writer.attribute("player", player.getId());
 		writer.element("usedActions");
-		for (ActionType action : usedActions){
+		for (ActionType action : usedActions) {
 			writer.element("action");
-			writer.attribute("name",action.name());
+			writer.attribute("name", action.name());
 			writer.pop();
 		}
 		writer.pop();
@@ -200,15 +210,16 @@ public class GameObject {
 
 	/**
 	 * Loads the GameObject
+	 *
 	 * @param reader the XmlReader.Element
 	 */
-	public void load(XmlReader.Element reader){
+	public void load(XmlReader.Element reader) {
 		positionX = reader.getIntAttribute("x");
 		positionY = reader.getIntAttribute("y");
 		hp = reader.getIntAttribute("hp");
 		gameObjectType = GameObjectType.getGameObjectTypeById(reader.getAttribute("gameObjectType"));
 		player = Player.getPlayerById(reader.getIntAttribute("player"));
-		for (XmlReader.Element element : reader.getChildByName("usedActions").getChildrenByName("action")){
+		for (XmlReader.Element element : reader.getChildByName("usedActions").getChildrenByName("action")) {
 			usedActions.add(ActionType.valueOf(element.getAttribute("name")));
 		}
 	}

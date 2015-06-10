@@ -39,6 +39,7 @@ import java.util.LinkedList;
 
 /**
  * Pause screen
+ *
  * @author Benjamin Schmid
  */
 public class PauseScreen extends AbstractScreen {
@@ -47,15 +48,18 @@ public class PauseScreen extends AbstractScreen {
 
 	private boolean wasBackDown;
 
-	/** Constructor */
-	public PauseScreen(){
+	/**
+	 * Constructor
+	 */
+	public PauseScreen() {
 		super();
 
 		generateGUI();
 	}
 
-	private void generateGUI(){
-		LinkedList<Button> toLayout = new LinkedList<Button>();Button b;
+	private void generateGUI() {
+		LinkedList<Button> toLayout = new LinkedList<Button>();
+		Button b;
 
 		// quit game
 		b = new Button(new Sprite(Assets.button), Assets.liberationMedium,
@@ -119,21 +123,21 @@ public class PauseScreen extends AbstractScreen {
 	/**
 	 * resumes the game
 	 */
-	private void resumeGame(){
+	private void resumeGame() {
 		ScreenManager.showGame();
 	}
 
-	private void saveGame(){
+	private void saveGame() {
 		gameController.saveGame(Consts.quickSaveFileName);
 		resumeGame();
 	}
 
-	private void loadGame(){
+	private void loadGame() {
 		gameController.loadGame(Consts.quickSaveFileName);
 		resumeGame();
 	}
 
-	private void quitGame(){
+	private void quitGame() {
 		Gdx.app.exit();
 	}
 
@@ -143,6 +147,7 @@ public class PauseScreen extends AbstractScreen {
 
 	/**
 	 * Called when the screen should render itself.
+	 *
 	 * @param delta The time in seconds since the last render.
 	 */
 	@Override
@@ -151,8 +156,8 @@ public class PauseScreen extends AbstractScreen {
 		updateGUI(delta, false);
 		renderGUI(delta);
 
-		if(wasBackDown && !(Gdx.input.isKeyPressed(Input.Keys.BACK)
-				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))){
+		if (wasBackDown && !(Gdx.input.isKeyPressed(Input.Keys.BACK)
+				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))) {
 			resumeGame();
 		}
 

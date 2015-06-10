@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 /**
  * A clickable object
+ *
  * @author Benjamin Schmid
  */
 public abstract class AbstractGUIElement implements GUIElement {
@@ -25,7 +26,7 @@ public abstract class AbstractGUIElement implements GUIElement {
 	private boolean wasDown = false;
 	protected Vector2 lastTouchPos;
 
-	public AbstractGUIElement(){
+	public AbstractGUIElement() {
 		size = new Vector2(0, 0);
 		position = new Vector2(0, 0);
 		boundingBox = new Rectangle();
@@ -36,15 +37,16 @@ public abstract class AbstractGUIElement implements GUIElement {
 
 	/**
 	 * called once per frame to check if the object is clicked
+	 *
 	 * @param wasClick true if there was already a click in this frame.
 	 * @return true if the element was clicked
 	 */
 	@Override
 	public boolean updateClickable(Vector2 touchPos, boolean wasClick) {
 		boolean wasClicked = false;
-		if(visible && !wasClick && wasDown && !Gdx.input.isTouched()){
-			if(boundingBox != null && boundingBox.contains(touchPos.x, touchPos.y)) {
-				if(active) {
+		if (visible && !wasClick && wasDown && !Gdx.input.isTouched()) {
+			if (boundingBox != null && boundingBox.contains(touchPos.x, touchPos.y)) {
+				if (active) {
 					fireOnClick();
 				}
 				wasClicked = true;
@@ -60,6 +62,7 @@ public abstract class AbstractGUIElement implements GUIElement {
 
 	/**
 	 * Returns the bounding box of this object
+	 *
 	 * @return the bounding box
 	 */
 	@Override
@@ -69,12 +72,13 @@ public abstract class AbstractGUIElement implements GUIElement {
 
 	/**
 	 * Sets the bounding box of this object
+	 *
 	 * @param x
 	 * @param y
 	 * @param width
 	 * @param height
 	 */
-	protected void setBoundingBox(float x, float y, float width, float height){
+	protected void setBoundingBox(float x, float y, float width, float height) {
 		boundingBox.set(x, y, width, height);
 		setSize(boundingBox.getWidth(), boundingBox.getHeight());
 		setPosition(boundingBox.getX(), boundingBox.getY());
@@ -82,9 +86,10 @@ public abstract class AbstractGUIElement implements GUIElement {
 
 	/**
 	 * Sets tho bounding box of this object
+	 *
 	 * @param rectangle the bounding box
 	 */
-	protected void setBoundingBox(Rectangle rectangle){
+	protected void setBoundingBox(Rectangle rectangle) {
 		boundingBox.set(rectangle);
 		setSize(boundingBox.getWidth(), boundingBox.getHeight());
 		setPosition(boundingBox.getX(), boundingBox.getY());
@@ -92,16 +97,18 @@ public abstract class AbstractGUIElement implements GUIElement {
 
 	/**
 	 * Sets the size of this object
+	 *
 	 * @param width
 	 * @param height
 	 */
-	public void setSize(float width, float height){
+	public void setSize(float width, float height) {
 		size.set(width, height);
 		boundingBox.setSize(width, height);
 	}
 
 	/**
 	 * Sets the position of this object
+	 *
 	 * @param x
 	 * @param y
 	 */
@@ -112,6 +119,7 @@ public abstract class AbstractGUIElement implements GUIElement {
 
 	/**
 	 * Sets the center of this object
+	 *
 	 * @param x
 	 * @param y
 	 */
@@ -138,6 +146,7 @@ public abstract class AbstractGUIElement implements GUIElement {
 	public void resize(float width, float height) {
 		setBoundingBox(resizer.getNewSize(width, height));
 	}
+
 	@Override
 	public void setVisible(boolean visible) {
 		this.visible = visible;
@@ -159,8 +168,8 @@ public abstract class AbstractGUIElement implements GUIElement {
 		return active;
 	}
 
-	protected void fireOnClick(){
-		if(clickHandlers != null) {
+	protected void fireOnClick() {
+		if (clickHandlers != null) {
 			for (ClickHandler c : clickHandlers) {
 				c.onClick();
 			}
@@ -174,7 +183,7 @@ public abstract class AbstractGUIElement implements GUIElement {
 	 */
 	@Override
 	public void addClickHandler(ClickHandler handler) {
-		if(clickHandlers == null){
+		if (clickHandlers == null) {
 			clickHandlers = new LinkedList<ClickHandler>();
 		}
 		clickHandlers.add(handler);
@@ -187,11 +196,11 @@ public abstract class AbstractGUIElement implements GUIElement {
 	 */
 	@Override
 	public void removeClickHandler(ClickHandler handler) {
-		if(clickHandlers == null){
+		if (clickHandlers == null) {
 			return;
 		}
 		clickHandlers.remove(handler);
-		if(clickHandlers.isEmpty()){
+		if (clickHandlers.isEmpty()) {
 			clickHandlers = null;
 		}
 	}

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 /**
  * Defines stats &amp; co. for a GameObjectTye
+ *
  * @author Benjamin Schmid
  */
 public class GameObjectType {
@@ -53,7 +54,7 @@ public class GameObjectType {
 			int radiusFightMin,
 			int radiusFightMax,
 			boolean canFight,
-			HashMap<GameObjectType,Integer> damageTable,
+			HashMap<GameObjectType, Integer> damageTable,
 			boolean canProduce,
 			ArrayList<GameObjectType> canProduceList) {
 		this.id = id;
@@ -86,7 +87,7 @@ public class GameObjectType {
 		return name;
 	}
 
-	public String getTextureName(){
+	public String getTextureName() {
 		return textureName;
 	}
 
@@ -94,7 +95,7 @@ public class GameObjectType {
 		return texture;
 	}
 
-	public void setTexture(Texture texture){
+	public void setTexture(Texture texture) {
 		this.texture = texture;
 	}
 
@@ -138,7 +139,7 @@ public class GameObjectType {
 		return radiusFightMax;
 	}
 
-	public boolean isCanFight(){
+	public boolean isCanFight() {
 		return canFight;
 	}
 
@@ -146,15 +147,15 @@ public class GameObjectType {
 		return damageTable;
 	}
 
-	public boolean isCanProduce(){
+	public boolean isCanProduce() {
 		return canProduce;
 	}
 
-	public void addDamageTableEntry(GameObjectType gameObjectType, int damage){
+	public void addDamageTableEntry(GameObjectType gameObjectType, int damage) {
 		damageTable.put(gameObjectType, damage);
 	}
 
-	public int getDamage(GameObjectType gameObjectType){
+	public int getDamage(GameObjectType gameObjectType) {
 		return damageTable.get(gameObjectType);
 	}
 
@@ -162,32 +163,35 @@ public class GameObjectType {
 		return canProduceList;
 	}
 
-	public void addCanProduceEntry(GameObjectType gameObjectType){
+	public void addCanProduceEntry(GameObjectType gameObjectType) {
 		canProduceList.add(gameObjectType);
 	}
 
 	/**
 	 * returns the GameObjectType with the given name
+	 *
 	 * @param id id of the gameObjectType
 	 * @return the GameObjectType
 	 */
-	public static GameObjectType getGameObjectTypeById(String id){
+	public static GameObjectType getGameObjectTypeById(String id) {
 		return idToGameObjectType.get(id);
 	}
 
 	/**
 	 * returns all GameObjectTypes
+	 *
 	 * @return a List of all GameObjectTypes
 	 */
-	public static Collection<GameObjectType> getAllGameObjectTypes(){
+	public static Collection<GameObjectType> getAllGameObjectTypes() {
 		return idToGameObjectType.values();
 	}
 
 	/**
 	 * returns all GameObjectTypes sorted
+	 *
 	 * @return a List of all GameObjectTypes
 	 */
-	public static LinkedList<GameObjectType> getAllGameObjectTypesSorted(){
+	public static LinkedList<GameObjectType> getAllGameObjectTypesSorted() {
 		LinkedList<GameObjectType> gameObjectTypes = new LinkedList<GameObjectType>(idToGameObjectType.values());
 		Collections.sort(gameObjectTypes, new Comparator<GameObjectType>() {
 			@Override
@@ -206,8 +210,8 @@ public class GameObjectType {
 		GameObjectType.startGameObjectType = startGameObjectType;
 	}
 
-	public boolean isCanDoAction(Action.ActionType action){
-		switch(action){
+	public boolean isCanDoAction(Action.ActionType action) {
+		switch (action) {
 			case MOVE:
 				return getRadiusWalkMax() > 0;
 			case FIGHT:

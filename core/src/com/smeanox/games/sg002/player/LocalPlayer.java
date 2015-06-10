@@ -4,10 +4,11 @@ import com.smeanox.games.sg002.world.Action;
 
 /**
  * A real player that plays local
+ *
  * @author Benjamin Schmid
  */
 public class LocalPlayer extends Player {
-	public LocalPlayer(){
+	public LocalPlayer() {
 	}
 
 	@Override

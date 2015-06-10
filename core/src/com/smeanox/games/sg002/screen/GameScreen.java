@@ -249,10 +249,10 @@ public class GameScreen extends AbstractScreen {
 		layout(produceButtons, cols, rows, 0, 0, 0, 0, 250, 40, 5, 5);
 	}
 
-	private void initKeys(){
+	private void initKeys() {
 		wasKeyDown = new HashMap<Integer, Boolean>();
 
-		for(Integer key : Consts.KeyboardShortcuts.getAllShortcuts()){
+		for (Integer key : Consts.KeyboardShortcuts.getAllShortcuts()) {
 			wasKeyDown.put(key, false);
 		}
 	}
@@ -315,89 +315,89 @@ public class GameScreen extends AbstractScreen {
 
 		wasTouchDown = Gdx.input.isTouched();
 
-		for(Integer key : Consts.KeyboardShortcuts.getAllShortcuts()){
+		for (Integer key : Consts.KeyboardShortcuts.getAllShortcuts()) {
 			wasKeyDown.put(key, Gdx.input.isKeyPressed(key));
 		}
 
 		// in the above loop
-		if(Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
 			wasKeyDown.put(Consts.KeyboardShortcuts.backKey, true);
 		}
 	}
 
 	private void updateKeyboardShortcuts() {
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.quickSave)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.quickSave)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.quickSave)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.quickSave)) {
 			gameController.saveGame(Consts.quickSaveFileName);
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.quickLoad)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.quickLoad)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.quickLoad)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.quickLoad)) {
 			gameController.loadGame(Consts.quickSaveFileName);
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.nextPlayer)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.nextPlayer)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.nextPlayer)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.nextPlayer)) {
 			proposeEndPlaying();
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.produceArcher)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceArcher)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.produceArcher)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceArcher)) {
 			startProduce();
 			selectProduceGameObjectType(GameObjectType.getGameObjectTypeById("archer"));
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.produceGoldMine)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceGoldMine)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.produceGoldMine)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceGoldMine)) {
 			startProduce();
 			selectProduceGameObjectType(GameObjectType.getGameObjectTypeById("goldMine"));
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.produceKnight)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceKnight)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.produceKnight)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceKnight)) {
 			startProduce();
 			selectProduceGameObjectType(GameObjectType.getGameObjectTypeById("knight"));
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.produceInfantry)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceInfantry)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.produceInfantry)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceInfantry)) {
 			startProduce();
 			selectProduceGameObjectType(GameObjectType.getGameObjectTypeById("infantry"));
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.produceTownCenter)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceTownCenter)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.produceTownCenter)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.produceTownCenter)) {
 			startProduce();
 			selectProduceGameObjectType(GameObjectType.getGameObjectTypeById("townCenter"));
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.produceVillager)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.nextPlayer)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.produceVillager)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.nextPlayer)) {
 			startProduce();
 			selectProduceGameObjectType(GameObjectType.getGameObjectTypeById("villager"));
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.produce)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.nextPlayer)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.produce)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.nextPlayer)) {
 			startProduce();
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.move)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.move)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.move)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.move)) {
 			startMove();
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.fight)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.fight)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.fight)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.fight)) {
 			startFight();
 		}
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.cancel)
-				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.cancel)){
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.cancel)
+				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.cancel)) {
 			cancelAction();
 		}
 
-		if(wasKeyDown.get(Consts.KeyboardShortcuts.backKey)
+		if (wasKeyDown.get(Consts.KeyboardShortcuts.backKey)
 				&& !(Gdx.input.isKeyPressed(Input.Keys.BACK)
-				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))){
+				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))) {
 			pauseGame();
 		}
 	}
 
-	private void centerCameraOnActivePlayer(){
-		for(int y = 0; y < gameController.getGameWorld().getMapSizeY(); y++){
-			for(int x = 0; x < gameController.getGameWorld().getMapSizeX(); x++){
-				if(gameController.getGameWorld().getWorldMap(x, y) != null
+	private void centerCameraOnActivePlayer() {
+		for (int y = 0; y < gameController.getGameWorld().getMapSizeY(); y++) {
+			for (int x = 0; x < gameController.getGameWorld().getMapSizeX(); x++) {
+				if (gameController.getGameWorld().getWorldMap(x, y) != null
 						&& gameController.getGameWorld().getWorldMap(x, y).getPlayer()
-						== gameController.getActivePlayer()){
+						== gameController.getActivePlayer()) {
 					setCameraPosition(gameView.getPositionByField(x, y));
 				}
 			}
@@ -460,12 +460,12 @@ public class GameScreen extends AbstractScreen {
 	 * @param activeGameObject the active GameObject
 	 */
 	private void setProduceButtonsActive(GameObject activeGameObject) {
-		if(activeGameObject == null){
+		if (activeGameObject == null) {
 			return;
 		}
 		setProduceButtonsActive(false);
 		for (GameObjectType got : activeGameObject.getGameObjectType().getCanProduceList()) {
-			if(gameController.getActivePlayer().getMoney() >= got.getValue()) {
+			if (gameController.getActivePlayer().getMoney() >= got.getValue()) {
 				gameObjectTypeToProduceButton.get(got).setActive(true);
 			}
 		}
@@ -500,7 +500,7 @@ public class GameScreen extends AbstractScreen {
 	}
 
 	private void startProduce() {
-		if(gameView.getActiveGameObject() == null){
+		if (gameView.getActiveGameObject() == null) {
 			return;
 		}
 		aAction.actionType = Action.ActionType.NONE;
@@ -516,14 +516,14 @@ public class GameScreen extends AbstractScreen {
 	}
 
 	private void proposeEndPlaying() {
-		if(gameController.getActivePlayer().proposeEndPlaying()){
+		if (gameController.getActivePlayer().proposeEndPlaying()) {
 			cancelAction();
 		}
 	}
 
 	private void selectProduceGameObjectType(GameObjectType gameObjectType) {
-		if(gameView.getActiveGameObject() == null
-				|| !gameView.getActiveGameObject().getGameObjectType().getCanProduceList().contains(gameObjectType)){
+		if (gameView.getActiveGameObject() == null
+				|| !gameView.getActiveGameObject().getGameObjectType().getCanProduceList().contains(gameObjectType)) {
 			return;
 		}
 		aAction.actionType = Action.ActionType.PRODUCE;

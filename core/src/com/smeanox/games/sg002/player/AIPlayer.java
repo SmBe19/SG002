@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 /**
  * Player played by the computer
+ *
  * @author Benjamin Schmid
  */
 public abstract class AIPlayer extends Player {
@@ -15,7 +16,7 @@ public abstract class AIPlayer extends Player {
 
 	@Override
 	public final void update(float delta) {
-		if(finishedPlaying){
+		if (finishedPlaying) {
 			finishedPlaying = false;
 			endPlaying();
 		}
@@ -24,24 +25,25 @@ public abstract class AIPlayer extends Player {
 	/**
 	 * In the next frame the gamecontroller will be informed that the AI finished
 	 */
-	protected void setFinishedPlaying(){
+	protected void setFinishedPlaying() {
 		finishedPlaying = true;
 	}
 
 	/**
 	 * Counts all objects of the given player
+	 *
 	 * @param player the player to count the objects
 	 * @return the number of objects
 	 */
-	protected int countObjects(Player player){
+	protected int countObjects(Player player) {
 		int count = 0;
-		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
-			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
+		for (int y = 0; y < gameWorld.getMapSizeY(); y++) {
+			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
 				GameObject gameObject = gameWorld.getWorldMap(x, y);
-				if(gameObject == null){
+				if (gameObject == null) {
 					continue;
 				}
-				if(gameObject.getPlayer() == player){
+				if (gameObject.getPlayer() == player) {
 					count++;
 				}
 			}
@@ -52,26 +54,27 @@ public abstract class AIPlayer extends Player {
 	/**
 	 * @see #countObjects(Player)
 	 */
-	protected int countMyObjects(){
+	protected int countMyObjects() {
 		return countObjects(this);
 	}
 
 	/**
 	 * Counts all objects of a given player of the given type
-	 * @param player the player to count the objects
+	 *
+	 * @param player         the player to count the objects
 	 * @param gameObjectType the type to count
 	 * @return the number of objects
 	 */
-	protected int countObjects(Player player, GameObjectType gameObjectType){
+	protected int countObjects(Player player, GameObjectType gameObjectType) {
 		int count = 0;
-		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
-			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
+		for (int y = 0; y < gameWorld.getMapSizeY(); y++) {
+			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
 				GameObject gameObject = gameWorld.getWorldMap(x, y);
-				if(gameObject == null){
+				if (gameObject == null) {
 					continue;
 				}
-				if(gameObject.getPlayer() == player
-						&& gameObject.getGameObjectType() == gameObjectType){
+				if (gameObject.getPlayer() == player
+						&& gameObject.getGameObjectType() == gameObjectType) {
 					count++;
 				}
 			}
@@ -82,24 +85,25 @@ public abstract class AIPlayer extends Player {
 	/**
 	 * @see #countObjects(Player, GameObjectType)
 	 */
-	protected int countMyObjects(GameObjectType gameObjectType){
+	protected int countMyObjects(GameObjectType gameObjectType) {
 		return countObjects(this, gameObjectType);
 	}
 
 	/**
 	 * Return a list of all positions where the given player has an object
+	 *
 	 * @param player the player to search
 	 * @return a list of compressed coordinates
 	 */
-	protected LinkedList<Integer> getPositions(Player player){
+	protected LinkedList<Integer> getPositions(Player player) {
 		LinkedList<Integer> sol = new LinkedList<Integer>();
-		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
-			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
+		for (int y = 0; y < gameWorld.getMapSizeY(); y++) {
+			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
 				GameObject gameObject = gameWorld.getWorldMap(x, y);
-				if(gameObject == null){
+				if (gameObject == null) {
 					continue;
 				}
-				if(gameObject.getPlayer() == player){
+				if (gameObject.getPlayer() == player) {
 					sol.add(compress(x, y));
 				}
 			}
@@ -110,26 +114,27 @@ public abstract class AIPlayer extends Player {
 	/**
 	 * @see #getPositions(Player)
 	 */
-	protected LinkedList<Integer> getMyPositions(){
+	protected LinkedList<Integer> getMyPositions() {
 		return getPositions(this);
 	}
 
 	/**
 	 * Returns a list of all positions where the given player has an object from the given type
-	 * @param player the player to search
+	 *
+	 * @param player         the player to search
 	 * @param gameObjectType the type to search
 	 * @return a list of compressed coordinates
 	 */
-	protected LinkedList<Integer> getPositions(Player player, GameObjectType gameObjectType){
+	protected LinkedList<Integer> getPositions(Player player, GameObjectType gameObjectType) {
 		LinkedList<Integer> sol = new LinkedList<Integer>();
-		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
-			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
+		for (int y = 0; y < gameWorld.getMapSizeY(); y++) {
+			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
 				GameObject gameObject = gameWorld.getWorldMap(x, y);
-				if(gameObject == null){
+				if (gameObject == null) {
 					continue;
 				}
-				if(gameObject.getPlayer() == player
-						&& gameObject.getGameObjectType() == gameObjectType){
+				if (gameObject.getPlayer() == player
+						&& gameObject.getGameObjectType() == gameObjectType) {
 					sol.add(compress(x, y));
 				}
 			}
@@ -140,27 +145,28 @@ public abstract class AIPlayer extends Player {
 	/**
 	 * @see #getPositions(Player, GameObjectType)
 	 */
-	protected LinkedList<Integer> getMyPositions(GameObjectType gameObjectType){
+	protected LinkedList<Integer> getMyPositions(GameObjectType gameObjectType) {
 		return getPositions(this, gameObjectType);
 	}
 
 	/**
 	 * Returns all possible fields to produce to
-	 * @param pos field from which to produce
+	 *
+	 * @param pos                   field from which to produce
 	 * @param produceGameObjectType type to produce
 	 * @return list of all possible fields
 	 */
-	protected LinkedList<Integer> getAllFreeProduceFields(int pos, GameObjectType produceGameObjectType){
+	protected LinkedList<Integer> getAllFreeProduceFields(int pos, GameObjectType produceGameObjectType) {
 		LinkedList<Integer> sol = new LinkedList<Integer>();
-		if(gameWorld.getWorldMap(extractX(pos), extractY(pos)) == null){
+		if (gameWorld.getWorldMap(extractX(pos), extractY(pos)) == null) {
 			return sol;
 		}
 		GameObjectType gameObjectType = gameWorld.getWorldMap(extractX(pos), extractY(pos)).getGameObjectType();
-		for(int y = extractY(pos) - gameObjectType.getRadiusProduceMax();
-			y <= extractY(pos) + gameObjectType.getRadiusProduceMax(); y++){
-			for(int x = extractX(pos) - gameObjectType.getRadiusProduceMax();
-				x <= extractX(pos) + gameObjectType.getRadiusProduceMax(); x++){
-				if(gameWorld.canProduce(extractX(pos), extractY(pos), x, y, produceGameObjectType)){
+		for (int y = extractY(pos) - gameObjectType.getRadiusProduceMax();
+			 y <= extractY(pos) + gameObjectType.getRadiusProduceMax(); y++) {
+			for (int x = extractX(pos) - gameObjectType.getRadiusProduceMax();
+				 x <= extractX(pos) + gameObjectType.getRadiusProduceMax(); x++) {
+				if (gameWorld.canProduce(extractX(pos), extractY(pos), x, y, produceGameObjectType)) {
 					sol.add(compress(x, y));
 				}
 			}
@@ -170,13 +176,14 @@ public abstract class AIPlayer extends Player {
 
 	/**
 	 * Returns one possible field to produce to
-	 * @param pos field from which to produce
+	 *
+	 * @param pos                   field from which to produce
 	 * @param produceGameObjectType type to produce
 	 * @return compressed coordinate of a possible field
 	 */
-	protected int getFirstFreeProduceField(int pos, GameObjectType produceGameObjectType){
+	protected int getFirstFreeProduceField(int pos, GameObjectType produceGameObjectType) {
 		LinkedList<Integer> allFields = getAllFreeProduceFields(pos, produceGameObjectType);
-		if(allFields.isEmpty()){
+		if (allFields.isEmpty()) {
 			return -1;
 		}
 		return allFields.get(0);
@@ -184,34 +191,36 @@ public abstract class AIPlayer extends Player {
 
 	/**
 	 * Returns one possible field to produce to
-	 * @param pos field from which to produce
+	 *
+	 * @param pos                   field from which to produce
 	 * @param produceGameObjectType type to produce
 	 * @return compressed coordinate of a possible field
 	 */
-	protected int getRandomFreeProduceField(int pos, GameObjectType produceGameObjectType){
+	protected int getRandomFreeProduceField(int pos, GameObjectType produceGameObjectType) {
 		LinkedList<Integer> allFields = getAllFreeProduceFields(pos, produceGameObjectType);
-		if(allFields.isEmpty()){
+		if (allFields.isEmpty()) {
 			return -1;
 		}
-		return allFields.get(MathUtils.random(allFields.size()-1));
+		return allFields.get(MathUtils.random(allFields.size() - 1));
 	}
 
 	/**
 	 * Returns all possible fields to move to
+	 *
 	 * @param pos start position
 	 * @return list of all possible fields
 	 */
-	protected LinkedList<Integer> getAllFreeMoveFields(int pos){
+	protected LinkedList<Integer> getAllFreeMoveFields(int pos) {
 		LinkedList<Integer> sol = new LinkedList<Integer>();
-		if(gameWorld.getWorldMap(extractX(pos), extractY(pos)) == null){
+		if (gameWorld.getWorldMap(extractX(pos), extractY(pos)) == null) {
 			return sol;
 		}
 		GameObjectType gameObjectType = gameWorld.getWorldMap(extractX(pos), extractY(pos)).getGameObjectType();
-		for(int y = extractY(pos) - gameObjectType.getRadiusWalkMax();
-			y <= extractY(pos) + gameObjectType.getRadiusWalkMax(); y++){
-			for(int x = extractX(pos) - gameObjectType.getRadiusWalkMax();
-				x <= extractX(pos) + gameObjectType.getRadiusWalkMax(); x++){
-				if(gameWorld.canMove(extractX(pos), extractY(pos), x, y)) {
+		for (int y = extractY(pos) - gameObjectType.getRadiusWalkMax();
+			 y <= extractY(pos) + gameObjectType.getRadiusWalkMax(); y++) {
+			for (int x = extractX(pos) - gameObjectType.getRadiusWalkMax();
+				 x <= extractX(pos) + gameObjectType.getRadiusWalkMax(); x++) {
+				if (gameWorld.canMove(extractX(pos), extractY(pos), x, y)) {
 					sol.add(compress(x, y));
 				}
 			}
@@ -221,33 +230,35 @@ public abstract class AIPlayer extends Player {
 
 	/**
 	 * Returns a random possible field to move to
+	 *
 	 * @param pos start position
 	 * @return compressed coordinate of a possible field
 	 */
-	protected int getRandomFreeMoveField(int pos){
+	protected int getRandomFreeMoveField(int pos) {
 		LinkedList<Integer> allFields = getAllFreeMoveFields(pos);
-		if(allFields.isEmpty()){
+		if (allFields.isEmpty()) {
 			return -1;
 		}
-		return allFields.get(MathUtils.random(allFields.size()-1));
+		return allFields.get(MathUtils.random(allFields.size() - 1));
 	}
 
 	/**
 	 * Returns all possible fields to fight against
+	 *
 	 * @param pos start position
 	 * @return list of all possible fields
 	 */
-	protected LinkedList<Integer> getAllFightFields(int pos){
+	protected LinkedList<Integer> getAllFightFields(int pos) {
 		LinkedList<Integer> sol = new LinkedList<Integer>();
-		if(gameWorld.getWorldMap(extractX(pos), extractY(pos)) == null){
+		if (gameWorld.getWorldMap(extractX(pos), extractY(pos)) == null) {
 			return sol;
 		}
 		GameObjectType gameObjectType = gameWorld.getWorldMap(extractX(pos), extractY(pos)).getGameObjectType();
-		for(int y = extractY(pos) - gameObjectType.getRadiusFightMax();
-			y <= extractY(pos) + gameObjectType.getRadiusFightMax(); y++){
-			for(int x = extractX(pos) - gameObjectType.getRadiusFightMax();
-				x <= extractX(pos) + gameObjectType.getRadiusFightMax(); x++){
-				if(gameWorld.canFight(extractX(pos), extractY(pos), x, y)) {
+		for (int y = extractY(pos) - gameObjectType.getRadiusFightMax();
+			 y <= extractY(pos) + gameObjectType.getRadiusFightMax(); y++) {
+			for (int x = extractX(pos) - gameObjectType.getRadiusFightMax();
+				 x <= extractX(pos) + gameObjectType.getRadiusFightMax(); x++) {
+				if (gameWorld.canFight(extractX(pos), extractY(pos), x, y)) {
 					sol.add(compress(x, y));
 				}
 			}
@@ -257,42 +268,46 @@ public abstract class AIPlayer extends Player {
 
 	/**
 	 * Returns a random possible field to fight against
+	 *
 	 * @param pos start position
 	 * @return compressed coordinate of a possible field
 	 */
-	protected int getRandomFightField(int pos){
+	protected int getRandomFightField(int pos) {
 		LinkedList<Integer> allFields = getAllFightFields(pos);
-		if(allFields.isEmpty()){
+		if (allFields.isEmpty()) {
 			return -1;
 		}
-		return allFields.get(MathUtils.random(allFields.size()-1));
+		return allFields.get(MathUtils.random(allFields.size() - 1));
 	}
 
 	/**
 	 * calculates the x coordinate of the given compressed position
+	 *
 	 * @param pos the compressed position
 	 * @return the x coordinate
 	 */
-	protected int extractX(int pos){
+	protected int extractX(int pos) {
 		return pos % gameWorld.getMapSizeX();
 	}
 
 	/**
 	 * calculates the y coordinate of the given compressed position
+	 *
 	 * @param pos the compressed position
 	 * @return the y coordinate
 	 */
-	protected int extractY(int pos){
+	protected int extractY(int pos) {
 		return pos / gameWorld.getMapSizeX();
 	}
 
 	/**
 	 * Compress two coordinates into one number
+	 *
 	 * @param x coordinate
 	 * @param y coordinate
 	 * @return compressed number
 	 */
-	protected int compress(int x, int y){
+	protected int compress(int x, int y) {
 		return y * gameWorld.getMapSizeX() + x;
 	}
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 /**
  * Handles resizing
+ *
  * @author Benjamin Schmid
  */
 public interface Resizer {

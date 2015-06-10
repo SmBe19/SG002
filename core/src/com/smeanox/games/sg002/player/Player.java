@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 /**
  * a player that can play the game
+ *
  * @author Benjamin Schmid
  */
 public abstract class Player {
@@ -31,7 +32,7 @@ public abstract class Player {
 	/**
 	 * Inform the player that he can start playing
 	 */
-	public final void startPlaying(){
+	public final void startPlaying() {
 		isPlaying = true;
 		gameWorld = gameController.getGameWorld();
 		play();
@@ -40,7 +41,7 @@ public abstract class Player {
 	/**
 	 * Inform the gameController that the player finished playing
 	 */
-	protected final void endPlaying(){
+	protected final void endPlaying() {
 		isPlaying = false;
 		gameController.finishedRound();
 	}
@@ -52,29 +53,33 @@ public abstract class Player {
 
 	/**
 	 * Update the AI
+	 *
 	 * @param delta time passed since last update
 	 */
 	public abstract void update(float delta);
 
 	/**
 	 * Propose the action to be performed (e.g. the GUI can propose an action)
+	 *
 	 * @param action the action to perform
 	 * @return true if the action was performed
 	 */
-	public boolean proposeAction(Action action){
+	public boolean proposeAction(Action action) {
 		return false;
 	}
 
 	/**
 	 * Propose to end the round (e.g. the GUI can propose this)
+	 *
 	 * @return true if the it was performed
 	 */
-	public boolean proposeEndPlaying(){
+	public boolean proposeEndPlaying() {
 		return false;
 	}
 
 	/**
 	 * Save the Player to the given writer
+	 *
 	 * @param writer the writer to save to
 	 * @throws IOException
 	 */
@@ -90,17 +95,19 @@ public abstract class Player {
 
 	/**
 	 * Save implementation specific things
+	 *
 	 * @param writer the writer to save to
 	 * @throws IOException
 	 */
-	protected void saveImpl(XmlWriter writer) throws IOException{
+	protected void saveImpl(XmlWriter writer) throws IOException {
 	}
 
 	/**
 	 * Load the Player from the given reader
+	 *
 	 * @param reader the reader to read from
 	 */
-	public final void load(XmlReader.Element reader){
+	public final void load(XmlReader.Element reader) {
 		id = reader.getIntAttribute("id");
 		name = reader.getAttribute("name");
 		money = reader.getIntAttribute("money");
@@ -111,9 +118,10 @@ public abstract class Player {
 
 	/**
 	 * Load implementation specific things
+	 *
 	 * @param reader the reader to read from
 	 */
-	protected void loadImpl(XmlReader.Element reader){
+	protected void loadImpl(XmlReader.Element reader) {
 	}
 
 	public static Player loadStatic(XmlReader.Element reader) throws IOException {
@@ -134,18 +142,18 @@ public abstract class Player {
 	}
 
 	public final void setId(int id) {
-		if(idToPlayer.containsKey(this.id)){
+		if (idToPlayer.containsKey(this.id)) {
 			idToPlayer.remove(this.id);
 		}
 		this.id = id;
 		idToPlayer.put(id, this);
 	}
 
-	public final String getName(){
+	public final String getName() {
 		return name;
 	}
 
-	public final void setName(String name){
+	public final void setName(String name) {
 		this.name = name;
 	}
 
@@ -177,11 +185,11 @@ public abstract class Player {
 		this.showGUI = showGUI;
 	}
 
-	public static Player getPlayerById(int id){
+	public static Player getPlayerById(int id) {
 		return idToPlayer.get(id);
 	}
 
-	public static void resetPlayerIds(){
+	public static void resetPlayerIds() {
 		idToPlayer.clear();
 	}
 }

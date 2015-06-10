@@ -15,6 +15,7 @@ import java.util.LinkedList;
 
 /**
  * Controls the game flow
+ *
  * @author Benjamin Schmid
  */
 public class GameController {
@@ -26,12 +27,12 @@ public class GameController {
 
 	private LinkedList<NextPlayerHandler> nextPlayerHandlers;
 
-	public GameController(String fileName){
+	public GameController(String fileName) {
 		players = new LinkedList<Player>();
 		loadGame(fileName);
 	}
 
-	public GameController(Scenario scenario){
+	public GameController(Scenario scenario) {
 		this.scenario = scenario;
 		players = new LinkedList<Player>();
 
@@ -42,22 +43,24 @@ public class GameController {
 
 	/**
 	 * Initializes the scenario
+	 *
 	 * @param scenario the scenario
 	 */
-	private void initScenario(Scenario scenario){
+	private void initScenario(Scenario scenario) {
 		Consts.walkDiagonal = scenario.isWalkDiagonal();
 		Consts.startGameObjectMinDistance = scenario.getStartGameObjectMinDistance();
 
-		if(gameWorld == null) {
+		if (gameWorld == null) {
 			gameWorld = new GameWorld(scenario);
 		}
 	}
 
 	/**
 	 * Adds a new Player
+	 *
 	 * @param player the player to add
 	 */
-	public void addPlayer(Player player){
+	public void addPlayer(Player player) {
 		players.add(player);
 		player.setMoney(scenario.getStartMoney());
 		player.setGameController(this);
@@ -68,7 +71,7 @@ public class GameController {
 	/**
 	 * Starts the game
 	 */
-	public void startGame(){
+	public void startGame() {
 		playerIterator = players.iterator();
 		finishedRound();
 	}
@@ -76,23 +79,23 @@ public class GameController {
 	/**
 	 * Called by the active player when he finished his round
 	 */
-	public void finishedRound(){
-		if(!playerIterator.hasNext()){
+	public void finishedRound() {
+		if (!playerIterator.hasNext()) {
 			playerIterator = players.iterator();
 		}
 		activePlayer = playerIterator.next();
-		if(gameWorld.isPlayerStillAlive(activePlayer)) {
+		if (gameWorld.isPlayerStillAlive(activePlayer)) {
 			startRound(activePlayer);
 		} else {
 			finishedRound();
 		}
 	}
 
-	private void forwardToPlayer(Player player){
+	private void forwardToPlayer(Player player) {
 		playerIterator = players.iterator();
-		while (playerIterator.hasNext()){
+		while (playerIterator.hasNext()) {
 			activePlayer = playerIterator.next();
-			if(activePlayer == player){
+			if (activePlayer == player) {
 				break;
 			}
 		}
@@ -101,18 +104,20 @@ public class GameController {
 
 	/**
 	 * Starts a new round
+	 *
 	 * @param player the active player
 	 */
-	private void startRound(Player player){
+	private void startRound(Player player) {
 		startRound(player, true);
 	}
 
 	/**
 	 * Starts a new round
-	 * @param player the active player
+	 *
+	 * @param player              the active player
 	 * @param reenableUsedActions whether usedActions should be cleared
 	 */
-	private void startRound(Player player, boolean reenableUsedActions){
+	private void startRound(Player player, boolean reenableUsedActions) {
 		gameWorld.startRound(player, reenableUsedActions);
 		fireOnNextPlayer(player);
 		player.startPlaying();
@@ -120,15 +125,16 @@ public class GameController {
 
 	/**
 	 * Updates the active Player
+	 *
 	 * @param delta The time in seconds since the last render.
 	 */
 	public void update(float delta) {
-		if(activePlayer != null) {
+		if (activePlayer != null) {
 			activePlayer.update(delta);
 		}
 	}
 
-	public Player getActivePlayer(){
+	public Player getActivePlayer() {
 		return activePlayer;
 	}
 
@@ -138,17 +144,18 @@ public class GameController {
 
 	/**
 	 * saves the game state to the given file
+	 *
 	 * @param fileName the file to save to
 	 */
-	public void saveGame(String fileName){
+	public void saveGame(String fileName) {
 		try {
 			XmlWriter writer = new XmlWriter(new FileWriter(Gdx.files.local(fileName).file()));
 			writer.element("Game");
 			writer.attribute("scenario", scenario.getId());
 			writer.element("Players");
-			for(Player player : players){
+			for (Player player : players) {
 				writer.element("Player");
-				if(player == activePlayer){
+				if (player == activePlayer) {
 					writer.attribute("active", true);
 				}
 				player.save(writer);
@@ -166,13 +173,14 @@ public class GameController {
 
 	/**
 	 * loads the game state from the given file
+	 *
 	 * @param fileName the file to load from
 	 */
-	public void loadGame(String fileName){
+	public void loadGame(String fileName) {
 		try {
 			XmlReader reader = new XmlReader();
 			FileHandle file = Gdx.files.local(fileName);
-			if(!file.exists()){
+			if (!file.exists()) {
 				return;
 			}
 			XmlReader.Element root = reader.parse(Gdx.files.local(fileName));
@@ -181,12 +189,12 @@ public class GameController {
 			gameWorld.initScenario(scenarioLoad);
 			XmlReader.Element playersXML = root.getChildByName("Players");
 			players.clear();
-			for(XmlReader.Element aPlayer : playersXML.getChildrenByName("Player")){
+			for (XmlReader.Element aPlayer : playersXML.getChildrenByName("Player")) {
 				Player player = Player.loadStatic(aPlayer);
 				addPlayer(player);
 				player.load(aPlayer);
 
-				if(aPlayer.getBooleanAttribute("active", false)){
+				if (aPlayer.getBooleanAttribute("active", false)) {
 					activePlayer = player;
 				}
 			}
@@ -202,8 +210,8 @@ public class GameController {
 		}
 	}
 
-	protected void fireOnNextPlayer(Player nextPlayer){
-		if(nextPlayerHandlers != null) {
+	protected void fireOnNextPlayer(Player nextPlayer) {
+		if (nextPlayerHandlers != null) {
 			for (NextPlayerHandler c : nextPlayerHandlers) {
 				c.onNextPlayer(nextPlayer);
 			}
@@ -216,7 +224,7 @@ public class GameController {
 	 * @param handler the NextPlayerHandler
 	 */
 	public void addNextPlayerHandler(NextPlayerHandler handler) {
-		if(nextPlayerHandlers == null){
+		if (nextPlayerHandlers == null) {
 			nextPlayerHandlers = new LinkedList<NextPlayerHandler>();
 		}
 		nextPlayerHandlers.add(handler);
@@ -228,11 +236,11 @@ public class GameController {
 	 * @param handler the NextPlayerHandler
 	 */
 	public void removeNextPlayerHandler(NextPlayerHandler handler) {
-		if(nextPlayerHandlers == null){
+		if (nextPlayerHandlers == null) {
 			return;
 		}
 		nextPlayerHandlers.remove(handler);
-		if(nextPlayerHandlers.isEmpty()){
+		if (nextPlayerHandlers.isEmpty()) {
 			nextPlayerHandlers = null;
 		}
 	}

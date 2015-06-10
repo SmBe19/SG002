@@ -8,6 +8,7 @@ import com.smeanox.games.sg002.util.BitmapFontRapper;
 
 /**
  * A button
+ *
  * @author Benjamin Schmid
  */
 public class Button extends AbstractGUIElement {
@@ -21,7 +22,7 @@ public class Button extends AbstractGUIElement {
 	private Color backgroundColorInactive;
 	private GlyphLayout glyphLayout;
 
-	public Button(){
+	public Button() {
 		super();
 		glyphLayout = new GlyphLayout();
 	}
@@ -36,7 +37,7 @@ public class Button extends AbstractGUIElement {
 		this.backgroundColor = backgroundColor;
 		this.backgroundColorHover = backgroundColorHover;
 		this.backgroundColorInactive = backgroundColorInactive;
-		if(sprite != null){
+		if (sprite != null) {
 			size.set(sprite.getWidth(), sprite.getHeight());
 			position.set(sprite.getX(), sprite.getY());
 		}
@@ -44,6 +45,7 @@ public class Button extends AbstractGUIElement {
 
 	/**
 	 * returns the sprite. You should not manipulate position or size.
+	 *
 	 * @return the sprite
 	 */
 	public Sprite getSprite() {
@@ -111,7 +113,7 @@ public class Button extends AbstractGUIElement {
 	@Override
 	public void setSize(float width, float height) {
 		super.setSize(width, height);
-		if(sprite != null) {
+		if (sprite != null) {
 			sprite.setSize(width, height);
 		}
 	}
@@ -125,7 +127,7 @@ public class Button extends AbstractGUIElement {
 	@Override
 	public void setPosition(float x, float y) {
 		super.setPosition(x, y);
-		if(sprite != null) {
+		if (sprite != null) {
 			sprite.setPosition(x, y);
 		}
 	}
@@ -139,26 +141,27 @@ public class Button extends AbstractGUIElement {
 	@Override
 	public void setCenter(float x, float y) {
 		super.setCenter(x, y);
-		if(sprite != null) {
+		if (sprite != null) {
 			sprite.setCenter(x, y);
 		}
 	}
 
 	/**
 	 * Called when the object should render itself.
+	 *
 	 * @param delta The time in seconds since the last render.
 	 */
 	@Override
 	public void render(float delta, SpriteBatch spriteBatch) {
-		if(!visible){
+		if (!visible) {
 			return;
 		}
-		if(sprite != null){
+		if (sprite != null) {
 			sprite.setColor(active ? (boundingBox.contains(lastTouchPos)
 					? backgroundColorHover : backgroundColor) : backgroundColorInactive);
 			sprite.draw(spriteBatch);
 		}
-		if(font != null){
+		if (font != null) {
 			font.bitmapFont.setColor(textColor);
 			glyphLayout.setText(font.bitmapFont, text);
 			font.bitmapFont.draw(spriteBatch, glyphLayout,

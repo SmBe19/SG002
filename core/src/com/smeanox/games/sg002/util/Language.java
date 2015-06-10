@@ -13,33 +13,48 @@ import java.util.Locale;
  */
 public class Language {
 
-	private Language(){
+	private Language() {
 	}
 
-	/** the i18n bundel for strings */
+	/**
+	 * the i18n bundel for strings
+	 */
 	private static I18NBundle strings;
 
 	/**
 	 * Loads the i18n bundle for strings with the default locale
 	 */
-	public static void loadStrings(){
+	public static void loadStrings() {
 		loadStrings(Locale.getDefault());
 	}
 
 	/**
 	 * Loads the i18n bundle for strings with the given locale
-	 * @param locale
+	 *
+	 * @param locale the locale to load
 	 */
-	public static void loadStrings(Locale locale){
+	public static void loadStrings(Locale locale) {
 		FileHandle baseFileHandle = Gdx.files.internal("i18n/Strings");
 		strings = I18NBundle.createBundle(baseFileHandle, locale);
 	}
 
 	/**
+	 * Loads the i18n bundle for strings with the given locale
+	 * <br/>
+	 * Does not use {@link Gdx#files} and will only work on desktop
+	 *
+	 * @param locale the locale to load
+	 */
+	public static void loadStringsForHeadless(Locale locale) {
+		strings = I18NBundle.createBundle(new FileHandle("i18n/Strings"), locale);
+	}
+
+	/**
 	 * Returns the i18n bundle for strings
+	 *
 	 * @return the i18n bundle for strings
 	 */
-	public static I18NBundle getStrings(){
+	public static I18NBundle getStrings() {
 		return strings;
 	}
 }

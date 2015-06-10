@@ -12,32 +12,51 @@ import com.smeanox.games.sg002.world.GameObjectType;
 
 /**
  * Manages all Assets
+ *
  * @author Benjamin Schmid
  */
 public class Assets {
 	private static AssetManager manager;
 
-	/** smeanox logo */
+	/**
+	 * smeanox logo
+	 */
 	public static Texture smeanox;
 
-	/** button */
+	/**
+	 * button
+	 */
 	public static Texture button;
 
-	/** background */
+	/**
+	 * background
+	 */
 	public static Texture background;
 
-	/** selection */
+	/**
+	 * selection
+	 */
 	public static Texture selection;
-	/** grid */
+	/**
+	 * grid
+	 */
 	public static Texture grid;
-	/** possible field for movement */
+	/**
+	 * possible field for movement
+	 */
 	public static Texture possibleFieldMove;
-	/** possible field for fight */
+	/**
+	 * possible field for fight
+	 */
 	public static Texture possibleFieldFight;
-	/** possible field for production */
+	/**
+	 * possible field for production
+	 */
 	public static Texture possibleFieldProduce;
 
-	/** liberation font */
+	/**
+	 * liberation font
+	 */
 	public static FreeType liberation;
 	public static BitmapFontRapper liberationMicroShadow;
 	public static BitmapFontRapper liberationMicro;
@@ -47,14 +66,14 @@ public class Assets {
 
 	private static boolean finishedCompletly;
 
-	private Assets(){
+	private Assets() {
 	}
 
 	/**
 	 * loads all assets necessary to display the splash screen
 	 */
-	public static void loadAssetsSplashScreen(){
-		if(manager == null) {
+	public static void loadAssetsSplashScreen() {
+		if (manager == null) {
 			manager = new AssetManager();
 		}
 
@@ -71,8 +90,8 @@ public class Assets {
 	/**
 	 * prepares the AssetManager to load the assets
 	 */
-	public static void prepareLoadAssets(){
-		if(manager == null) {
+	public static void prepareLoadAssets() {
+		if (manager == null) {
 			manager = new AssetManager();
 		}
 
@@ -82,14 +101,14 @@ public class Assets {
 
 		TextureLoader.TextureParameter param = new TextureLoader.TextureParameter();
 		param.minFilter = Consts.textureFilter;
-		param.genMipMaps =  param.minFilter == Texture.TextureFilter.MipMapLinearLinear;
+		param.genMipMaps = param.minFilter == Texture.TextureFilter.MipMapLinearLinear;
 
-		manager.load("images/button.png", Texture.class,param);
-		manager.load("images/background.png", Texture.class,param);
-		manager.load("images/selection.png", Texture.class,param);
-		manager.load("images/grid.png", Texture.class,param);
-		manager.load("images/possibleFieldMove.png", Texture.class,param);
-		manager.load("images/possibleFieldFight.png", Texture.class,param);
+		manager.load("images/button.png", Texture.class, param);
+		manager.load("images/background.png", Texture.class, param);
+		manager.load("images/selection.png", Texture.class, param);
+		manager.load("images/grid.png", Texture.class, param);
+		manager.load("images/possibleFieldMove.png", Texture.class, param);
+		manager.load("images/possibleFieldFight.png", Texture.class, param);
 		manager.load("images/possibleFieldProduce.png", Texture.class, param);
 
 		finishedCompletly = false;
@@ -97,20 +116,22 @@ public class Assets {
 
 	/**
 	 * Adds the asset to be loaded
+	 *
 	 * @param filename filename of the asset to be loaded
-	 * @param type class of the asset
+	 * @param type     class of the asset
 	 */
-	public static void addToLoadQueue(String filename, Class type){
+	public static void addToLoadQueue(String filename, Class type) {
 		manager.load(filename, type);
 	}
 
 	/**
 	 * loads the assets
+	 *
 	 * @return true if the assets are loaded
 	 */
-	public static boolean loadAssets(){
-		if(manager.update()){
-			if(!finishedCompletly) {
+	public static boolean loadAssets() {
+		if (manager.update()) {
+			if (!finishedCompletly) {
 				finishedLoading();
 				return false;
 			}
@@ -121,18 +142,19 @@ public class Assets {
 
 	/**
 	 * returns the loaded asset
+	 *
 	 * @param name filename of the loaded asset
 	 * @param <T>
 	 * @return the asset
 	 */
-	public static <T> T getAsset(String name){
-		return (T)manager.get(name);
+	public static <T> T getAsset(String name) {
+		return (T) manager.get(name);
 	}
 
 	/**
 	 * assigns the loaded assets to variables
 	 */
-	private static void finishedLoading(){
+	private static void finishedLoading() {
 		button = manager.get("images/button.png", Texture.class);
 		background = manager.get("images/background.png", Texture.class);
 		selection = manager.get("images/selection.png", Texture.class);
@@ -149,8 +171,8 @@ public class Assets {
 		finishedCompletly = true;
 	}
 
-	private static void setGameObjectTypeTextures(){
-		for(GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()){
+	private static void setGameObjectTypeTextures() {
+		for (GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()) {
 			gameObjectType.setTexture(manager.get(gameObjectType.getTextureName(), Texture.class));
 		}
 	}
@@ -158,30 +180,30 @@ public class Assets {
 	/**
 	 * Creates fonts on the fly for the active screen size
 	 */
-	public static void createFonts(){
-		if(liberationMicroShadow == null) {
+	public static void createFonts() {
+		if (liberationMicroShadow == null) {
 			liberationMicroShadow = new BitmapFontRapper();
 		}
-		if(liberationMicro == null) {
+		if (liberationMicro == null) {
 			liberationMicro = new BitmapFontRapper();
 		}
-		if(liberationSmall == null) {
+		if (liberationSmall == null) {
 			liberationSmall = new BitmapFontRapper();
 		}
-		if(liberationMedium == null) {
+		if (liberationMedium == null) {
 			liberationMedium = new BitmapFontRapper();
 		}
-		if(liberationLarge == null) {
+		if (liberationLarge == null) {
 			liberationLarge = new BitmapFontRapper();
 		}
 
-		if(liberationSmall.bitmapFont != null) {
+		if (liberationSmall.bitmapFont != null) {
 			liberationSmall.bitmapFont.dispose();
 		}
-		if(liberationMedium.bitmapFont != null) {
+		if (liberationMedium.bitmapFont != null) {
 			liberationMedium.bitmapFont.dispose();
 		}
-		if(liberationLarge.bitmapFont != null) {
+		if (liberationLarge.bitmapFont != null) {
 			liberationLarge.bitmapFont.dispose();
 		}
 
@@ -189,21 +211,21 @@ public class Assets {
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 
 		// add Eur sign
-		parameter.characters =  FreeTypeFontGenerator.DEFAULT_CHARS + "\u20AC";
+		parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + "\u20AC";
 
-		parameter.size = (int)Math.ceil(Consts.fontSizeMicro * Consts.devScaleY);
+		parameter.size = (int) Math.ceil(Consts.fontSizeMicro * Consts.devScaleY);
 		liberationMicro.bitmapFont = generator.generateFont(parameter);
-		parameter.size = (int)Math.ceil(Consts.fontSizeSmall * Consts.devScaleY);
+		parameter.size = (int) Math.ceil(Consts.fontSizeSmall * Consts.devScaleY);
 		liberationSmall.bitmapFont = generator.generateFont(parameter);
-		parameter.size = (int)Math.ceil(Consts.fontSizeMedium * Consts.devScaleY);
+		parameter.size = (int) Math.ceil(Consts.fontSizeMedium * Consts.devScaleY);
 		liberationMedium.bitmapFont = generator.generateFont(parameter);
 		parameter.size = (int) Math.ceil(Consts.fontSizeLarge * Consts.devScaleY);
 		liberationLarge.bitmapFont = generator.generateFont(parameter);
 
-		parameter.size = (int)Math.ceil(Consts.fontSizeMicro * 10 *  Consts.devScaleY);
+		parameter.size = (int) Math.ceil(Consts.fontSizeMicro * 10 * Consts.devScaleY);
 		parameter.shadowColor = Color.BLACK;
-		parameter.shadowOffsetX = (int)Math.ceil(0.5 * Consts.devScaleX);
-		parameter.shadowOffsetY = (int)Math.ceil(0.5 * Consts.devScaleY);
+		parameter.shadowOffsetX = (int) Math.ceil(0.5 * Consts.devScaleX);
+		parameter.shadowOffsetY = (int) Math.ceil(0.5 * Consts.devScaleY);
 		parameter.minFilter = Consts.textureFilter;
 		parameter.genMipMaps = parameter.minFilter == Texture.TextureFilter.MipMapLinearLinear;
 		liberationMicroShadow.bitmapFont = generator.generateFont(parameter);
@@ -214,7 +236,7 @@ public class Assets {
 	/**
 	 * Disposes all assets
 	 */
-	public static void unload(){
+	public static void unload() {
 		manager.dispose();
 	}
 }

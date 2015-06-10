@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 /**
  * Describes a Scenario
+ *
  * @author Benjamin Schmid
  */
 public class Scenario {
@@ -60,44 +61,47 @@ public class Scenario {
 		return mapSizeY;
 	}
 
-	public boolean isWalkDiagonal(){
+	public boolean isWalkDiagonal() {
 		return walkDiagonal;
 	}
 
-	public int getStartGameObjectMinDistance(){
+	public int getStartGameObjectMinDistance() {
 		return startGameObjectMinDistance;
 	}
 
 	/**
 	 * returns the Scenario with the given name
+	 *
 	 * @param id id of the scanario
 	 * @return the Scenario
 	 */
-	public static Scenario getScanarioById(String id){
+	public static Scenario getScanarioById(String id) {
 		return idToScenario.get(id);
 	}
 
 	/**
 	 * returns all Scenarios sorted
+	 *
 	 * @return a List of all Scenarios
 	 */
-	public static Collection<Scenario> getAllScenarios(){
+	public static Collection<Scenario> getAllScenarios() {
 		return idToScenario.values();
 	}
 
 	/**
 	 * returns all Scenarios sorted
+	 *
 	 * @return a List of all Scenarios
 	 */
-	public static LinkedList<Scenario> getAllScenariosSorted(){
+	public static LinkedList<Scenario> getAllScenariosSorted() {
 		LinkedList<Scenario> scenarios = new LinkedList<Scenario>(idToScenario.values());
 		Collections.sort(scenarios, new Comparator<Scenario>() {
 			@Override
 			public int compare(Scenario o1, Scenario o2) {
-				if(o1.getMaxPlayerCount() != o2.getMaxPlayerCount()){
+				if (o1.getMaxPlayerCount() != o2.getMaxPlayerCount()) {
 					return o1.getMaxPlayerCount() - o2.getMaxPlayerCount();
 				}
-				if(o1.getStartMoney() != o2.getStartMoney()){
+				if (o1.getStartMoney() != o2.getStartMoney()) {
 					return o1.getStartMoney() - o2.getStartMoney();
 				}
 				return o1.getName().compareTo(o2.getName());

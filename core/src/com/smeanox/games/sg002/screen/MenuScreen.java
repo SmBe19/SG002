@@ -44,6 +44,7 @@ import java.util.LinkedList;
 
 /**
  * Menu screen
+ *
  * @author Benjamin Schmid
  */
 public class MenuScreen extends AbstractScreen {
@@ -62,8 +63,10 @@ public class MenuScreen extends AbstractScreen {
 
 	private boolean wasBackDown;
 
-	/** Constructor */
-	public MenuScreen(){
+	/**
+	 * Constructor
+	 */
+	public MenuScreen() {
 		super();
 
 		playerCount = 2;
@@ -75,8 +78,9 @@ public class MenuScreen extends AbstractScreen {
 		nextScenario();
 	}
 
-	private void generateGUI(){
-		LinkedList<Button> toLayout = new LinkedList<Button>();Button b;
+	private void generateGUI() {
+		LinkedList<Button> toLayout = new LinkedList<Button>();
+		Button b;
 
 		// playerCountLabel
 		b = new Button(new Sprite(Assets.button), Assets.liberationMedium, "playerCount",
@@ -134,8 +138,8 @@ public class MenuScreen extends AbstractScreen {
 	/**
 	 * cycles through scenarios
 	 */
-	private void nextScenario(){
-		if(!scenarioIterator.hasNext()){
+	private void nextScenario() {
+		if (!scenarioIterator.hasNext()) {
 			scenarioIterator = Scenario.getAllScenariosSorted().iterator();
 		}
 		scenario = scenarioIterator.next();
@@ -148,9 +152,9 @@ public class MenuScreen extends AbstractScreen {
 	/**
 	 * increases the playerCount and resets it if its too high
 	 */
-	private void increasePlayerCount(){
+	private void increasePlayerCount() {
 		playerCount++;
-		if(playerCount > scenario.getMaxPlayerCount()){
+		if (playerCount > scenario.getMaxPlayerCount()) {
 			playerCount = 2;
 		}
 
@@ -160,24 +164,25 @@ public class MenuScreen extends AbstractScreen {
 	/**
 	 * Sets the text on the scenarioLabel to the active scenario's name
 	 */
-	private void setScenarioLabelText(){
+	private void setScenarioLabelText() {
 		scenarioLabel.setText(scenario.getName());
 		scenarioInfoLabel.setText(Language.getStrings().format("menu.scenarioInfo",
 				scenario.getMapSizeX(), scenario.getMapSizeY(), scenario.getStartMoney(), scenario.getMaxPlayerCount()));
 	}
 
-	private void setPlayerCountText(){
+	private void setPlayerCountText() {
 		playerCountLabel.setText(Language.getStrings().format("menu.playerCount", playerCount, scenario.getMaxPlayerCount()));
 	}
 
 	/**
 	 * loads a saved game
 	 */
-	private void resumeGame(){
+	private void resumeGame() {
 	}
 
 	/**
 	 * Called when the screen should render itself.
+	 *
 	 * @param delta The time in seconds since the last render.
 	 */
 	@Override
@@ -186,17 +191,17 @@ public class MenuScreen extends AbstractScreen {
 		updateGUI(delta, false);
 		renderGUI(delta);
 
-		if(processedPlayerNames >= playerCount){
+		if (processedPlayerNames >= playerCount) {
 			startGame();
-		} else if(displayDialog){
+		} else if (displayDialog) {
 			Gdx.input.getTextInput(new PlayerNameListener(processedPlayerNames),
 					Language.getStrings().get("menu.playerName.dialog"),
 					playerNames.get(processedPlayerNames), "");
 			displayDialog = false;
 		}
 
-		if(wasBackDown && !(Gdx.input.isKeyPressed(Input.Keys.BACK)
-				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))){
+		if (wasBackDown && !(Gdx.input.isKeyPressed(Input.Keys.BACK)
+				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))) {
 			Gdx.app.exit();
 		}
 
@@ -204,27 +209,27 @@ public class MenuScreen extends AbstractScreen {
 				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey);
 	}
 
-	private void prepareStart(){
+	private void prepareStart() {
 		playerNames = new LinkedList<String>();
-		for(int i = 0; i < playerCount; i++){
-			playerNames.add(Language.getStrings().format("menu.playerName.default", (i+1)));
+		for (int i = 0; i < playerCount; i++) {
+			playerNames.add(Language.getStrings().format("menu.playerName.default", (i + 1)));
 		}
 		displayDialog = true;
 		processedPlayerNames = 0;
 	}
 
-	private void startGame(){
+	private void startGame() {
 		GameController gameController = new GameController(scenario);
-		for(int i = 0; i < playerCount; i++){
+		for (int i = 0; i < playerCount; i++) {
 			Player player;
 			// FIXME make nicer
-			if("BenNo1".equals(playerNames.get(i))) {
+			if ("BenNo1".equals(playerNames.get(i))) {
 				player = new AIPlayer_BenNo1();
 			} else {
 				player = new LocalPlayer();
 			}
 			// FIXME Remove me
-			if(i > 0){
+			if (i > 0) {
 				//player = new AIPlayer_BenNo1();
 			}
 			gameController.addPlayer(player);
@@ -235,10 +240,10 @@ public class MenuScreen extends AbstractScreen {
 		ScreenManager.showGame(gameController);
 	}
 
-	private class PlayerNameListener implements Input.TextInputListener{
+	private class PlayerNameListener implements Input.TextInputListener {
 		private int player;
 
-		public PlayerNameListener(int player){
+		public PlayerNameListener(int player) {
 			this.player = player;
 		}
 

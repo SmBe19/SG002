@@ -7,20 +7,29 @@ import com.smeanox.games.sg002.util.Assets;
 
 /**
  * Screen displayed at startup of game while loading assets
+ *
  * @author Benjamin Schmid
  */
 public class SplashScreen extends AbstractScreen {
 
-	/** smeanox logo */
+	/**
+	 * smeanox logo
+	 */
 	public static Sprite smeanox;
 
-	/** how long the splash screen is shown in seconds */
+	/**
+	 * how long the splash screen is shown in seconds
+	 */
 	private final float splashDuration = 4f;
-	/** how many seconds already passed */
+	/**
+	 * how many seconds already passed
+	 */
 	private float timePassed;
 
-	/** Constructor */
-	public SplashScreen(){
+	/**
+	 * Constructor
+	 */
+	public SplashScreen() {
 		super();
 	}
 
@@ -40,6 +49,7 @@ public class SplashScreen extends AbstractScreen {
 
 	/**
 	 * Called when the screen should render itself.
+	 *
 	 * @param delta The time in seconds since the last render.
 	 */
 	@Override
@@ -47,11 +57,11 @@ public class SplashScreen extends AbstractScreen {
 		timePassed += delta;
 
 		// if not all assets are loaded we let the logo stay for longer
-		if(!Assets.loadAssets()){
+		if (!Assets.loadAssets()) {
 			timePassed = Math.min(timePassed, splashDuration / 2f);
 		}
 
-		if(timePassed >= splashDuration){
+		if (timePassed >= splashDuration) {
 			ScreenManager.showMenu();
 		}
 
@@ -68,6 +78,7 @@ public class SplashScreen extends AbstractScreen {
 
 	/**
 	 * Called when the Application is resized.
+	 *
 	 * @param width
 	 * @param height
 	 */
@@ -80,8 +91,8 @@ public class SplashScreen extends AbstractScreen {
 	/**
 	 * Scales all local sprites according to dewScale
 	 */
-	private void scaleSprites(){
-		float scale = (float)Gdx.graphics.getWidth() / Assets.smeanox.getWidth() * 0.8f;
+	private void scaleSprites() {
+		float scale = (float) Gdx.graphics.getWidth() / Assets.smeanox.getWidth() * 0.8f;
 		smeanox.setSize(Assets.smeanox.getWidth() * scale, Assets.smeanox.getHeight() * scale);
 		smeanox.setCenter(0, 0);
 	}
