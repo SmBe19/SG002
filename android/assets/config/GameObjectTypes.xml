@@ -12,6 +12,13 @@
                 <Produce gameObjectType="infantry"/>
             </CanProduce>
         </GameObjectType>
+        <GameObjectType id="goldMine" name="gameObjectType.goldMine.name" texture="images/goldMine.png">
+            <HP defaultHP="50"/>
+            <Value value="750" valuePerRound="100" valueOnDestruction="50"/>
+            <Radius radiusWalkMin="0" radiusWalkMax="0" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="0" radiusFightMax="0"/>
+            <DamageTable canFight="false"/>
+            <CanProduce canProduce="false"/>
+        </GameObjectType>
         <GameObjectType id="villager" name="gameObjectType.villager.name" texture="images/villager.png">
             <HP defaultHP="40"/>
             <Value value="10" valuePerRound="1" valueOnDestruction="1"/>
@@ -28,13 +35,6 @@
                 <Produce gameObjectType="townCenter"/>
                 <Produce gameObjectType="goldMine"/>
             </CanProduce>
-        </GameObjectType>
-        <GameObjectType id="goldMine" name="gameObjectType.goldMine.name" texture="images/goldMine.png">
-            <HP defaultHP="50"/>
-            <Value value="750" valuePerRound="100" valueOnDestruction="50"/>
-            <Radius radiusWalkMin="0" radiusWalkMax="0" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="0" radiusFightMax="0"/>
-            <DamageTable canFight="false"/>
-            <CanProduce canProduce="false"/>
         </GameObjectType>
         <GameObjectType id="knight" name="gameObjectType.knight.name" texture="images/knight.png">
             <HP defaultHP="800"/>
