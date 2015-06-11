@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.smeanox.games.sg002.world.GameObjectType;
+import com.smeanox.games.sg002.world.MapObjectType;
 
 /**
  * Manages all Assets
@@ -151,6 +152,7 @@ public class Assets {
 
 
 		setGameObjectTypeTextures();
+		setMapObjectTypeTextures();
 
 		createFonts();
 
@@ -160,6 +162,12 @@ public class Assets {
 	private static void setGameObjectTypeTextures(){
 		for(GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()){
 			gameObjectType.setTexture(manager.get(gameObjectType.getTextureName(), Texture.class));
+		}
+	}
+	
+	private static void setMapObjectTypeTextures(){
+		for(MapObjectType mapObjectType : MapObjectType.getMapObjectTypes()){
+			mapObjectType.setTexture(manager.get(mapObjectType.getTextureName(), Texture.class));
 		}
 	}
 

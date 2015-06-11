@@ -1,12 +1,11 @@
 package com.smeanox.games.sg002.world;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Consts;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -18,7 +17,8 @@ public class GameWorld {
 	private int mapSizeX;
 	private int mapSizeY;
 
-	private GameObject[][] worldMap;
+	private GameObject[][] worldGameObjects;
+	private MapObject[][] worldMapObjects;
 
 	private Player activePlayer;
 	private HashSet<GameObject> gameObjects;
@@ -35,7 +35,17 @@ public class GameWorld {
 		mapSizeX = scenario.getMapSizeX();
 		mapSizeY = scenario.getMapSizeY();
 
-		worldMap = new GameObject[mapSizeY][mapSizeX];
+		worldGameObjects = new GameObject[mapSizeY][mapSizeX];
+		worldMapObjects = new MapObject[mapSizeY][mapSizeX];
+		for (int x = 0; x < mapSizeY; x++){
+			for (int y = 0; y < mapSizeX; y++){
+				worldMapObjects[x][y] = new MapObject(MapObjectType.getDefaultMapObjectType(), y, x);
+				//coordinates are such a mess -> i have no idea whether this order is correct
+			}
+		}
+		for (Point point : scenario.getGoldPos()){
+			worldMapObjects[point.y][point.x] = new MapObject(MapObjectType.getMapObjectTypeById("gold"), point.x, point.y);
+		}
 		this.scenario = scenario;
 	}
 
@@ -51,11 +61,21 @@ public class GameWorld {
 		if(x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY){
 			return null;
 		}
-		return worldMap[y][x];
+		return worldGameObjects[y][x];
+	}
+
+	public MapObject getWorldMapObject(int x, int y){
+		if(x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY){
+			return null;
+		}
+		return worldMapObjects[y][x];
 	}
 
 	public GameObject[][] getWorldMap() {
-		return worldMap;
+		return worldGameObjects;
+	}
+	public MapObject[][] getWorldMapObjects() {
+		return worldMapObjects;
 	}
 
 	/**
@@ -69,12 +89,12 @@ public class GameWorld {
 			y = scenario.getRandom().nextInt(mapSizeY-1);
 		} while(!canAddStartGameObject(x, y));
 */
-		x = scenario.getStartPos(player.getId()).x;
-		y = scenario.getStartPos(player.getId()).y;
-		worldMap[y][x] = new GameObject(gameObjectType, player);
-		worldMap[y][x].setPositionX(x);
-		worldMap[y][x].setPositionY(y);
-		gameObjects.add(worldMap[y][x]);
+		x = scenario.getStartPos(player.getId()).y;
+		y = scenario.getStartPos(player.getId()).x;
+		worldGameObjects[y][x] = new GameObject(gameObjectType, player);
+		worldGameObjects[y][x].setPositionX(x);
+		worldGameObjects[y][x].setPositionY(y);
+		gameObjects.add(worldGameObjects[y][x]);
 	}
 
 	/**
@@ -167,7 +187,7 @@ public class GameWorld {
 	 * @param y coordinates
 	 */
 	public void removeGameObject(int x, int y){
-		worldMap[y][x] = null;
+		worldGameObjects[y][x] = null;
 	}
 
 	/**
@@ -181,10 +201,10 @@ public class GameWorld {
 			/*if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
 				return true;//what happened here?
 			}
-			if (worldMap[x][y] == null) return true; //this shouldn't happen either*/
-			return !worldMap[y][x].isCanDoAction(Action.ActionType.MOVE) &&
-					!worldMap[y][x].isCanDoAction(Action.ActionType.PRODUCE) &&
-					!worldMap[y][x].isCanDoAction(Action.ActionType.FIGHT);
+			if (worldGameObjects[x][y] == null) return true; //this shouldn't happen either*/
+			return !worldGameObjects[y][x].isCanDoAction(Action.ActionType.MOVE) &&
+					!worldGameObjects[y][x].isCanDoAction(Action.ActionType.PRODUCE) &&
+					!worldGameObjects[y][x].isCanDoAction(Action.ActionType.FIGHT);
 		} catch (NullPointerException ex){
 			ex.printStackTrace();
 		} catch (IndexOutOfBoundsException ex){ // java 6 compatibility
@@ -241,8 +261,8 @@ public class GameWorld {
 		if(!canMove(startX, startY, endX, endY)){
 			return false;
 		}
-		worldMap[endY][endX] = worldMap[startY][startX];
-		worldMap[startY][startX] = null;
+		worldGameObjects[endY][endX] = worldGameObjects[startY][startX];
+		worldGameObjects[startY][startX] = null;
 		getWorldMap(endX, endY).setPositionX(endX);
 		getWorldMap(endX, endY).setPositionY(endY);
 		getWorldMap(endX, endY).use(Action.ActionType.MOVE);
@@ -308,7 +328,7 @@ public class GameWorld {
 		GameObject newGameObject = new GameObject(gameObjectType, activePlayer);
 		newGameObject.setPositionX(endX);
 		newGameObject.setPositionY(endY);
-		worldMap[endY][endX] = newGameObject;
+		worldGameObjects[endY][endX] = newGameObject;
 		activePlayer.addMoney(-gameObjectType.getValue());
 		getWorldMap(startX, startY).use(Action.ActionType.PRODUCE);
 		gameObjects.add(newGameObject);
@@ -399,7 +419,7 @@ public class GameWorld {
 				if(getWorldMap(x, y) != null){
 					writer.element("GameObject");
 					if(getWorldMap(x, y).getPositionX() != x || getWorldMap(x, y).getPositionY() != y){
-						throw new IOException("Position in worldMap and gameObject doesn't correspond!");
+						throw new IOException("Position in worldGameObjects and gameObject doesn't correspond!");
 					}
 					getWorldMap(x, y).save(writer);
 					writer.pop();
@@ -414,11 +434,11 @@ public class GameWorld {
 	 * @param reader the XmlReader.Element
 	 */
 	public void load(XmlReader.Element reader){
-		worldMap = new GameObject[mapSizeY][mapSizeX];
+		worldGameObjects = new GameObject[mapSizeY][mapSizeX];
 		XmlReader.Element gameObjects = reader.getChildByName("GameObjects");
 		for(XmlReader.Element gameObjectXML : gameObjects.getChildrenByName("GameObject")){
 			GameObject gameObject = new GameObject(gameObjectXML);
-			worldMap[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
+			worldGameObjects[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
 			this.gameObjects.add(gameObject);
 		}
 	}

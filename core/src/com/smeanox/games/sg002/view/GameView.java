@@ -11,6 +11,7 @@ import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameWorld;
+import com.smeanox.games.sg002.world.MapObject;
 
 /**
  * Renders the GameWorld
@@ -174,9 +175,16 @@ public class GameView {
 		renderGrid(spriteBatch);
 
 		GameObject gameObject;
+		MapObject mapObject;
 		GameObject activeGameObject = gameWorld.getWorldMap(activeX, activeY);
 		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
 			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
+				//render MapObjects
+				mapObject = gameWorld.getWorldMapObject(x, y);
+				spriteBatch.setColor(Color.WHITE);
+				renderField(spriteBatch, mapObject.getMapObjectType().getTexture(), x, y);
+
+				//render GameObjects
 				gameObject = gameWorld.getWorldMap(x, y);
 				if(gameObject != null){
 					spriteBatch.setColor(gameObject.getPlayer().getColor());
