@@ -130,6 +130,11 @@ public class Consts {
 	public static boolean walkDiagonal = false;
 
 	/**
+	 * Whether an object can perform multiple actions per round (one of each)
+	 */
+	public static boolean multipleActionsPerObject = true;
+
+	/**
 	 * The minimal distance between two start GameObjects
 	 */
 	public static int startGameObjectMinDistance = 2;

@@ -36,6 +36,7 @@ public class ScenarioReader {
 						scenario.getIntAttribute("mapSizeX"),
 						scenario.getIntAttribute("mapSizeY"),
 						scenario.getBooleanAttribute("walkDiagonal"),
+						scenario.getBooleanAttribute("multipleActionsPerObject"),
 						scenario.getIntAttribute("startGameObjectMinDistance"));
 				ids.add(scenario.getAttribute("id"));
 			}

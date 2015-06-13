@@ -24,6 +24,6 @@ public class TestUtil {
 	}
 
 	public static Scenario createTestScenario() {
-		return new Scenario("test", "test", 1000, 8, 15, 20, true, 4);
+		return new Scenario("test", "test", 1000, 8, 15, 20, true, true, 4);
 	}
 }

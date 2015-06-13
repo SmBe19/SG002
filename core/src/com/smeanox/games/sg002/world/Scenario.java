@@ -21,10 +21,12 @@ public class Scenario {
 	private int mapSizeX;
 	private int mapSizeY;
 	private boolean walkDiagonal;
+	private boolean multipleActionsPerObject;
 	private int startGameObjectMinDistance;
 
 	public Scenario(String id, String name, int startMoney, int maxPlayerCount, int mapSizeX,
-					int mapSizeY, boolean walkDiagonal, int startGameObjectMinDistance) {
+					int mapSizeY, boolean walkDiagonal, boolean multipleActionsPerObject,
+					int startGameObjectMinDistance) {
 		this.id = id;
 		this.name = name;
 		this.startMoney = startMoney;
@@ -32,6 +34,7 @@ public class Scenario {
 		this.mapSizeX = mapSizeX;
 		this.mapSizeY = mapSizeY;
 		this.walkDiagonal = walkDiagonal;
+		this.multipleActionsPerObject = multipleActionsPerObject;
 		this.startGameObjectMinDistance = startGameObjectMinDistance;
 
 		idToScenario.put(id, this);
@@ -59,6 +62,10 @@ public class Scenario {
 
 	public int getMapSizeY() {
 		return mapSizeY;
+	}
+
+	public boolean isMultipleActionsPerObject(){
+		return multipleActionsPerObject;
 	}
 
 	public boolean isWalkDiagonal() {

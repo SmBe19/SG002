@@ -58,6 +58,7 @@ public class GameController {
 	 */
 	private void initScenario(Scenario scenario) {
 		Consts.walkDiagonal = scenario.isWalkDiagonal();
+		Consts.multipleActionsPerObject = scenario.isMultipleActionsPerObject();
 		Consts.startGameObjectMinDistance = scenario.getStartGameObjectMinDistance();
 
 		if (gameWorld == null) {

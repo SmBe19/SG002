@@ -123,6 +123,12 @@ public class GameObject {
 	public void use(ActionType action) {
 		if (action == null) return;
 		usedActions.add(action);
+
+		if(!Consts.multipleActionsPerObject){
+			usedActions.add(ActionType.FIGHT);
+			usedActions.add(ActionType.MOVE);
+			usedActions.add(ActionType.PRODUCE);
+		}
 	}
 
 	/**
