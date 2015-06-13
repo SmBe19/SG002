@@ -12,8 +12,8 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Consts.textureFilter = Texture.TextureFilter.Nearest; //To enable texture filtering on Android change this line to:
-		//Consts.textureFilter = Texture.TextureFilter.MipMapLinearLinear;
+		//Consts.textureFilter = Texture.TextureFilter.Nearest; //To enable texture filtering on Android change this line to:
+		Consts.textureFilter = Texture.TextureFilter.MipMapLinearLinear;
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.numSamples = 2;

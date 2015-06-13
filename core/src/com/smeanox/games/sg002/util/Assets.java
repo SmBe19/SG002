@@ -103,7 +103,7 @@ public class Assets {
 		param.minFilter = Consts.textureFilter;
 		param.genMipMaps = param.minFilter == Texture.TextureFilter.MipMapLinearLinear;
 
-		manager.load("images/button.png", Texture.class, param);
+		manager.load("images/button.png", Texture.class);
 		manager.load("images/background.png", Texture.class, param);
 		manager.load("images/selection.png", Texture.class, param);
 		manager.load("images/grid.png", Texture.class, param);
@@ -222,7 +222,7 @@ public class Assets {
 		parameter.size = (int) Math.ceil(Consts.fontSizeLarge * Consts.devScaleY);
 		liberationLarge.bitmapFont = generator.generateFont(parameter);
 
-		parameter.size = (int) Math.ceil(Consts.fontSizeMicro * 10 * Consts.devScaleY);
+		parameter.size = (int) Math.ceil(Consts.fontSizeMicro * Consts.devScaleY);
 		parameter.shadowColor = Color.BLACK;
 		parameter.shadowOffsetX = (int) Math.ceil(0.5 * Consts.devScaleX);
 		parameter.shadowOffsetY = (int) Math.ceil(0.5 * Consts.devScaleY);

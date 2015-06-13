@@ -64,6 +64,8 @@ public class GameView {
 
 	public void zoomOut() {
 		zoom /= Consts.zoomStep;
+		// TODO
+		System.out.println(zoom);
 	}
 
 	public int getActiveX() {
@@ -173,7 +175,6 @@ public class GameView {
 	public void render(SpriteBatch spriteBatch, Player activePlayer) {
 		aFieldSizeX = (Consts.fieldSizeX * Consts.devScaleY * zoom);
 		aFieldSizeY = (Consts.fieldSizeY * Consts.devScaleY * zoom);
-		Assets.liberationMicroShadow.bitmapFont.getData().setScale(zoom * 1.3f);
 
 		renderBackground(spriteBatch);
 		renderGrid(spriteBatch);
@@ -190,12 +191,14 @@ public class GameView {
 					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);
 
-					Assets.liberationMicroShadow.bitmapFont.setColor(Consts.hpColor);
-					glyphLayout.setText(Assets.liberationMicroShadow.bitmapFont, "" + gameObject.getHp());
+					if(zoom >= Consts.hpDisplayMinZoom) {
+						Assets.liberationMicroShadow.bitmapFont.setColor(Consts.hpColor);
+						glyphLayout.setText(Assets.liberationMicroShadow.bitmapFont, "" + gameObject.getHp());
 
-					Assets.liberationMicroShadow.bitmapFont.draw(spriteBatch, glyphLayout,
-							x * aFieldSizeX + (aFieldSizeX - glyphLayout.width) / 2f,
-							y * aFieldSizeY + aFieldSizeY * 0.95f);
+						Assets.liberationMicroShadow.bitmapFont.draw(spriteBatch, glyphLayout,
+								x * aFieldSizeX + (aFieldSizeX - glyphLayout.width) / 2f,
+								y * aFieldSizeY + aFieldSizeY * 0.95f);
+					}
 				}
 
 				if (x == activeX && y == activeY) {

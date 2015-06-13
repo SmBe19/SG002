@@ -102,6 +102,11 @@ public class Consts {
 	public static final Color canProduceColor = Color.ORANGE;
 
 	/**
+	 * The minimal zoom factor for the hp text to show up
+	 */
+	public static final float hpDisplayMinZoom = 0.06f;
+
+	/**
 	 * The color for the different players
 	 */
 	public static final Color playerColors[] = new Color[]{Color.BLUE, Color.RED, Color.GREEN,
