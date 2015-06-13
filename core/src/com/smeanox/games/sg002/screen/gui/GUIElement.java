@@ -28,31 +28,31 @@ public interface GUIElement {
 	boolean updateClickable(Vector2 touchPos, boolean wasClick);
 
 	/**
-	 * adds a {@link ClickHandler}
+	 * add a {@link ClickHandler}
 	 *
 	 * @param handler the ClickHandler
 	 */
 	void addClickHandler(ClickHandler handler);
 
 	/**
-	 * removes a {@link ClickHandler}
+	 * remove a {@link ClickHandler}
 	 *
 	 * @param handler the ClickHandler
 	 */
 	void removeClickHandler(ClickHandler handler);
 
 	/**
-	 * Returns the bounding box of this object
+	 * Return the bounding box of this object
 	 *
 	 * @return the bounding box
 	 */
 	Rectangle getBoundingBox();
 
 	/**
-	 * Updates the position and size of the object when the window size changed
+	 * Update the position and size of the object when the window size changed
 	 *
-	 * @param width
-	 * @param height
+	 * @param width  size of the window
+	 * @param height size of the window
 	 */
 	void resize(float width, float height);
 

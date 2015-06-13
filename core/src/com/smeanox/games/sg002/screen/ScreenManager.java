@@ -1,16 +1,14 @@
 package com.smeanox.games.sg002.screen;
 
 import com.badlogic.gdx.Game;
-import com.smeanox.games.sg002.debug.Timer;
 import com.smeanox.games.sg002.world.GameController;
 
 /**
- * Manages the different Screens
+ * Manage the different Screens
  *
  * @author Benjamin Schmid
  */
 public class ScreenManager {
-
 	private static Game game;
 
 	private static SplashScreen splashScreen;
@@ -22,7 +20,7 @@ public class ScreenManager {
 	}
 
 	/**
-	 * Initializes the screen manager
+	 * Initialize the screen manager
 	 *
 	 * @param game the game to set the screens to
 	 */
@@ -31,7 +29,7 @@ public class ScreenManager {
 	}
 
 	/**
-	 * Sets the splash screen as active screen
+	 * Set the splash screen as active screen
 	 */
 	public static void showSplash() {
 		if (splashScreen == null) {
@@ -41,7 +39,7 @@ public class ScreenManager {
 	}
 
 	/**
-	 * Sets the splash screen as active screen
+	 * Set the splash screen as active screen
 	 */
 	public static void showMenu() {
 		if (menuScreen == null) {
@@ -51,7 +49,7 @@ public class ScreenManager {
 	}
 
 	/**
-	 * Sets the pause menu as active screen
+	 * Set the pause menu as active screen
 	 *
 	 * @param gameController the GameController to use
 	 */
@@ -64,14 +62,14 @@ public class ScreenManager {
 	}
 
 	/**
-	 * Sets the game screen as active screen
+	 * Set the game screen as active screen (the game screen has to have been the active screen before)
 	 */
 	public static void showGame() {
 		game.setScreen(gameScreen);
 	}
 
 	/**
-	 * Sets the game screen as active screen with the given scenario loaded
+	 * Set the game screen as active screen with the given scenario loaded
 	 *
 	 * @param gameController the GameController to start the game with
 	 */

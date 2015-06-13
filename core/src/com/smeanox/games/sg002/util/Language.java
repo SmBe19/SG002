@@ -17,19 +17,19 @@ public class Language {
 	}
 
 	/**
-	 * the i18n bundel for strings
+	 * the i18n bundle for strings
 	 */
 	private static I18NBundle strings;
 
 	/**
-	 * Loads the i18n bundle for strings with the default locale
+	 * Load the i18n bundle for strings with the default locale
 	 */
 	public static void loadStrings() {
 		loadStrings(Locale.getDefault());
 	}
 
 	/**
-	 * Loads the i18n bundle for strings with the given locale
+	 * Load the i18n bundle for strings with the given locale
 	 *
 	 * @param locale the locale to load
 	 */
@@ -39,8 +39,8 @@ public class Language {
 	}
 
 	/**
-	 * Loads the i18n bundle for strings with the given locale
-	 * <br/>
+	 * Load the i18n bundle for strings with the given locale
+	 * <br>
 	 * Does not use {@link Gdx#files} and will only work on desktop
 	 *
 	 * @param locale the locale to load
@@ -50,7 +50,7 @@ public class Language {
 	}
 
 	/**
-	 * Returns the i18n bundle for strings
+	 * Return the i18n bundle for strings
 	 *
 	 * @return the i18n bundle for strings
 	 */

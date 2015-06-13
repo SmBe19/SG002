@@ -26,10 +26,21 @@ public class GameObject {
 
 	private Set<ActionType> usedActions = new HashSet();
 
+	/**
+	 * Create a new instance and load the state from the given reader
+	 *
+	 * @param reader the reader to read from
+	 */
 	public GameObject(XmlReader.Element reader) {
 		load(reader);
 	}
 
+	/**
+	 * Create a new instance of the given type for the given player
+	 *
+	 * @param gameObjectType the typo of the new object
+	 * @param player         the player which owns the object
+	 */
 	public GameObject(GameObjectType gameObjectType, Player player) {
 		this.gameObjectType = gameObjectType;
 		this.player = player;
@@ -76,21 +87,27 @@ public class GameObject {
 		this.player = player;
 	}
 
+	/**
+	 * Whether the object can do the given action in its current state (e.g. the type allows the action and the action wasn't performed this round
+	 *
+	 * @param action the action to check
+	 * @return true if the action can be performed
+	 */
 	public boolean isCanDoAction(ActionType action) {
 		return !usedActions.contains(action) && getGameObjectType().isCanDoAction(action);
 	}
 
 	/**
-	 * reenables all actions
+	 * reenable all actions
 	 */
 	public void resetUsedActions() {
 		usedActions.clear();
 	}
 
 	/**
-	 * Checks whether the specified action was already used in this round
+	 * Check whether the specified action was already used in this round
 	 *
-	 * @param action
+	 * @param action the action to check
 	 * @return true if it was already used
 	 */
 	public boolean wasUsed(ActionType action) {
@@ -99,16 +116,22 @@ public class GameObject {
 	}
 
 	/**
-	 * Uses a specific action
+	 * Use the given action
 	 *
-	 * @param action
-	 * @return true if it was already used
+	 * @param action the used action
 	 */
 	public void use(ActionType action) {
 		if (action == null) return;
 		usedActions.add(action);
 	}
 
+	/**
+	 * Return the difference between the position of this object to the given field
+	 *
+	 * @param x the coordinates of the field
+	 * @param y the coordinates of the field
+	 * @return distance to the given field
+	 */
 	private int getDiff(int x, int y) {
 		int diffX, diffY, diffTot;
 		diffX = Math.abs(positionX - x);
@@ -122,10 +145,10 @@ public class GameObject {
 	}
 
 	/**
-	 * Checks if the new position is within reach to walk
+	 * Check if the new position is within reach to walk
 	 *
-	 * @param x
-	 * @param y
+	 * @param x new position
+	 * @param y new position
 	 * @return true if the object can move to this position
 	 */
 	public boolean canMoveTo(int x, int y) {
@@ -136,8 +159,8 @@ public class GameObject {
 	/**
 	 * Checks if the new position is within reach to produce
 	 *
-	 * @param x
-	 * @param y
+	 * @param x new position
+	 * @param y new position
 	 * @return true if the object can produce to this position
 	 */
 	public boolean canProduceTo(int x, int y) {
@@ -148,8 +171,8 @@ public class GameObject {
 	/**
 	 * Checks if the new position is within reach to fight
 	 *
-	 * @param x
-	 * @param y
+	 * @param x new position
+	 * @param y new position
 	 * @return true if the object can fight this position
 	 */
 	public boolean canFightTo(int x, int y) {
@@ -158,7 +181,7 @@ public class GameObject {
 	}
 
 	/**
-	 * Checks if the gameObject can be fought
+	 * Check if the gameObject can be fought
 	 *
 	 * @param gameObject the GameObject to fight against
 	 * @return true if the GameObject can be fought
@@ -171,7 +194,7 @@ public class GameObject {
 	}
 
 	/**
-	 * Fights the given GameObject
+	 * Fight the given GameObject
 	 *
 	 * @param gameObject the GameObject to fight against
 	 * @return the difference in HP
@@ -187,9 +210,9 @@ public class GameObject {
 	}
 
 	/**
-	 * Saves the GameObject
+	 * Save the GameObject
 	 *
-	 * @param writer the XmlWriter
+	 * @param writer the XmlWriter to save to
 	 */
 	public void save(XmlWriter writer) throws IOException {
 		writer.attribute("x", positionX);
@@ -207,9 +230,9 @@ public class GameObject {
 	}
 
 	/**
-	 * Loads the GameObject
+	 * Load the GameObject
 	 *
-	 * @param reader the XmlReader.Element
+	 * @param reader the XmlReader.Element to read from
 	 */
 	public void load(XmlReader.Element reader) {
 		positionX = reader.getIntAttribute("x");

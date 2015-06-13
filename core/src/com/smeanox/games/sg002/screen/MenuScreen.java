@@ -64,7 +64,7 @@ public class MenuScreen extends AbstractScreen {
 	private boolean wasBackDown;
 
 	/**
-	 * Constructor
+	 * Create a new instance
 	 */
 	public MenuScreen() {
 		super();
@@ -72,13 +72,16 @@ public class MenuScreen extends AbstractScreen {
 		playerCount = 2;
 		displayDialog = false;
 
-		generateGUI();
+		createUI();
 
 		scenarioIterator = Scenario.getAllScenariosSorted().iterator();
 		nextScenario();
 	}
 
-	private void generateGUI() {
+	/**
+	 * Create all GUI elements
+	 */
+	private void createUI() {
 		LinkedList<Button> toLayout = new LinkedList<Button>();
 		Button b;
 
@@ -136,7 +139,7 @@ public class MenuScreen extends AbstractScreen {
 	}
 
 	/**
-	 * cycles through scenarios
+	 * cycle through scenarios
 	 */
 	private void nextScenario() {
 		if (!scenarioIterator.hasNext()) {
@@ -150,7 +153,7 @@ public class MenuScreen extends AbstractScreen {
 	}
 
 	/**
-	 * increases the playerCount and resets it if its too high
+	 * increase the playerCount and reset it if its too high
 	 */
 	private void increasePlayerCount() {
 		playerCount++;
@@ -162,7 +165,7 @@ public class MenuScreen extends AbstractScreen {
 	}
 
 	/**
-	 * Sets the text on the scenarioLabel to the active scenario's name
+	 * Set the text on the scenarioLabel to the active scenario's name
 	 */
 	private void setScenarioLabelText() {
 		scenarioLabel.setText(scenario.getName());
@@ -175,16 +178,11 @@ public class MenuScreen extends AbstractScreen {
 	}
 
 	/**
-	 * loads a saved game
+	 * load a saved game
 	 */
 	private void resumeGame() {
 	}
 
-	/**
-	 * Called when the screen should render itself.
-	 *
-	 * @param delta The time in seconds since the last render.
-	 */
 	@Override
 	public void render(float delta) {
 		clearScreen();
@@ -209,6 +207,9 @@ public class MenuScreen extends AbstractScreen {
 				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey);
 	}
 
+	/**
+	 * Prepare to start the game (e.g. ask for player names)
+	 */
 	private void prepareStart() {
 		playerNames = new LinkedList<String>();
 		for (int i = 0; i < playerCount; i++) {
@@ -218,6 +219,9 @@ public class MenuScreen extends AbstractScreen {
 		processedPlayerNames = 0;
 	}
 
+	/**
+	 * Start the game
+	 */
 	private void startGame() {
 		GameController gameController = new GameController(scenario);
 		for (int i = 0; i < playerCount; i++) {
@@ -240,6 +244,9 @@ public class MenuScreen extends AbstractScreen {
 		ScreenManager.showGame(gameController);
 	}
 
+	/**
+	 * Wait for the user to input a player name
+	 */
 	private class PlayerNameListener implements Input.TextInputListener {
 		private int player;
 

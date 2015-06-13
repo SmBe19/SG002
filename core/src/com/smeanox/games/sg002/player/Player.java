@@ -124,6 +124,13 @@ public abstract class Player {
 	protected void loadImpl(XmlReader.Element reader) {
 	}
 
+	/**
+	 * Create a Player instance of the type defined in the saved XML
+	 *
+	 * @param reader the reder to read from
+	 * @return a new instance of the defined class
+	 * @throws IOException
+	 */
 	public static Player loadStatic(XmlReader.Element reader) throws IOException {
 		try {
 			Player player = (Player) ClassReflection.newInstance(ClassReflection.forName(reader.getAttribute("class")));
@@ -185,10 +192,19 @@ public abstract class Player {
 		this.showGUI = showGUI;
 	}
 
+	/**
+	 * Return the player associated to the given id
+	 *
+	 * @param id the id to search
+	 * @return the player with the given id
+	 */
 	public static Player getPlayerById(int id) {
 		return idToPlayer.get(id);
 	}
 
+	/**
+	 * Reset the list of ids of players
+	 */
 	public static void resetPlayerIds() {
 		idToPlayer.clear();
 	}

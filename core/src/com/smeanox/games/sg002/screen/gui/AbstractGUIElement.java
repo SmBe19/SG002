@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.LinkedList;
 
 /**
- * A clickable object
+ * A clickable gui object
  *
  * @author Benjamin Schmid
  */
@@ -26,6 +26,9 @@ public abstract class AbstractGUIElement implements GUIElement {
 	private boolean wasDown = false;
 	protected Vector2 lastTouchPos;
 
+	/**
+	 * Create a new instance
+	 */
 	public AbstractGUIElement() {
 		size = new Vector2(0, 0);
 		position = new Vector2(0, 0);
@@ -35,12 +38,6 @@ public abstract class AbstractGUIElement implements GUIElement {
 		lastTouchPos = new Vector2();
 	}
 
-	/**
-	 * called once per frame to check if the object is clicked
-	 *
-	 * @param wasClick true if there was already a click in this frame.
-	 * @return true if the element was clicked
-	 */
 	@Override
 	public boolean updateClickable(Vector2 touchPos, boolean wasClick) {
 		boolean wasClicked = false;
@@ -60,23 +57,18 @@ public abstract class AbstractGUIElement implements GUIElement {
 		return wasClicked;
 	}
 
-	/**
-	 * Returns the bounding box of this object
-	 *
-	 * @return the bounding box
-	 */
 	@Override
 	public Rectangle getBoundingBox() {
 		return boundingBox;
 	}
 
 	/**
-	 * Sets the bounding box of this object
+	 * Set the bounding box of this object
 	 *
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
+	 * @param x      coordinate of the lower left corner
+	 * @param y      coordinate of the lower left corner
+	 * @param width  the size
+	 * @param height the size
 	 */
 	protected void setBoundingBox(float x, float y, float width, float height) {
 		boundingBox.set(x, y, width, height);
@@ -85,7 +77,7 @@ public abstract class AbstractGUIElement implements GUIElement {
 	}
 
 	/**
-	 * Sets tho bounding box of this object
+	 * Set tho bounding box of this object
 	 *
 	 * @param rectangle the bounding box
 	 */
@@ -96,10 +88,10 @@ public abstract class AbstractGUIElement implements GUIElement {
 	}
 
 	/**
-	 * Sets the size of this object
+	 * Set the size of this object
 	 *
-	 * @param width
-	 * @param height
+	 * @param width  the size
+	 * @param height the size
 	 */
 	public void setSize(float width, float height) {
 		size.set(width, height);
@@ -107,10 +99,10 @@ public abstract class AbstractGUIElement implements GUIElement {
 	}
 
 	/**
-	 * Sets the position of this object
+	 * Set the position of this object
 	 *
-	 * @param x
-	 * @param y
+	 * @param x coordinate of the lower left corner
+	 * @param y coordinate of the lower left corner
 	 */
 	public void setPosition(float x, float y) {
 		position.set(x, y);
@@ -118,10 +110,10 @@ public abstract class AbstractGUIElement implements GUIElement {
 	}
 
 	/**
-	 * Sets the center of this object
+	 * Set the center of this object
 	 *
-	 * @param x
-	 * @param y
+	 * @param x coordinate of the center
+	 * @param y coordinate of the center
 	 */
 	public void setCenter(float x, float y) {
 		boundingBox.setCenter(x, y);
@@ -136,12 +128,6 @@ public abstract class AbstractGUIElement implements GUIElement {
 		this.resizer = resizer;
 	}
 
-	/**
-	 * Updates the position and size of the object
-	 *
-	 * @param width
-	 * @param height
-	 */
 	@Override
 	public void resize(float width, float height) {
 		setBoundingBox(resizer.getNewSize(width, height));
@@ -168,6 +154,9 @@ public abstract class AbstractGUIElement implements GUIElement {
 		return active;
 	}
 
+	/**
+	 * Fires the action that the object was clicked
+	 */
 	protected void fireOnClick() {
 		if (clickHandlers != null) {
 			for (ClickHandler c : clickHandlers) {
@@ -176,11 +165,6 @@ public abstract class AbstractGUIElement implements GUIElement {
 		}
 	}
 
-	/**
-	 * adds a {@link ClickHandler}
-	 *
-	 * @param handler the ClickHandler
-	 */
 	@Override
 	public void addClickHandler(ClickHandler handler) {
 		if (clickHandlers == null) {
@@ -189,11 +173,6 @@ public abstract class AbstractGUIElement implements GUIElement {
 		clickHandlers.add(handler);
 	}
 
-	/**
-	 * removes a {@link ClickHandler}
-	 *
-	 * @param handler the ClickHandler
-	 */
 	@Override
 	public void removeClickHandler(ClickHandler handler) {
 		if (clickHandlers == null) {

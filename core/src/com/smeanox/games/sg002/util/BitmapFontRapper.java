@@ -13,6 +13,11 @@ public class BitmapFontRapper {
 	public BitmapFontRapper() {
 	}
 
+	/**
+	 * Create a new instance
+	 *
+	 * @param bitmapFont the BitmapFont to use
+	 */
 	public BitmapFontRapper(BitmapFont bitmapFont) {
 		this.bitmapFont = bitmapFont;
 	}

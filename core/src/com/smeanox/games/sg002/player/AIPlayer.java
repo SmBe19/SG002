@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.player;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameObjectType;
 
@@ -13,10 +14,12 @@ import java.util.LinkedList;
  */
 public abstract class AIPlayer extends Player {
 	protected boolean finishedPlaying;
+	protected float aiSleepLeft;
 
 	@Override
 	public final void update(float delta) {
-		if (finishedPlaying) {
+		aiSleepLeft -= delta;
+		if (finishedPlaying && aiSleepLeft <= 0) {
 			finishedPlaying = false;
 			endPlaying();
 		}
@@ -27,10 +30,11 @@ public abstract class AIPlayer extends Player {
 	 */
 	protected void setFinishedPlaying() {
 		finishedPlaying = true;
+		aiSleepLeft = Consts.aiSleep;
 	}
 
 	/**
-	 * Counts all objects of the given player
+	 * Count all objects of the given player
 	 *
 	 * @param player the player to count the objects
 	 * @return the number of objects
@@ -52,6 +56,8 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
+	 * Count all objects of this player
+	 *
 	 * @see #countObjects(Player)
 	 */
 	protected int countMyObjects() {
@@ -59,7 +65,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Counts all objects of a given player of the given type
+	 * Count all objects of a given player of the given type
 	 *
 	 * @param player         the player to count the objects
 	 * @param gameObjectType the type to count
@@ -83,6 +89,8 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
+	 * Count all objects of this player of a given type
+	 *
 	 * @see #countObjects(Player, GameObjectType)
 	 */
 	protected int countMyObjects(GameObjectType gameObjectType) {
@@ -112,6 +120,8 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
+	 * Return a list of all positions where this player has an object
+	 *
 	 * @see #getPositions(Player)
 	 */
 	protected LinkedList<Integer> getMyPositions() {
@@ -119,7 +129,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Returns a list of all positions where the given player has an object from the given type
+	 * Return a list of all positions where the given player has an object from the given type
 	 *
 	 * @param player         the player to search
 	 * @param gameObjectType the type to search
@@ -143,6 +153,8 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
+	 * Return a list of all positions where this player has an object from the given type
+	 *
 	 * @see #getPositions(Player, GameObjectType)
 	 */
 	protected LinkedList<Integer> getMyPositions(GameObjectType gameObjectType) {
@@ -150,7 +162,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Returns all possible fields to produce to
+	 * Return all possible fields to produce to
 	 *
 	 * @param pos                   field from which to produce
 	 * @param produceGameObjectType type to produce
@@ -175,7 +187,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Returns one possible field to produce to
+	 * Return one arbitrary possible field to produce to
 	 *
 	 * @param pos                   field from which to produce
 	 * @param produceGameObjectType type to produce
@@ -190,7 +202,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Returns one possible field to produce to
+	 * Return one random possible field to produce to
 	 *
 	 * @param pos                   field from which to produce
 	 * @param produceGameObjectType type to produce
@@ -205,7 +217,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Returns all possible fields to move to
+	 * Return all possible fields to move to
 	 *
 	 * @param pos start position
 	 * @return list of all possible fields
@@ -229,7 +241,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Returns a random possible field to move to
+	 * Return a random possible field to move to
 	 *
 	 * @param pos start position
 	 * @return compressed coordinate of a possible field
@@ -243,7 +255,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Returns all possible fields to fight against
+	 * Return all possible fields to fight against
 	 *
 	 * @param pos start position
 	 * @return list of all possible fields
@@ -267,7 +279,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * Returns a random possible field to fight against
+	 * Return a random possible field to fight against
 	 *
 	 * @param pos start position
 	 * @return compressed coordinate of a possible field
@@ -281,7 +293,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * calculates the x coordinate of the given compressed position
+	 * Calculate the x coordinate of the given compressed position
 	 *
 	 * @param pos the compressed position
 	 * @return the x coordinate
@@ -291,7 +303,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	/**
-	 * calculates the y coordinate of the given compressed position
+	 * Calculate the y coordinate of the given compressed position
 	 *
 	 * @param pos the compressed position
 	 * @return the y coordinate

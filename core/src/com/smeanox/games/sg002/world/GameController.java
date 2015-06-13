@@ -14,7 +14,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Controls the game flow
+ * Control the game flow
  *
  * @author Benjamin Schmid
  */
@@ -27,11 +27,21 @@ public class GameController {
 
 	private LinkedList<NextPlayerHandler> nextPlayerHandlers;
 
+	/**
+	 * Create a new instance and load the given save file
+	 *
+	 * @param fileName the file to load
+	 */
 	public GameController(String fileName) {
 		players = new LinkedList<Player>();
 		loadGame(fileName);
 	}
 
+	/**
+	 * Create a new instance
+	 *
+	 * @param scenario the scenario to use
+	 */
 	public GameController(Scenario scenario) {
 		this.scenario = scenario;
 		players = new LinkedList<Player>();
@@ -42,7 +52,7 @@ public class GameController {
 	}
 
 	/**
-	 * Initializes the scenario
+	 * Initialize the scenario
 	 *
 	 * @param scenario the scenario
 	 */
@@ -56,7 +66,7 @@ public class GameController {
 	}
 
 	/**
-	 * Adds a new Player
+	 * Add a new Player
 	 *
 	 * @param player the player to add
 	 */
@@ -69,7 +79,7 @@ public class GameController {
 	}
 
 	/**
-	 * Starts the game
+	 * Start the game
 	 */
 	public void startGame() {
 		playerIterator = players.iterator();
@@ -91,6 +101,11 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Increases the playerIterator until the given player is the active player
+	 *
+	 * @param player the player that should be the active player afterwards
+	 */
 	private void forwardToPlayer(Player player) {
 		playerIterator = players.iterator();
 		while (playerIterator.hasNext()) {
@@ -103,7 +118,7 @@ public class GameController {
 	}
 
 	/**
-	 * Starts a new round
+	 * Start a new round
 	 *
 	 * @param player the active player
 	 */
@@ -112,7 +127,7 @@ public class GameController {
 	}
 
 	/**
-	 * Starts a new round
+	 * Start a new round
 	 *
 	 * @param player              the active player
 	 * @param reenableUsedActions whether usedActions should be cleared
@@ -124,7 +139,7 @@ public class GameController {
 	}
 
 	/**
-	 * Updates the active Player
+	 * Update the active Player
 	 *
 	 * @param delta The time in seconds since the last render.
 	 */
@@ -143,7 +158,7 @@ public class GameController {
 	}
 
 	/**
-	 * saves the game state to the given file
+	 * save the game state to the given file
 	 *
 	 * @param fileName the file to save to
 	 */
@@ -172,7 +187,7 @@ public class GameController {
 	}
 
 	/**
-	 * loads the game state from the given file
+	 * load the game state from the given file
 	 *
 	 * @param fileName the file to load from
 	 */
@@ -198,6 +213,12 @@ public class GameController {
 					activePlayer = player;
 				}
 			}
+			// make sure the players are associated to the correct ids
+			Player.resetPlayerIds();
+			for (Player player : players) {
+				player.setId(player.getId());
+			}
+
 			XmlReader.Element gameWorldXML = root.getChildByName("GameWorld");
 			gameWorld.load(gameWorldXML);
 
@@ -210,6 +231,11 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Fire an event that the next player started its turn
+	 *
+	 * @param nextPlayer the player that started its round
+	 */
 	protected void fireOnNextPlayer(Player nextPlayer) {
 		if (nextPlayerHandlers != null) {
 			for (NextPlayerHandler c : nextPlayerHandlers) {
@@ -219,7 +245,7 @@ public class GameController {
 	}
 
 	/**
-	 * adds a {@link NextPlayerHandler}
+	 * add a {@link NextPlayerHandler}
 	 *
 	 * @param handler the NextPlayerHandler
 	 */
@@ -231,7 +257,7 @@ public class GameController {
 	}
 
 	/**
-	 * removes a {@link NextPlayerHandler}
+	 * remove a {@link NextPlayerHandler}
 	 *
 	 * @param handler the NextPlayerHandler
 	 */

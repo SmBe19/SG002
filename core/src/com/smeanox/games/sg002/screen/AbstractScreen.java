@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.smeanox.games.sg002.debug.Timer;
 import com.smeanox.games.sg002.screen.gui.AbstractGUIElement;
 import com.smeanox.games.sg002.screen.gui.GUIElement;
 import com.smeanox.games.sg002.screen.gui.Resizer;
@@ -18,7 +17,7 @@ import com.smeanox.games.sg002.util.Consts;
 import java.util.LinkedList;
 
 /**
- * Implements some methods most screens can use
+ * Implement some methods most screens can use
  *
  * @author Benjamin Schmid
  */
@@ -33,13 +32,19 @@ public abstract class AbstractScreen implements Screen {
 	 */
 	protected SpriteBatch spriteBatch;
 
+	/**
+	 * camera used to draw the content
+	 */
 	protected Camera camera;
+	/**
+	 * Camera used to draw the gui
+	 */
 	private Camera guiCamera;
 	private Vector2 vector2;
 	private Vector3 vector3;
 
 	/**
-	 * Constructor
+	 * Create a new instance
 	 */
 	public AbstractScreen() {
 		guiElements = new LinkedList<GUIElement>();
@@ -53,7 +58,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
-	 * Adds a {@link GUIElement} to the screen
+	 * Add a {@link GUIElement} to the screen
 	 *
 	 * @param guiElement the clickable
 	 */
@@ -62,7 +67,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
-	 * Removes a {@link GUIElement} from the screen
+	 * Remove a {@link GUIElement} from the screen
 	 *
 	 * @param guiElement the clickable
 	 */
@@ -70,6 +75,13 @@ public abstract class AbstractScreen implements Screen {
 		guiElements.remove(guiElement);
 	}
 
+	/**
+	 * Unproject the given coordinates in screen space to world space
+	 *
+	 * @param x position in screen coordinates
+	 * @param y position in screen coordinates
+	 * @return position in world coordinates
+	 */
 	protected Vector2 unproject(float x, float y) {
 		vector3.set(x, y, 0);
 		vector3.set(camera.unproject(vector3));
@@ -77,10 +89,23 @@ public abstract class AbstractScreen implements Screen {
 		return vector2;
 	}
 
+	/**
+	 * Unprojet the given coordinates in screen space to world space
+	 *
+	 * @param v2 position in screen coordinates
+	 * @return position in world coordinates
+	 */
 	protected Vector2 unproject(Vector2 v2) {
 		return unproject(v2.x, v2.y);
 	}
 
+	/**
+	 * Unproject the given coordinates in screen space to world space for the GUI (using guicamera)
+	 *
+	 * @param x position in screen coordinates
+	 * @param y position in screen coordinates
+	 * @return position in world coordinates
+	 */
 	protected Vector2 unprojectGUI(float x, float y) {
 		vector3.set(x, y, 0);
 		vector3.set(guiCamera.unproject(vector3));
@@ -88,19 +113,22 @@ public abstract class AbstractScreen implements Screen {
 		return vector2;
 	}
 
+	/**
+	 * Unproject the given coordinates in screen space to world space for the GUI (using guicamera)
+	 *
+	 * @param v2 position in screen coordinates
+	 * @return position in world coordinates
+	 */
 	protected Vector2 unprojectGUI(Vector2 v2) {
 		return unprojectGUI(v2.x, v2.y);
 	}
 
-	/**
-	 * Called when this screen becomes the current screen for a Game.
-	 */
 	@Override
 	public void show() {
 	}
 
 	/**
-	 * Clears the screen using black
+	 * Clear the screen using black
 	 */
 	protected void clearScreen() {
 		Gdx.graphics.getGL20().glClearColor(0, 0, 0, 1);
@@ -108,7 +136,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
-	 * Updates all GUI elements
+	 * Update all GUI elements
 	 *
 	 * @param delta    The time in seconds since the last render.
 	 * @param wasClick true if there was already a click in this frame.
@@ -126,7 +154,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
-	 * Renders all GUI elements
+	 * Render all GUI elements
 	 *
 	 * @param delta The time in seconds since the last render.
 	 */
@@ -140,12 +168,6 @@ public abstract class AbstractScreen implements Screen {
 		spriteBatch.setProjectionMatrix(camera.combined);
 	}
 
-	/**
-	 * Called when the Application is resized.
-	 *
-	 * @param width
-	 * @param height
-	 */
 	@Override
 	public void resize(int width, int height) {
 		Consts.updateScale();
@@ -163,7 +185,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
-	 * layouts the given objects
+	 * layout the given objects
 	 *
 	 * @param toLayout      list of objects to layout
 	 * @param cols          number of columns
@@ -226,7 +248,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
-	 * moves the camera
+	 * move the camera
 	 *
 	 * @param x offset
 	 * @param y offset
@@ -238,7 +260,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
-	 * sets the camera position
+	 * set the camera position
 	 *
 	 * @param x position
 	 * @param y position
@@ -250,7 +272,7 @@ public abstract class AbstractScreen implements Screen {
 	}
 
 	/**
-	 * sets the camera position
+	 * set the camera position
 	 *
 	 * @param postition postition
 	 */
@@ -258,33 +280,21 @@ public abstract class AbstractScreen implements Screen {
 		setCameraPosition(postition.x, postition.y);
 	}
 
-	/**
-	 * Called when the Application is paused, usually when it's not active or visible on screen.
-	 */
 	@Override
 	public void pause() {
 
 	}
 
-	/**
-	 * Called when the Application is resumed from a paused state, usually when it regains focus.
-	 */
 	@Override
 	public void resume() {
 
 	}
 
-	/**
-	 * Called when this screen is no longer the current screen for a Game.
-	 */
 	@Override
 	public void hide() {
 
 	}
 
-	/**
-	 * Called when this screen should release all resources.
-	 */
 	@Override
 	public void dispose() {
 

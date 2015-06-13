@@ -12,35 +12,64 @@ public class Timer {
 
 	private LinkedList<TimerEntry> stack;
 
-	private Timer(){
+	/**
+	 * Create a new instance
+	 */
+	private Timer() {
 		stack = new LinkedList<TimerEntry>();
 	}
 
-	public static Timer get(){
-		if(singleton == null){
+	/**
+	 * Returns the singleton instance
+	 *
+	 * @return the singleton instance
+	 */
+	public static Timer get() {
+		if (singleton == null) {
 			singleton = new Timer();
 		}
 		return singleton;
 	}
 
-	public void start(String name){
+	/**
+	 * Push a new Timer on the stack
+	 *
+	 * @param name the name of the timer
+	 */
+	public void start(String name) {
 		stack.addFirst(new TimerEntry(name, System.currentTimeMillis()));
 		System.out.println("Task " + name + " started");
 	}
 
-	public void stop(){
+	/**
+	 * Stop the last not yet stopped Timer and print the duration
+	 */
+	public void stop() {
 		TimerEntry entry = stack.poll();
 		long time = System.currentTimeMillis() - entry.time;
 		System.out.println("Task " + entry.name + " ran for " + time + "ms");
 	}
 
-	private class TimerEntry{
+	/**
+	 * Class to hold a Timer
+	 */
+	private class TimerEntry {
 		public String name;
 		public long time;
 
-		public TimerEntry(){}
+		/**
+		 * Create a new instance
+		 */
+		public TimerEntry() {
+		}
 
-		public TimerEntry(String name, long time){
+		/**
+		 * Create a new instance
+		 *
+		 * @param name the name of the timer
+		 * @param time the time the timer was started
+		 */
+		public TimerEntry(String name, long time) {
 			this.name = name;
 			this.time = time;
 		}

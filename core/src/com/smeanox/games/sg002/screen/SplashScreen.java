@@ -27,15 +27,12 @@ public class SplashScreen extends AbstractScreen {
 	private float timePassed;
 
 	/**
-	 * Constructor
+	 * Create a new instance
 	 */
 	public SplashScreen() {
 		super();
 	}
 
-	/**
-	 * Called when this screen becomes the current screen for a Game.
-	 */
 	@Override
 	public void show() {
 		super.show();
@@ -47,11 +44,6 @@ public class SplashScreen extends AbstractScreen {
 		smeanox = new Sprite(Assets.smeanox);
 	}
 
-	/**
-	 * Called when the screen should render itself.
-	 *
-	 * @param delta The time in seconds since the last render.
-	 */
 	@Override
 	public void render(float delta) {
 		timePassed += delta;
@@ -76,12 +68,6 @@ public class SplashScreen extends AbstractScreen {
 		spriteBatch.end();
 	}
 
-	/**
-	 * Called when the Application is resized.
-	 *
-	 * @param width
-	 * @param height
-	 */
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
@@ -89,7 +75,7 @@ public class SplashScreen extends AbstractScreen {
 	}
 
 	/**
-	 * Scales all local sprites according to dewScale
+	 * Scale all local sprites according to dewScale
 	 */
 	private void scaleSprites() {
 		float scale = (float) Gdx.graphics.getWidth() / Assets.smeanox.getWidth() * 0.8f;

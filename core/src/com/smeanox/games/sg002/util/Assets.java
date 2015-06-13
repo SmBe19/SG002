@@ -5,14 +5,12 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.smeanox.games.sg002.debug.Timer;
 import com.smeanox.games.sg002.world.GameObjectType;
 
 /**
- * Manages all Assets
+ * Manage all Assets
  *
  * @author Benjamin Schmid
  */
@@ -58,7 +56,6 @@ public class Assets {
 	/**
 	 * liberation font
 	 */
-	public static FreeType liberation;
 	public static BitmapFontRapper liberationMicroShadow;
 	public static BitmapFontRapper liberationMicro;
 	public static BitmapFontRapper liberationSmall;
@@ -71,7 +68,7 @@ public class Assets {
 	}
 
 	/**
-	 * loads all assets necessary to display the splash screen
+	 * load all assets necessary to display the splash screen
 	 */
 	public static void loadAssetsSplashScreen() {
 		if (manager == null) {
@@ -89,7 +86,7 @@ public class Assets {
 	}
 
 	/**
-	 * prepares the AssetManager to load the assets
+	 * prepare the AssetManager to load the assets
 	 */
 	public static void prepareLoadAssets() {
 		if (manager == null) {
@@ -116,7 +113,7 @@ public class Assets {
 	}
 
 	/**
-	 * Adds the asset to be loaded
+	 * Add the asset to be loaded
 	 *
 	 * @param filename filename of the asset to be loaded
 	 * @param type     class of the asset
@@ -126,7 +123,7 @@ public class Assets {
 	}
 
 	/**
-	 * loads the assets
+	 * load the assets
 	 *
 	 * @return true if the assets are loaded
 	 */
@@ -142,10 +139,10 @@ public class Assets {
 	}
 
 	/**
-	 * returns the loaded asset
+	 * return the loaded asset
 	 *
 	 * @param name filename of the loaded asset
-	 * @param <T>
+	 * @param <T>  Type of the asset
 	 * @return the asset
 	 */
 	public static <T> T getAsset(String name) {
@@ -153,7 +150,7 @@ public class Assets {
 	}
 
 	/**
-	 * assigns the loaded assets to variables
+	 * assign the loaded assets to variables
 	 */
 	private static void finishedLoading() {
 		button = manager.get("images/button.png", Texture.class);
@@ -164,22 +161,17 @@ public class Assets {
 		possibleFieldFight = manager.get("images/possibleFieldFight.png", Texture.class);
 		possibleFieldProduce = manager.get("images/possibleFieldProduce.png", Texture.class);
 
-
-		setGameObjectTypeTextures();
+		for (GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()) {
+			gameObjectType.setTexture(manager.get(gameObjectType.getTextureName(), Texture.class));
+		}
 
 		createFonts();
 
 		finishedCompletly = true;
 	}
 
-	private static void setGameObjectTypeTextures() {
-		for (GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()) {
-			gameObjectType.setTexture(manager.get(gameObjectType.getTextureName(), Texture.class));
-		}
-	}
-
 	/**
-	 * Creates fonts on the fly for the active screen size
+	 * Create fonts on the fly for the active screen size
 	 */
 	public static void createFonts() {
 		if (liberationMicroShadow == null) {
@@ -233,7 +225,7 @@ public class Assets {
 	}
 
 	/**
-	 * Disposes all assets
+	 * Dispose all assets
 	 */
 	public static void unload() {
 		manager.dispose();

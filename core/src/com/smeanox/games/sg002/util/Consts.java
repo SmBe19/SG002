@@ -118,6 +118,11 @@ public class Consts {
 	 */
 	public static final float zoomStep = 1.1f;
 
+	/**
+	 * number of seconds the AI should wait until the next player plays
+	 */
+	public static final float aiSleep = 0.5f;
+
 	// Game Settings, read from scenario
 	/**
 	 * Whether the GameObjects can move diagonal (different radius form)
@@ -155,6 +160,11 @@ public class Consts {
 
 		private static LinkedList<Integer> allShortcuts;
 
+		/**
+		 * Return a list of all keyboard shortcuts
+		 *
+		 * @return the list
+		 */
 		public static LinkedList<Integer> getAllShortcuts() {
 			if (allShortcuts == null) {
 				allShortcuts = new LinkedList<Integer>();
@@ -191,7 +201,7 @@ public class Consts {
 		devScaleX = (float) Gdx.graphics.getWidth() / devWidth;
 		devScaleY = (float) Gdx.graphics.getHeight() / devHeight;
 
-		if(Math.abs(oldX - devScaleX) > 0.001f || Math.abs(oldY - devScaleY) > 0.001f) {
+		if (Math.abs(oldX - devScaleX) > 0.001f || Math.abs(oldY - devScaleY) > 0.001f) {
 			Assets.createFonts();
 		}
 	}

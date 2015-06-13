@@ -11,18 +11,19 @@ import java.util.Locale;
 
 /**
  * Helper methods for testing
+ *
  * @author Benjamin Schmid
  */
 public class TestUtil {
 
-	public static void setupConfig(){
+	public static void setupConfig() {
 		Consts.headlessMode = true;
 		Language.loadStringsForHeadless(Locale.getDefault());
 		GameObjectTypeReader.readGameObjectTypes(new FileHandle("config/GameObjectTypes.xml"));
 		ScenarioReader.readScenarios(new FileHandle("config/Scenarios.xml"));
 	}
 
-	public static Scenario createTestScenario(){
+	public static Scenario createTestScenario() {
 		return new Scenario("test", "test", 1000, 8, 15, 20, true, 4);
 	}
 }

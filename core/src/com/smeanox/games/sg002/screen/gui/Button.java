@@ -22,11 +22,25 @@ public class Button extends AbstractGUIElement {
 	private Color backgroundColorInactive;
 	private GlyphLayout glyphLayout;
 
+	/**
+	 * Create a new instance
+	 */
 	public Button() {
 		super();
 		glyphLayout = new GlyphLayout();
 	}
 
+	/**
+	 * Create a new instance
+	 *
+	 * @param sprite                  the sprite used as background
+	 * @param font                    the font used to display the text
+	 * @param text                    the text to display
+	 * @param textColor               the color of the texet
+	 * @param backgroundColor         the color used to tint the background
+	 * @param backgroundColorHover    the color used to tint the background when the mouse hovers over the button
+	 * @param backgroundColorInactive the color used to tint the background when the button is inactive
+	 */
 	public Button(Sprite sprite, BitmapFontRapper font, String text, Color textColor,
 				  Color backgroundColor, Color backgroundColorHover, Color backgroundColorInactive) {
 		this();
@@ -44,7 +58,7 @@ public class Button extends AbstractGUIElement {
 	}
 
 	/**
-	 * returns the sprite. You should not manipulate position or size.
+	 * return the sprite. You should not manipulate position or size.
 	 *
 	 * @return the sprite
 	 */
@@ -104,12 +118,6 @@ public class Button extends AbstractGUIElement {
 		this.backgroundColorInactive = backgroundColorInactive;
 	}
 
-	/**
-	 * Sets the size of this object
-	 *
-	 * @param width
-	 * @param height
-	 */
 	@Override
 	public void setSize(float width, float height) {
 		super.setSize(width, height);
@@ -118,12 +126,6 @@ public class Button extends AbstractGUIElement {
 		}
 	}
 
-	/**
-	 * Sets the position of this object
-	 *
-	 * @param x
-	 * @param y
-	 */
 	@Override
 	public void setPosition(float x, float y) {
 		super.setPosition(x, y);
@@ -132,12 +134,6 @@ public class Button extends AbstractGUIElement {
 		}
 	}
 
-	/**
-	 * Sets the center of this object
-	 *
-	 * @param x
-	 * @param y
-	 */
 	@Override
 	public void setCenter(float x, float y) {
 		super.setCenter(x, y);
@@ -146,11 +142,6 @@ public class Button extends AbstractGUIElement {
 		}
 	}
 
-	/**
-	 * Called when the object should render itself.
-	 *
-	 * @param delta The time in seconds since the last render.
-	 */
 	@Override
 	public void render(float delta, SpriteBatch spriteBatch) {
 		if (!visible) {

@@ -8,5 +8,12 @@ import com.badlogic.gdx.math.Rectangle;
  * @author Benjamin Schmid
  */
 public interface Resizer {
-	public Rectangle getNewSize(float width, float height);
+	/**
+	 * Calculate the new size of the object
+	 *
+	 * @param width  size of the screen
+	 * @param height size of the screen
+	 * @return the new size
+	 */
+	Rectangle getNewSize(float width, float height);
 }

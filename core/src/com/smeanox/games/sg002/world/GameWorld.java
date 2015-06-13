@@ -23,12 +23,22 @@ public class GameWorld {
 	private Player activePlayer;
 	private HashSet<GameObject> gameObjects;
 
+	/**
+	 * Create a new instance
+	 *
+	 * @param scenario the scenario to use
+	 */
 	public GameWorld(Scenario scenario) {
 		initScenario(scenario);
 
 		gameObjects = new HashSet<GameObject>();
 	}
 
+	/**
+	 * initializes the values using the given scenario
+	 *
+	 * @param scenario the scenario to use
+	 */
 	public void initScenario(Scenario scenario) {
 		mapSizeX = scenario.getMapSizeX();
 		mapSizeY = scenario.getMapSizeY();
@@ -44,6 +54,13 @@ public class GameWorld {
 		return mapSizeY;
 	}
 
+	/**
+	 * Return the GameObject at the given position or null if there is no GameObject
+	 *
+	 * @param x position
+	 * @param y position
+	 * @return the GameObject or null
+	 */
 	public GameObject getWorldMap(int x, int y) {
 		if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
 			return null;
@@ -56,9 +73,10 @@ public class GameWorld {
 	}
 
 	/**
-	 * Sets the starting GameObjects for the given player at a random position
+	 * Add the starting GameObjects for the given player at a random position
 	 *
-	 * @param player
+	 * @param player         the player for which the starting GameObject should be added
+	 * @param gameObjectType the type of the object to add
 	 */
 	public void addStartGameObjects(Player player, GameObjectType gameObjectType) {
 		int x, y;
@@ -74,7 +92,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * Checks if the startGameObject can be placed here
+	 * Check if the startGameObject can be placed here
 	 *
 	 * @param px position
 	 * @param py position
@@ -113,6 +131,12 @@ public class GameWorld {
 		activePlayer.addMoney(calcMoneyPerRound(activePlayer));
 	}
 
+	/**
+	 * Return the amount the given player receives per round
+	 *
+	 * @param activePlayer the player for which the amount should be calculated
+	 * @return the amount the player receives per round
+	 */
 	private int calcMoneyPerRound(Player activePlayer) {
 		int sol = 0;
 		for (int y = 0; y < mapSizeY; y++) {
@@ -126,7 +150,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * executes the given action
+	 * execute the given action
 	 *
 	 * @param action the action
 	 * @return true if the action was successful
@@ -144,7 +168,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * Checks if a player is still alive
+	 * Check if a player is still alive
 	 *
 	 * @param player the player
 	 * @return true if the player didn't lose yet
@@ -162,7 +186,7 @@ public class GameWorld {
 
 
 	/**
-	 * removes the GameObject from the map
+	 * remove the GameObject from the map
 	 *
 	 * @param x coordinates
 	 * @param y coordinates
@@ -172,11 +196,11 @@ public class GameWorld {
 	}
 
 	/**
-	 * Checks whether a gameObject has any remaining actions
+	 * Check whether a gameObject has any remaining actions
 	 *
 	 * @param x coordinates
 	 * @param y coordinates
-	 * @return
+	 * @return true if all actions were used
 	 */
 	public boolean wasUsed(int x, int y) {
 		try {
@@ -196,7 +220,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * checks if the GameObject can be moved
+	 * check if the GameObject can be moved to the given position
 	 *
 	 * @param startX start coordinates
 	 * @param startY start coordinates
@@ -233,7 +257,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * moves the GameObject
+	 * move the GameObject to the given position
 	 *
 	 * @param startX start coordinates
 	 * @param startY start coordinates
@@ -254,7 +278,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * checks if the GameObject can produce
+	 * check if the GameObject can produce to the given position
 	 *
 	 * @param startX start coordinates
 	 * @param startY start coordinates
@@ -299,7 +323,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * Produces a new GameObject
+	 * Produce a new GameObject at the given position
 	 *
 	 * @param startX start coordinates
 	 * @param startY start coordinates
@@ -325,7 +349,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * checks if the GameObject can fight the other GameObject
+	 * check if the GameObject can fight the other GameObject
 	 *
 	 * @param startX start coordinates
 	 * @param startY start coordinates
@@ -362,7 +386,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * fights the other GameObject
+	 * fight the other GameObject
 	 *
 	 * @param startX start coordinates
 	 * @param startY start coordinates
@@ -388,7 +412,7 @@ public class GameWorld {
 	}
 
 	/**
-	 * Conquers a player
+	 * Conquer a player
 	 *
 	 * @param conqueror the winner
 	 * @param loser     the loser
@@ -398,9 +422,9 @@ public class GameWorld {
 	}
 
 	/**
-	 * Saves the GameWorld
+	 * Save the GameWorld
 	 *
-	 * @param writer the XmlWriter
+	 * @param writer the XmlWriter to write to
 	 */
 	public void save(XmlWriter writer) throws IOException {
 		writer.element("GameObjects");
@@ -420,9 +444,9 @@ public class GameWorld {
 	}
 
 	/**
-	 * loads the GameWorld
+	 * load the GameWorld
 	 *
-	 * @param reader the XmlReader.Element
+	 * @param reader the XmlReader.Element to read from
 	 */
 	public void load(XmlReader.Element reader) {
 		worldMap = new GameObject[mapSizeY][mapSizeX];

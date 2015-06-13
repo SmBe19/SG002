@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Reads a given XML file and creates the Scenarios
+ * Read a given XML file and create the Scenarios
  *
  * @author Benjamin Schmid
  */
@@ -17,7 +17,7 @@ public class ScenarioReader {
 	}
 
 	/**
-	 * Reads all the Scenarios from the given file
+	 * Read all the Scenarios from the given file
 	 *
 	 * @param file file to read from
 	 * @return list with all the read ids

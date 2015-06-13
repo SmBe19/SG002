@@ -14,7 +14,7 @@ import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameWorld;
 
 /**
- * Renders the GameWorld
+ * Render the GameWorld
  *
  * @author Benjamin Schmid
  */
@@ -28,6 +28,11 @@ public class GameView {
 	private int activeY;
 	private TextureRegion backgroundRegions[][];
 
+	/**
+	 * Create a new instance
+	 *
+	 * @param gameWorld the gameWorld to display
+	 */
 	public GameView(GameWorld gameWorld) {
 		this.gameWorld = gameWorld;
 		activeX = -1;
@@ -37,6 +42,9 @@ public class GameView {
 		initBackgroundRegions();
 	}
 
+	/**
+	 * Initialize the list of background regions. The background is split into several texture regions
+	 */
 	private void initBackgroundRegions() {
 		backgroundRegions = new TextureRegion[Consts.backgroundFieldsY][Consts.backgroundFieldsX];
 		int backgroundRegionWidth, backgroundRegionHeight;
@@ -83,10 +91,22 @@ public class GameView {
 		this.activeY = activeY;
 	}
 
+	/**
+	 * Return the GameObject at the position [acitveX, acitveY]
+	 *
+	 * @return the GameObject or null if there is no GameObject
+	 */
 	public GameObject getActiveGameObject() {
 		return gameWorld.getWorldMap(activeX, activeY);
 	}
 
+	/**
+	 * Return the Field that belongs to the given coordinates in world space
+	 *
+	 * @param x coordinates in world space
+	 * @param y coordinates in world space
+	 * @return the coordinates of the field
+	 */
 	public Vector2 getFieldByPosition(float x, float y) {
 		int newActiveX, newActiveY;
 		newActiveX = (int) (x / (Consts.fieldSizeX * Consts.devScaleY * zoom));
@@ -94,10 +114,23 @@ public class GameView {
 		return new Vector2(newActiveX, newActiveY);
 	}
 
+	/**
+	 * Return the Field that belongs to the given coordinates in world space
+	 *
+	 * @param vector2 coordinates in world space
+	 * @return the coordinates of the field
+	 */
 	public Vector2 getFieldByPosition(Vector2 vector2) {
 		return getFieldByPosition(vector2.x, vector2.y);
 	}
 
+	/**
+	 * Return the coordinates in world space of the lower left corner of the given field
+	 *
+	 * @param x coordinates of the field
+	 * @param y coordinates of the field
+	 * @return coordinates in world space
+	 */
 	public Vector2 getPositionByField(int x, int y) {
 		float positionX, positionY;
 		positionX = x * Consts.fieldSizeX * Consts.devScaleY * zoom;
@@ -105,6 +138,12 @@ public class GameView {
 		return new Vector2(positionX, positionY);
 	}
 
+	/**
+	 * Set the active field to the field at the given coordinates
+	 *
+	 * @param x coordinates in world space
+	 * @param y coordinates in world space
+	 */
 	public void setActiveByPosition(float x, float y) {
 		int newActiveX, newActiveY;
 		newActiveX = (int) (x / (Consts.fieldSizeX * Consts.devScaleY * zoom));
@@ -117,17 +156,22 @@ public class GameView {
 		}
 	}
 
+	/**
+	 * Set the active field to the field at the given coordinates
+	 *
+	 * @param vector2 coordinates in world space
+	 */
 	public void setActiveByPosition(Vector2 vector2) {
 		setActiveByPosition(vector2.x, vector2.y);
 	}
 
 	/**
-	 * renders a Texture on a given field
+	 * render a Texture on a given field
 	 *
-	 * @param spriteBatch
-	 * @param texture
-	 * @param x
-	 * @param y
+	 * @param spriteBatch spriteBatch to use
+	 * @param texture     the texture to draw
+	 * @param x           coordinate of the field to draw
+	 * @param y           coordinate of the field to draw
 	 */
 	private void renderField(SpriteBatch spriteBatch, Texture texture, int x, int y) {
 		spriteBatch.draw(texture,
@@ -138,7 +182,7 @@ public class GameView {
 	}
 
 	/**
-	 * renders the background
+	 * render the background
 	 *
 	 * @param spriteBatch spriteBatch
 	 */
@@ -153,7 +197,7 @@ public class GameView {
 	}
 
 	/**
-	 * renders the grid
+	 * render the grid
 	 *
 	 * @param spriteBatch spriteBatch
 	 */
@@ -167,9 +211,10 @@ public class GameView {
 	}
 
 	/**
-	 * renders the GameWorld
+	 * render the GameWorld
 	 *
-	 * @param spriteBatch
+	 * @param spriteBatch spriteBatch
+	 * @param activePlayer the player that is playing
 	 */
 	public void render(SpriteBatch spriteBatch, Player activePlayer) {
 		aFieldSizeX = (Consts.fieldSizeX * Consts.devScaleY * zoom);
@@ -190,7 +235,7 @@ public class GameView {
 					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);
 
-					if(zoom >= Consts.hpDisplayMinZoom) {
+					if (zoom >= Consts.hpDisplayMinZoom) {
 						Assets.liberationMicroShadow.bitmapFont.setColor(Consts.hpColor);
 						glyphLayout.setText(Assets.liberationMicroShadow.bitmapFont, "" + gameObject.getHp());
 

@@ -70,7 +70,7 @@ public class Scenario {
 	}
 
 	/**
-	 * returns the Scenario with the given name
+	 * return the Scenario with the given name
 	 *
 	 * @param id id of the scanario
 	 * @return the Scenario
@@ -80,7 +80,7 @@ public class Scenario {
 	}
 
 	/**
-	 * returns all Scenarios sorted
+	 * return all Scenarios (not sorted)
 	 *
 	 * @return a List of all Scenarios
 	 */
@@ -89,9 +89,9 @@ public class Scenario {
 	}
 
 	/**
-	 * returns all Scenarios sorted
+	 * return all Scenarios sorted
 	 *
-	 * @return a List of all Scenarios
+	 * @return a sorted List of all Scenarios
 	 */
 	public static LinkedList<Scenario> getAllScenariosSorted() {
 		LinkedList<Scenario> scenarios = new LinkedList<Scenario>(idToScenario.values());

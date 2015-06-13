@@ -3,7 +3,7 @@ package com.smeanox.games.sg002.player;
 import com.smeanox.games.sg002.world.Action;
 
 /**
- * A real player that plays local
+ * A real player that plays locally
  *
  * @author Benjamin Schmid
  */

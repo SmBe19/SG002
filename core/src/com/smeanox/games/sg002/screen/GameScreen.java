@@ -72,6 +72,11 @@ public class GameScreen extends AbstractScreen {
 	private LinkedList<Button> produceButtons;
 	private HashMap<GameObjectType, Button> gameObjectTypeToProduceButton;
 
+	/**
+	 * Create a new instance
+	 *
+	 * @param gameController the GameController that handles the game
+	 */
 	public GameScreen(GameController gameController) {
 		super();
 		this.gameController = gameController;
@@ -105,6 +110,9 @@ public class GameScreen extends AbstractScreen {
 		gameController.startGame();
 	}
 
+	/**
+	 * Create all GUI elements
+	 */
 	private void createUI() {
 		LinkedList<Button> toLayout = new LinkedList<Button>();
 
@@ -249,6 +257,9 @@ public class GameScreen extends AbstractScreen {
 		layout(produceButtons, cols, rows, 0, 0, 0, 0, 250, 40, 5, 5);
 	}
 
+	/**
+	 * inilialize all keyboard shortcuts
+	 */
 	private void initKeys() {
 		wasKeyDown = new HashMap<Integer, Boolean>();
 
@@ -257,11 +268,6 @@ public class GameScreen extends AbstractScreen {
 		}
 	}
 
-	/**
-	 * Called when the screen should render itself.
-	 *
-	 * @param delta The time in seconds since the last render.
-	 */
 	@Override
 	public void render(float delta) {
 		boolean wasClick = updateGUI(delta, wasDrag);
@@ -276,7 +282,7 @@ public class GameScreen extends AbstractScreen {
 	}
 
 	/**
-	 * Updates the Input
+	 * Update the Input
 	 *
 	 * @param delta    The time in seconds since the last render.
 	 * @param wasClick true if there was already a click in this frame
@@ -325,6 +331,9 @@ public class GameScreen extends AbstractScreen {
 		}
 	}
 
+	/**
+	 * Check whether a keyboard shortcut was pressed
+	 */
 	private void updateKeyboardShortcuts() {
 		if (wasKeyDown.get(Consts.KeyboardShortcuts.quickSave)
 				&& !Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.quickSave)) {
@@ -392,6 +401,9 @@ public class GameScreen extends AbstractScreen {
 		}
 	}
 
+	/**
+	 * Center the camera on the first GameObject found of the current player
+	 */
 	private void centerCameraOnActivePlayer() {
 		for (int y = 0; y < gameController.getGameWorld().getMapSizeY(); y++) {
 			for (int x = 0; x < gameController.getGameWorld().getMapSizeX(); x++) {
@@ -405,7 +417,7 @@ public class GameScreen extends AbstractScreen {
 	}
 
 	/**
-	 * Updates the labels
+	 * Update the labels
 	 */
 	private void updateLabels() {
 		moneyLabel.setText(Language.getStrings().format("gameScreen.currency", gameController.getActivePlayer().getMoney()));
@@ -415,6 +427,11 @@ public class GameScreen extends AbstractScreen {
 		nameLabel.setTextColor(gameController.getActivePlayer().getColor());
 	}
 
+	/**
+	 * Set the visibility of all action buttons to the given value
+	 *
+	 * @param visible whether the buttons should be visible
+	 */
 	private void setActionButtonsVisible(boolean visible) {
 		moveButton.setVisible(visible);
 		fightButton.setVisible(visible);
@@ -422,6 +439,11 @@ public class GameScreen extends AbstractScreen {
 		cancelButton.setVisible(visible);
 	}
 
+	/**
+	 * Set the active flag of all action buttons to the given value
+	 *
+	 * @param active whether the buttons should be active
+	 */
 	private void setActionButtonsActive(boolean active) {
 		moveButton.setActive(active);
 		fightButton.setActive(active);
@@ -430,7 +452,7 @@ public class GameScreen extends AbstractScreen {
 	}
 
 	/**
-	 * activates only the buttons the active gameObject supports
+	 * activate only the buttons the active gameObject supports
 	 *
 	 * @param activeGameObject the active GameObject
 	 */
@@ -442,12 +464,22 @@ public class GameScreen extends AbstractScreen {
 		cancelButton.setActive(false);
 	}
 
+	/**
+	 * Set the visibility of all produce buttons to the given value
+	 *
+	 * @param visible whether the buttons should be visible
+	 */
 	private void setProduceButtonsVisible(boolean visible) {
 		for (Button b : produceButtons) {
 			b.setVisible(visible);
 		}
 	}
 
+	/**
+	 * Set the active flag of all produce buttons to the given value
+	 *
+	 * @param active whether the buttons should be active
+	 */
 	private void setProduceButtonsActive(boolean active) {
 		for (Button b : produceButtons) {
 			b.setActive(active);
@@ -455,7 +487,7 @@ public class GameScreen extends AbstractScreen {
 	}
 
 	/**
-	 * activates only the buttons the active gameObject supports and the player can afford
+	 * activate only the buttons the active gameObject supports and the player can afford
 	 *
 	 * @param activeGameObject the active GameObject
 	 */
@@ -471,6 +503,9 @@ public class GameScreen extends AbstractScreen {
 		}
 	}
 
+	/**
+	 * Zoom in the GameView
+	 */
 	private void zoomIn() {
 		vector3.set(camera.position);
 		vector3.x *= Consts.zoomStep;
@@ -479,6 +514,9 @@ public class GameScreen extends AbstractScreen {
 		gameView.zoomIn();
 	}
 
+	/**
+	 * Zoom out the GameView
+	 */
 	private void zoomOut() {
 		vector3.set(camera.position);
 		vector3.x /= Consts.zoomStep;
@@ -487,18 +525,27 @@ public class GameScreen extends AbstractScreen {
 		gameView.zoomOut();
 	}
 
+	/**
+	 * The user clicked the "move" button
+	 */
 	private void startMove() {
 		aAction.actionType = Action.ActionType.MOVE;
 		setProduceButtonsVisible(false);
 		cancelButton.setActive(true);
 	}
 
+	/**
+	 * The user clicked the "fight" button
+	 */
 	private void startFight() {
 		aAction.actionType = Action.ActionType.FIGHT;
 		setProduceButtonsVisible(false);
 		cancelButton.setActive(true);
 	}
 
+	/**
+	 * The user clicked the "produce" button
+	 */
 	private void startProduce() {
 		if (gameView.getActiveGameObject() == null) {
 			return;
@@ -509,18 +556,29 @@ public class GameScreen extends AbstractScreen {
 		setProduceButtonsActive(gameView.getActiveGameObject());
 	}
 
+	/**
+	 * The user clicked the "cancel" button
+	 */
 	private void cancelAction() {
 		setProduceButtonsVisible(false);
 		aAction.actionType = Action.ActionType.NONE;
 		cancelButton.setActive(false);
 	}
 
+	/**
+	 * The user finished clicked "next player"
+	 */
 	private void proposeEndPlaying() {
 		if (gameController.getActivePlayer().proposeEndPlaying()) {
 			cancelAction();
 		}
 	}
 
+	/**
+	 * The user clicked on a produce button
+	 *
+	 * @param gameObjectType the GameObjectType of the produce button
+	 */
 	private void selectProduceGameObjectType(GameObjectType gameObjectType) {
 		if (gameView.getActiveGameObject() == null
 				|| !gameView.getActiveGameObject().getGameObjectType().getCanProduceList().contains(gameObjectType)) {
@@ -531,6 +589,12 @@ public class GameScreen extends AbstractScreen {
 		setProduceButtonsVisible(false);
 	}
 
+	/**
+	 * select the given field in the GameView
+	 *
+	 * @param x coordinates in world space
+	 * @param y coordinates in world space
+	 */
 	private void selectField(int x, int y) {
 		gameView.setActiveX(x);
 		gameView.setActiveY(y);
@@ -550,6 +614,12 @@ public class GameScreen extends AbstractScreen {
 		}
 	}
 
+	/**
+	 * The user finished an action, the action is proposed to the active player
+	 *
+	 * @param x coordinates in world space of the end field of the action
+	 * @param y coordinates in world space of the end field of the action
+	 */
 	private void finishAction(int x, int y) {
 		aAction.endX = x;
 		aAction.endY = y;
@@ -562,6 +632,9 @@ public class GameScreen extends AbstractScreen {
 		}
 	}
 
+	/**
+	 * Pause the game
+	 */
 	private void pauseGame() {
 		ScreenManager.showPauseMenu(gameController);
 	}

@@ -28,7 +28,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.smeanox.games.sg002.debug.Timer;
 import com.smeanox.games.sg002.screen.gui.Button;
 import com.smeanox.games.sg002.screen.gui.ClickHandler;
 import com.smeanox.games.sg002.util.Assets;
@@ -50,15 +49,18 @@ public class PauseScreen extends AbstractScreen {
 	private boolean wasBackDown;
 
 	/**
-	 * Constructor
+	 * Create a new instance
 	 */
 	public PauseScreen() {
 		super();
 
-		generateGUI();
+		createUI();
 	}
 
-	private void generateGUI() {
+	/**
+	 * Create all GUI elements
+	 */
+	private void createUI() {
 		LinkedList<Button> toLayout = new LinkedList<Button>();
 		Button b;
 
@@ -122,22 +124,31 @@ public class PauseScreen extends AbstractScreen {
 	}
 
 	/**
-	 * resumes the game
+	 * resume the game
 	 */
 	private void resumeGame() {
 		ScreenManager.showGame();
 	}
 
+	/**
+	 * save the game (quicksave)
+	 */
 	private void saveGame() {
 		gameController.saveGame(Consts.quickSaveFileName);
 		resumeGame();
 	}
 
+	/**
+	 * load the game (quicksave)
+	 */
 	private void loadGame() {
 		gameController.loadGame(Consts.quickSaveFileName);
 		resumeGame();
 	}
 
+	/**
+	 * Quit the game
+	 */
 	private void quitGame() {
 		Gdx.app.exit();
 	}
@@ -146,11 +157,6 @@ public class PauseScreen extends AbstractScreen {
 		this.gameController = gameController;
 	}
 
-	/**
-	 * Called when the screen should render itself.
-	 *
-	 * @param delta The time in seconds since the last render.
-	 */
 	@Override
 	public void render(float delta) {
 		clearScreen();

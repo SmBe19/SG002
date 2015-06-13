@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Reads a given XML file and creates the gameObjectTypes
+ * Read a given XML file and create the gameObjectTypes
  *
  * @author Benjamin Schmid
  */
@@ -20,7 +20,7 @@ public class GameObjectTypeReader {
 	}
 
 	/**
-	 * Reads all the GameObjectTypes from the given file
+	 * Read all the GameObjectTypes from the given file
 	 *
 	 * @param file file to read from
 	 * @return list with all the read ids
@@ -79,6 +79,12 @@ public class GameObjectTypeReader {
 		return ids;
 	}
 
+	/**
+	 * Read a single GameObjectType
+	 *
+	 * @param element the Element to read from
+	 * @return the read GameObjectType
+	 */
 	private static GameObjectType readGameObjectType(XmlReader.Element element) {
 		XmlReader.Element hp = element.getChildByName("HP");
 		XmlReader.Element value = element.getChildByName("Value");

@@ -1,10 +1,13 @@
 package com.smeanox.games.sg002.screen.gui;
 
 /**
- * Handles a click
+ * An object that can handle a click
  *
  * @author Benjamin Schmid
  */
 public interface ClickHandler {
-	public void onClick();
+	/**
+	 * Handle a click
+	 */
+	void onClick();
 }
