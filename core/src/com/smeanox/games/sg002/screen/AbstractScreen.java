@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.smeanox.games.sg002.debug.Timer;
 import com.smeanox.games.sg002.screen.gui.AbstractGUIElement;
 import com.smeanox.games.sg002.screen.gui.GUIElement;
 import com.smeanox.games.sg002.screen.gui.Resizer;

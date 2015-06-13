@@ -15,9 +15,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = Consts.devWidth * 2;
 		config.height = Consts.devHeight * 2;
-		config.samples = 32;
-
-
+		// uncomment this line for production (commented so window can be resized to test different screenSizes faster)
+		//config.samples = 32;
 
 		new LwjglApplication(new SG002(), config);
 	}

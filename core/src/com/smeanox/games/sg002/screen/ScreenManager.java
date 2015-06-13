@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.screen;
 
 import com.badlogic.gdx.Game;
+import com.smeanox.games.sg002.debug.Timer;
 import com.smeanox.games.sg002.world.GameController;
 
 /**

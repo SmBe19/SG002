@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.smeanox.games.sg002.debug.Timer;
 import com.smeanox.games.sg002.world.GameObjectType;
 
 /**
@@ -226,8 +227,6 @@ public class Assets {
 		parameter.shadowColor = Color.BLACK;
 		parameter.shadowOffsetX = (int) Math.ceil(0.5 * Consts.devScaleX);
 		parameter.shadowOffsetY = (int) Math.ceil(0.5 * Consts.devScaleY);
-		parameter.minFilter = Consts.textureFilter;
-		parameter.genMipMaps = parameter.minFilter == Texture.TextureFilter.MipMapLinearLinear;
 		liberationMicroShadow.bitmapFont = generator.generateFont(parameter);
 
 		generator.dispose();

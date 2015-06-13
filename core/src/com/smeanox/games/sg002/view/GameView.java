@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
+import com.smeanox.games.sg002.world.Action;
 import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameWorld;
 
@@ -64,8 +65,6 @@ public class GameView {
 
 	public void zoomOut() {
 		zoom /= Consts.zoomStep;
-		// TODO
-		System.out.println(zoom);
 	}
 
 	public int getActiveX() {
@@ -206,15 +205,15 @@ public class GameView {
 					renderField(spriteBatch, Assets.selection, x, y);
 				} else {
 					if (activeGameObject != null && activeGameObject.canMoveTo(x, y)) {
-						spriteBatch.setColor(Consts.canMoveColor);
+						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.MOVE) ? Consts.usedColor : Consts.canMoveColor);
 						renderField(spriteBatch, Assets.possibleFieldMove, x, y);
 					}
 					if (activeGameObject != null && activeGameObject.canFightTo(x, y)) {
-						spriteBatch.setColor(Consts.canFightColor);
+						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.FIGHT) ? Consts.usedColor : Consts.canFightColor);
 						renderField(spriteBatch, Assets.possibleFieldFight, x, y);
 					}
 					if (activeGameObject != null && activeGameObject.canProduceTo(x, y)) {
-						spriteBatch.setColor(Consts.canProduceColor);
+						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.PRODUCE) ? Consts.usedColor : Consts.canProduceColor);
 						renderField(spriteBatch, Assets.possibleFieldProduce, x, y);
 					}
 				}

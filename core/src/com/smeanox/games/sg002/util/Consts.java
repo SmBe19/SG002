@@ -184,9 +184,15 @@ public class Consts {
 	 * updates the devScale according to screenSize
 	 */
 	public static void updateScale() {
+		float oldX, oldY;
+		oldX = devScaleX;
+		oldY = devScaleY;
+
 		devScaleX = (float) Gdx.graphics.getWidth() / devWidth;
 		devScaleY = (float) Gdx.graphics.getHeight() / devHeight;
 
-		Assets.createFonts();
+		if(Math.abs(oldX - devScaleX) > 0.001f || Math.abs(oldY - devScaleY) > 0.001f) {
+			Assets.createFonts();
+		}
 	}
 }
