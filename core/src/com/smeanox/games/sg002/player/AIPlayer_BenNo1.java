@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class AIPlayer_BenNo1 extends AIPlayer {
 
 	@Override
-	protected void playAI() {
+	protected void play() {
 		HashMap<String, LinkedList<Integer>> positions = new HashMap<String, LinkedList<Integer>>();
 		for (GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()) {
 			positions.put(gameObjectType.getId(), getMyPositions(gameObjectType));

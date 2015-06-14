@@ -33,11 +33,6 @@ public class Assets {
 	public static Texture background;
 
 	/**
-	 * gold mountain
-	 */
-	public static Texture goldMountain;
-
-	/**
 	 * selection
 	 */
 	public static Texture selection;
@@ -108,7 +103,6 @@ public class Assets {
 
 		manager.load("images/button.png", Texture.class);
 		manager.load("images/background.png", Texture.class, param);
-		manager.load("images/goldMountain.png", Texture.class, param);
 		manager.load("images/selection.png", Texture.class, param);
 		manager.load("images/grid.png", Texture.class, param);
 		manager.load("images/possibleFieldMove.png", Texture.class, param);
@@ -161,7 +155,6 @@ public class Assets {
 	private static void finishedLoading() {
 		button = manager.get("images/button.png", Texture.class);
 		background = manager.get("images/background.png", Texture.class);
-		goldMountain = manager.get("images/goldMountain.png", Texture.class);
 		selection = manager.get("images/selection.png", Texture.class);
 		grid = manager.get("images/grid.png", Texture.class);
 		possibleFieldMove = manager.get("images/possibleFieldMove.png", Texture.class);

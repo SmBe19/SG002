@@ -2,27 +2,21 @@
     <Scenarios>
         <Scenario id="small" name="scenario.small.name" startMoney="1000" maxPlayerCount="2"
                   mapSizeX="20" mapSizeY="20" walkDiagonal="true" multipleActionsPerObject="true"
-                  goldMountains="true" goldMountainCount="20" startGameObjectMinDistance="4"
-                  seed="314159265358979"/>
+                  startGameObjectMinDistance="4"/>
         <Scenario id="big" name="scenario.big.name" startMoney="1000" maxPlayerCount="8"
                   mapSizeX="40" mapSizeY="40" walkDiagonal="true" multipleActionsPerObject="true"
-                  goldMountains="true" goldMountainCount="20" startGameObjectMinDistance="8"
-                  seed="314159265358979"/>
+                  startGameObjectMinDistance="8"/>
         <Scenario id="bigPlenty" name="scenario.bigPlenty.name" startMoney="100000" maxPlayerCount="8"
                   mapSizeX="40" mapSizeY="40" walkDiagonal="true" multipleActionsPerObject="true"
-                  goldMountains="true" goldMountainCount="20" startGameObjectMinDistance="8"
-                  seed="314159265358979"/>
+                  startGameObjectMinDistance="8"/>
         <Scenario id="bigLittle" name="scenario.bigLittle.name" startMoney="50" maxPlayerCount="8"
                   mapSizeX="40" mapSizeY="40" walkDiagonal="true" multipleActionsPerObject="true"
-                  goldMountains="true" goldMountainCount="20" startGameObjectMinDistance="8"
-                  seed="314159265358979"/>
+                  startGameObjectMinDistance="8"/>
         <Scenario id="vast" name="scenario.vast.name" startMoney="1000" maxPlayerCount="32"
                   mapSizeX="100" mapSizeY="100" walkDiagonal="true" multipleActionsPerObject="true"
-                  goldMountains="true" goldMountainCount="20" startGameObjectMinDistance="10"
-                  seed="314159265358979"/>
+                  startGameObjectMinDistance="10"/>
         <Scenario id="giant" name="scenario.giant.name" startMoney="1000" maxPlayerCount="64"
                   mapSizeX="400" mapSizeY="400" walkDiagonal="true" multipleActionsPerObject="true"
-                  goldMountains="true" goldMountainCount="20" startGameObjectMinDistance="16"
-                  seed="314159265358979"/>
+                  startGameObjectMinDistance="16"/>
     </Scenarios>
 </Config>

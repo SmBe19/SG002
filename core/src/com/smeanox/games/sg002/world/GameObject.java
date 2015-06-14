@@ -7,7 +7,6 @@ import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.Action.ActionType;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -126,7 +125,9 @@ public class GameObject {
 		usedActions.add(action);
 
 		if(!Consts.multipleActionsPerObject){
-			Collections.addAll(usedActions, ActionType.values());
+			usedActions.add(ActionType.FIGHT);
+			usedActions.add(ActionType.MOVE);
+			usedActions.add(ActionType.PRODUCE);
 		}
 	}
 

@@ -89,21 +89,17 @@ public class Consts {
 	 */
 	public static final Color gridColor = new Color(0.9f, 0.9f, 0.9f, 0.25f);
 	/**
-	 * The color to display the canMove marker in
+	 * The color to displey the canMove marker in
 	 */
 	public static final Color canMoveColor = Color.BLUE;
 	/**
-	 * The color to display the canMove marker in
+	 * The color to displey the canMove marker in
 	 */
 	public static final Color canFightColor = Color.RED;
 	/**
-	 * The color to display the canMove marker in
+	 * The color to displey the canMove marker in
 	 */
 	public static final Color canProduceColor = Color.ORANGE;
-	/**
-	 * The color used to display the goldMountain in
-	 */
-	public static final Color goldMountainColor = Color.LIGHT_GRAY;
 
 	/**
 	 * The minimal zoom factor for the hp text to show up
@@ -128,31 +124,15 @@ public class Consts {
 	public static final float aiSleep = 0.5f;
 
 	// Game Settings, read from scenario
-
 	/**
-	 * The seed used for randomness
+	 * Whether the GameObjects can move diagonal (different radius form)
 	 */
-	public static long seed = 314159265358979L;
+	public static boolean walkDiagonal = false;
 
 	/**
-	 * Whether the GameObjects can move diagonal (different radius form). The distance is diffX + diffY (false) or max(diffX, diffY) (true)
-	 */
-	public static boolean walkDiagonal = true;
-
-	/**
-	 * Whether an object can perform multiple actions per round (one of each type) or only one per round
+	 * Whether an object can perform multiple actions per round (one of each)
 	 */
 	public static boolean multipleActionsPerObject = true;
-
-	/**
-	 * Whether GoldMines can only be built at specific places
-	 */
-	public static boolean goldMountains = true;
-
-	/**
-	 * The number of goldMountains that are available on the map
-	 */
-	public static int goldMountainCount = 10;
 
 	/**
 	 * The minimal distance between two start GameObjects
