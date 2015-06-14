@@ -63,6 +63,15 @@ public class Scenario {
 		goldPos = new Point[maxGold];
 		startPos = new Point[maxPlayerCount];
 
+		for (int i = 0; i < maxPlayerCount; i++) {
+			Point pt;
+			do {
+				pt = new Point(MathUtils.random(mapSizeX - 1), MathUtils.random(mapSizeY - 1));
+			} while (!checkMinDist(usedPos, pt, startGameObjectMinDistance));
+			usedPos.add(pt);
+			startPos[i] = pt;
+		}
+
 		for (int i = 0; i < maxGold; i++) {
 			Point pt;
 			do {
@@ -70,15 +79,6 @@ public class Scenario {
 			} while (usedPos.contains(pt));
 			usedPos.add(pt);
 			goldPos[i] = pt;
-		}
-
-		for (int i = 0; i < maxPlayerCount; i++) {
-			Point pt;
-			do {
-				pt = new Point(MathUtils.random(mapSizeX - 1), MathUtils.random(mapSizeY - 1));
-			} while (usedPos.contains(pt));
-			usedPos.add(pt);
-			startPos[i] = pt;
 		}
 	}
 
@@ -99,6 +99,30 @@ public class Scenario {
 				seed, maxGold, multipleActionsPerObject);
 		this.goldPos = goldPos;
 		this.startPos = startPos;
+	}
+
+	/**
+	 * Check whether the minimal distance is obeyed
+	 * @param usedPoints the points that are already set
+	 * @param newPoint the new point that might get added
+	 * @param minDist the minimal distance to obey
+	 * @return true if it is possible to add the newPoint
+	 */
+	private boolean checkMinDist(Set<Point> usedPoints, Point newPoint, int minDist){
+		if(usedPoints.contains(newPoint)){
+			return false;
+		}
+
+		for(Point point : usedPoints){
+			int distX, distY;
+			distX = Math.abs(point.x - newPoint.x);
+			distY = Math.abs(point.y - newPoint.y);
+			if(Math.max(distX, distY) < minDist){
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
