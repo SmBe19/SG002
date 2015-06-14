@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.smeanox.games.sg002.world.GameObjectType;
+import com.smeanox.games.sg002.world.MapObjectType;
 
 /**
  * Manage all Assets
@@ -52,6 +53,8 @@ public class Assets {
 	 * possible field for production
 	 */
 	public static Texture possibleFieldProduce;
+	/** possible field for goldmine */
+	public static Texture gold;
 
 	/**
 	 * liberation font
@@ -108,6 +111,7 @@ public class Assets {
 		manager.load("images/possibleFieldMove.png", Texture.class, param);
 		manager.load("images/possibleFieldFight.png", Texture.class, param);
 		manager.load("images/possibleFieldProduce.png", Texture.class, param);
+		manager.load("images/gold.png", Texture.class, param);
 
 		finishedCompletly = false;
 	}
@@ -118,8 +122,12 @@ public class Assets {
 	 * @param filename filename of the asset to be loaded
 	 * @param type     class of the asset
 	 */
-	public static void addToLoadQueue(String filename, Class type) {
-		manager.load(filename, type);
+	public static void addToLoadQueue(String filename, Class type){
+
+		TextureLoader.TextureParameter param = new TextureLoader.TextureParameter();
+		param.minFilter = Consts.textureFilter;
+		param.genMipMaps =  param.minFilter == Texture.TextureFilter.MipMapLinearLinear;
+		manager.load(filename, type, param);
 	}
 
 	/**
@@ -160,14 +168,27 @@ public class Assets {
 		possibleFieldMove = manager.get("images/possibleFieldMove.png", Texture.class);
 		possibleFieldFight = manager.get("images/possibleFieldFight.png", Texture.class);
 		possibleFieldProduce = manager.get("images/possibleFieldProduce.png", Texture.class);
+		gold = manager.get("images/gold.png", Texture.class);
 
-		for (GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()) {
-			gameObjectType.setTexture(manager.get(gameObjectType.getTextureName(), Texture.class));
-		}
+
+		setGameObjectTypeTextures();
+		setMapObjectTypeTextures();
 
 		createFonts();
 
 		finishedCompletly = true;
+	}
+
+	private static void setGameObjectTypeTextures(){
+		for(GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()){
+			gameObjectType.setTexture(manager.get(gameObjectType.getTextureName(), Texture.class));
+		}
+	}
+	
+	private static void setMapObjectTypeTextures(){
+		for(MapObjectType mapObjectType : MapObjectType.getMapObjectTypes()){
+			mapObjectType.setTexture(manager.get(mapObjectType.getTextureName(), Texture.class));
+		}
 	}
 
 	/**

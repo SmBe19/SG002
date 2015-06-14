@@ -6,8 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.smeanox.games.sg002.SG002;
 import com.smeanox.games.sg002.util.Consts;
 
-import org.lwjgl.opengl.GL11;
-
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Consts.textureFilter = Texture.TextureFilter.MipMapLinearLinear;

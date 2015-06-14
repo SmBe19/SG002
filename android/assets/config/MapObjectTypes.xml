@@ -1,0 +1,13 @@
+<Config>
+	<!-- <AllowedGameObjects> / <ForbiddenGameObjects> can both be used -->
+	<!-- When <AllowedGameObjects> are not specified, all GameObjects unless the ones forbidden are allowed -->
+    <MapObjectTypes>
+        <MapObjectType id="empty" texture="images/empty.png" default="true">
+            <ForbiddenGameObjects>
+                <GameObject id="goldMine"/>
+            </ForbiddenGameObjects>
+        </MapObjectType>
+        <MapObjectType id="gold" texture="images/gold.png">
+        </MapObjectType>
+    </MapObjectTypes>
+</Config>
