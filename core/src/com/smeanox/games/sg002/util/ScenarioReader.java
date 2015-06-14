@@ -30,15 +30,18 @@ public class ScenarioReader {
 		try {
 			XmlReader.Element root = reader.parse(file);
 			for(XmlReader.Element scenario : root.getChildByName("Scenarios").getChildrenByName("Scenario")){
+
 				if (scenario.getChildByName("GoldPos") != null && scenario.getChildByName("StartPos") != null){
-					List<Point> goldPos = new ArrayList();
+
+					List<Point> goldPos = new ArrayList<Point>();
 					for (XmlReader.Element pos : scenario.getChildByName("GoldPos").getChildrenByName("Gold")){
 						goldPos.add(new Point(pos.getIntAttribute("x"),pos.getIntAttribute("y")));
 					}
-					List<Point> startPos = new ArrayList();
+					List<Point> startPos = new ArrayList<Point>();
 					for (XmlReader.Element pos : scenario.getChildByName("StartPos").getChildrenByName("Start")){
 						startPos.add(new Point(pos.getIntAttribute("x"),pos.getIntAttribute("y")));
 					}
+
 					new Scenario(
 							scenario.getAttribute("id"),
 							Language.getStrings().get(scenario.getAttribute("name")),
@@ -48,10 +51,11 @@ public class ScenarioReader {
 							scenario.getIntAttribute("mapSizeY"),
 							scenario.getBooleanAttribute("walkDiagonal"),
 							scenario.getIntAttribute("startGameObjectMinDistance"),
-							scenario.getIntAttribute("seed"),
-							goldPos.toArray(new Point[0]),
-							startPos.toArray(new Point[0]),
-							scenario.getBooleanAttribute("multipleActionsPerObject"));
+							Long.parseLong(scenario.getAttribute("seed")),
+							scenario.getIntAttribute("maxGold"),
+							scenario.getBooleanAttribute("multipleActionsPerObject"),
+							goldPos.toArray(new Point[goldPos.size()]),
+							startPos.toArray(new Point[startPos.size()]));
 				}else {
 					new Scenario(
 							scenario.getAttribute("id"),
@@ -62,7 +66,7 @@ public class ScenarioReader {
 							scenario.getIntAttribute("mapSizeY"),
 							scenario.getBooleanAttribute("walkDiagonal"),
 							scenario.getIntAttribute("startGameObjectMinDistance"),
-							scenario.getIntAttribute("seed"),
+							Long.parseLong(scenario.getAttribute("seed")),
 							scenario.getIntAttribute("maxGold"),
 							scenario.getBooleanAttribute("multipleActionsPerObject"));
 				}

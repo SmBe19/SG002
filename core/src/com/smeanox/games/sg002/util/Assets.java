@@ -179,12 +179,18 @@ public class Assets {
 		finishedCompletly = true;
 	}
 
+	/**
+	 * assign the loaded assets to gameObjectTypes
+	 */
 	private static void setGameObjectTypeTextures(){
 		for(GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()){
 			gameObjectType.setTexture(manager.get(gameObjectType.getTextureName(), Texture.class));
 		}
 	}
-	
+
+	/**
+	 * assign the loaded assets to mapObjectTypes
+	 */
 	private static void setMapObjectTypeTextures(){
 		for(MapObjectType mapObjectType : MapObjectType.getMapObjectTypes()){
 			mapObjectType.setTexture(manager.get(mapObjectType.getTextureName(), Texture.class));

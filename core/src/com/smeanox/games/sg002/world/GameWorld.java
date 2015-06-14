@@ -3,7 +3,6 @@ package com.smeanox.games.sg002.world;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.smeanox.games.sg002.player.Player;
-import com.smeanox.games.sg002.util.Consts;
 
 import java.awt.Point;
 import java.io.IOException;
@@ -31,7 +30,7 @@ public class GameWorld {
 	 *
 	 * @param scenario the scenario to use
 	 */
-	public GameWorld(Scenario scenario){
+	public GameWorld(Scenario scenario) {
 		initScenario(scenario);
 
 		gameObjects = new HashSet<GameObject>();
@@ -43,21 +42,21 @@ public class GameWorld {
 	 * @param scenario the scenario to use
 	 */
 	public void initScenario(Scenario scenario) {
+		this.scenario = scenario;
+
 		mapSizeX = scenario.getMapSizeX();
 		mapSizeY = scenario.getMapSizeY();
 
 		worldGameObjects = new GameObject[mapSizeY][mapSizeX];
 		worldMapObjects = new MapObject[mapSizeY][mapSizeX];
-		for (int x = 0; x < mapSizeY; x++){
-			for (int y = 0; y < mapSizeX; y++){
-				worldMapObjects[x][y] = new MapObject(MapObjectType.getDefaultMapObjectType(), y, x);
-				//coordinates are such a mess -> i have no idea whether this order is correct
+		for (int y = 0; y < mapSizeY; y++) {
+			for (int x = 0; x < mapSizeX; x++) {
+				worldMapObjects[y][x] = new MapObject(MapObjectType.getDefaultMapObjectType(), x, y);
 			}
 		}
-		for (Point point : scenario.getGoldPos()){
+		for (Point point : scenario.getGoldPos()) {
 			worldMapObjects[point.y][point.x] = new MapObject(MapObjectType.getMapObjectTypeById("gold"), point.x, point.y);
 		}
-		this.scenario = scenario;
 	}
 
 	public int getMapSizeX() {
@@ -68,6 +67,10 @@ public class GameWorld {
 		return mapSizeY;
 	}
 
+	public Player getActivePlayer() {
+		return activePlayer;
+	}
+
 	/**
 	 * Return the GameObject at the given position or null if there is no GameObject
 	 *
@@ -75,23 +78,24 @@ public class GameWorld {
 	 * @param y position
 	 * @return the GameObject or null
 	 */
-	public GameObject getWorldMap(int x, int y) {
+	public GameObject getWorldGameObject(int x, int y) {
 		if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
 			return null;
 		}
 		return worldGameObjects[y][x];
 	}
 
-	public MapObject getWorldMapObject(int x, int y){
-		if(x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY){
+	public MapObject getWorldMapObject(int x, int y) {
+		if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
 			return null;
 		}
 		return worldMapObjects[y][x];
 	}
 
-	public GameObject[][] getWorldMap() {
+	public GameObject[][] getWorldGameObjects() {
 		return worldGameObjects;
 	}
+
 	public MapObject[][] getWorldMapObjects() {
 		return worldMapObjects;
 	}
@@ -102,43 +106,14 @@ public class GameWorld {
 	 * @param player         the player for which the starting GameObject should be added
 	 * @param gameObjectType the type of the object to add
 	 */
-	public void addStartGameObjects(Player player, GameObjectType gameObjectType){
-		int x, y;/*
-		do{
-			x = scenario.getRandom().nextInt(mapSizeX-1);
-			y = scenario.getRandom().nextInt(mapSizeY-1);
-		} while(!canAddStartGameObject(x, y));
-*/
-		x = scenario.getStartPos(player.getId()).y;
-		y = scenario.getStartPos(player.getId()).x;
+	public void addStartGameObjects(Player player, GameObjectType gameObjectType) {
+		int x, y;
+		x = scenario.getStartPos(player.getId()).x;
+		y = scenario.getStartPos(player.getId()).y;
 		worldGameObjects[y][x] = new GameObject(gameObjectType, player);
 		worldGameObjects[y][x].setPositionX(x);
 		worldGameObjects[y][x].setPositionY(y);
 		gameObjects.add(worldGameObjects[y][x]);
-	}
-
-	/**
-	 * Check if the startGameObject can be placed here
-	 *
-	 * @param px position
-	 * @param py position
-	 * @return true if it is possible
-	 */
-	private boolean canAddStartGameObject(int px, int py) {
-		if (px < 0 || py < 0 || px >= mapSizeX || py >= mapSizeY) {
-			return false;
-		}
-		for (int y = py - Consts.startGameObjectMinDistance; y <= py + Consts.startGameObjectMinDistance; y++) {
-			for (int x = px - Consts.startGameObjectMinDistance; x <= px + Consts.startGameObjectMinDistance; x++) {
-				if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
-					continue;
-				}
-				if (getWorldMap(x, y) != null) {
-					return false;
-				}
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -165,11 +140,9 @@ public class GameWorld {
 	 */
 	private int calcMoneyPerRound(Player activePlayer) {
 		int sol = 0;
-		for (int y = 0; y < mapSizeY; y++) {
-			for (int x = 0; x < mapSizeX; x++) {
-				if (getWorldMap(x, y) != null && getWorldMap(x, y).getPlayer() == activePlayer) {
-					sol += getWorldMap(x, y).getGameObjectType().getValuePerRound();
-				}
+		for (GameObject gameObject : gameObjects) {
+			if (gameObject.getPlayer() == activePlayer) {
+				sol += gameObject.getGameObjectType().getValuePerRound();
 			}
 		}
 		return sol;
@@ -200,11 +173,9 @@ public class GameWorld {
 	 * @return true if the player didn't lose yet
 	 */
 	public boolean isPlayerStillAlive(Player player) {
-		for (int y = 0; y < mapSizeY; y++) {
-			for (int x = 0; x < mapSizeX; x++) {
-				if (getWorldMap(x, y) != null && getWorldMap(x, y).getPlayer() == player) {
-					return true;
-				}
+		for (GameObject gameObject : gameObjects) {
+			if (gameObject.getPlayer() == player) {
+				return true;
 			}
 		}
 		return false;
@@ -217,7 +188,10 @@ public class GameWorld {
 	 * @param x coordinates
 	 * @param y coordinates
 	 */
-	public void removeGameObject(int x, int y){
+	public void removeGameObject(int x, int y) {
+		if (worldGameObjects[y][x] != null) {
+			gameObjects.remove(worldGameObjects[y][x]);
+		}
 		worldGameObjects[y][x] = null;
 	}
 
@@ -237,7 +211,7 @@ public class GameWorld {
 			return !worldGameObjects[y][x].isCanDoAction(Action.ActionType.MOVE) &&
 					!worldGameObjects[y][x].isCanDoAction(Action.ActionType.PRODUCE) &&
 					!worldGameObjects[y][x].isCanDoAction(Action.ActionType.FIGHT);
-		} catch (NullPointerException ex){
+		} catch (NullPointerException ex) {
 			ex.printStackTrace();
 		} catch (IndexOutOfBoundsException ex) { // java 6 compatibility
 			ex.printStackTrace();
@@ -262,13 +236,13 @@ public class GameWorld {
 			return false;
 		}
 
-		GameObject gameObject = getWorldMap(startX, startY);
+		GameObject gameObject = getWorldGameObject(startX, startY);
 		// there is no GameObject at the start
 		if (gameObject == null) {
 			return false;
 		}
 		// the destination is blocked
-		if (getWorldMap(endX, endY) != null) {
+		if (getWorldGameObject(endX, endY) != null) {
 			return false;
 		}
 		// the destination is not within radius
@@ -297,9 +271,9 @@ public class GameWorld {
 		}
 		worldGameObjects[endY][endX] = worldGameObjects[startY][startX];
 		worldGameObjects[startY][startX] = null;
-		getWorldMap(endX, endY).setPositionX(endX);
-		getWorldMap(endX, endY).setPositionY(endY);
-		getWorldMap(endX, endY).use(Action.ActionType.MOVE);
+		getWorldGameObject(endX, endY).setPositionX(endX);
+		getWorldGameObject(endX, endY).setPositionY(endY);
+		getWorldGameObject(endX, endY).use(Action.ActionType.MOVE);
 		return true;
 	}
 
@@ -320,21 +294,21 @@ public class GameWorld {
 			return false;
 		}
 
-		GameObject gameObject = getWorldMap(startX, startY);
+		GameObject gameObject = getWorldGameObject(startX, startY);
 		// there is no GameObject at the start
 		if (gameObject == null) {
 			return false;
 		}
 		// the destination is blocked
-		if (getWorldMap(endX, endY) != null) {
+		if (getWorldGameObject(endX, endY) != null) {
 			return false;
 		}
 		// the destination is not within radius
 		if (!gameObject.canProduceTo(endX, endY)) {
 			return false;
 		}
-		// target mapObject doesnt allow this gameObjectType
-		if (!getWorldMapObject(endX, endY).getMapObjectType().isGameObjectTypeAllowed(gameObjectType)){
+		// target mapObject does not allow this gameObjectType
+		if (!getWorldMapObject(endX, endY).getMapObjectType().isGameObjectTypeAllowed(gameObjectType)) {
 			return false;
 		}
 		// the active GameObjectType can't produce the desired GameObjectType
@@ -342,7 +316,7 @@ public class GameWorld {
 			return false;
 		}
 		// the new GameObject is too expensive
-		if(getActivePlayer().getMoney() < gameObjectType.getValue()){
+		if (getActivePlayer().getMoney() < gameObjectType.getValue()) {
 			return false;
 		}
 		// the gameObject has been used already
@@ -369,9 +343,9 @@ public class GameWorld {
 		newGameObject.setPositionX(endX);
 		newGameObject.setPositionY(endY);
 		worldGameObjects[endY][endX] = newGameObject;
-		getActivePlayer().addMoney(-gameObjectType.getValue());
-		getWorldMap(startX, startY).use(Action.ActionType.PRODUCE);
 		gameObjects.add(newGameObject);
+		getActivePlayer().addMoney(-gameObjectType.getValue());
+		getWorldGameObject(startX, startY).use(Action.ActionType.PRODUCE);
 		for (Action.ActionType a : Action.ActionType.values()) {
 			newGameObject.use(a);//not able to do anything after being built
 		}
@@ -395,17 +369,17 @@ public class GameWorld {
 			return false;
 		}
 
-		GameObject gameObject = getWorldMap(startX, startY);
+		GameObject gameObject = getWorldGameObject(startX, startY);
 		// there is no GameObject at the start
 		if (gameObject == null) {
 			return false;
 		}
 		// there is no GameObject at the destination
-		if (getWorldMap(endX, endY) == null) {
+		if (getWorldGameObject(endX, endY) == null) {
 			return false;
 		}
 		// the destination is not within radius
-		if (!gameObject.canFight(getWorldMap(endX, endY))) {
+		if (!gameObject.canFight(getWorldGameObject(endX, endY))) {
 			return false;
 		}
 		// the gameObject has been used already
@@ -428,16 +402,16 @@ public class GameWorld {
 		if (!canFight(startX, startY, endX, endY)) {
 			return 0;
 		}
-		int damage = getWorldMap(startX, startY).fight(getWorldMap(endX, endY));
-		if(getWorldMap(endX, endY).getHp() <= 0){
-			getActivePlayer().addMoney(getWorldMap(endX, endY).getGameObjectType().getValueOnDestruction());
-			Player otherPlayer = getWorldMap(endX, endY).getPlayer();
+		int damage = getWorldGameObject(startX, startY).fight(getWorldGameObject(endX, endY));
+		if (getWorldGameObject(endX, endY).getHp() <= 0) {
+			getActivePlayer().addMoney(getWorldGameObject(endX, endY).getGameObjectType().getValueOnDestruction());
+			Player otherPlayer = getWorldGameObject(endX, endY).getPlayer();
 			removeGameObject(endX, endY);
-			if(!isPlayerStillAlive(otherPlayer)){
+			if (!isPlayerStillAlive(otherPlayer)) {
 				conquerPlayer(getActivePlayer(), otherPlayer);
 			}
 		}
-		getWorldMap(startX, startY).use(Action.ActionType.FIGHT);
+		getWorldGameObject(startX, startY).use(Action.ActionType.FIGHT);
 		return damage;
 	}
 
@@ -449,6 +423,11 @@ public class GameWorld {
 	 */
 	private void conquerPlayer(Player conqueror, Player loser) {
 		conqueror.addMoney(loser.getMoney());
+		for (GameObject gameObject : gameObjects) {
+			if (gameObject.getPlayer() == loser) {
+				gameObject.setPlayer(conqueror);
+			}
+		}
 	}
 
 	/**
@@ -460,12 +439,12 @@ public class GameWorld {
 		writer.element("GameObjects");
 		for (int y = 0; y < mapSizeY; y++) {
 			for (int x = 0; x < mapSizeX; x++) {
-				if (getWorldMap(x, y) != null) {
+				if (getWorldGameObject(x, y) != null) {
 					writer.element("GameObject");
-					if(getWorldMap(x, y).getPositionX() != x || getWorldMap(x, y).getPositionY() != y){
+					if (getWorldGameObject(x, y).getPositionX() != x || getWorldGameObject(x, y).getPositionY() != y) {
 						throw new IOException("Position in worldGameObjects and gameObject doesn't correspond!");
 					}
-					getWorldMap(x, y).save(writer);
+					getWorldGameObject(x, y).save(writer);
 					writer.pop();
 				}
 			}
@@ -478,7 +457,7 @@ public class GameWorld {
 	 *
 	 * @param reader the XmlReader.Element to read from
 	 */
-	public void load(XmlReader.Element reader){
+	public void load(XmlReader.Element reader) {
 		worldGameObjects = new GameObject[mapSizeY][mapSizeX];
 		XmlReader.Element gameObjects = reader.getChildByName("GameObjects");
 		for (XmlReader.Element gameObjectXML : gameObjects.getChildrenByName("GameObject")) {
@@ -486,9 +465,5 @@ public class GameWorld {
 			worldGameObjects[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
 			this.gameObjects.add(gameObject);
 		}
-	}
-
-	public Player getActivePlayer() {
-		return activePlayer;
 	}
 }

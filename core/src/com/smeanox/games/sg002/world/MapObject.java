@@ -3,14 +3,21 @@ package com.smeanox.games.sg002.world;
 import java.awt.Point;
 
 /**
- * Created by User on 09.06.2015.
+ * Describes the mapObjectType for a given position
+ * @author Fabian Lyck
  */
 public class MapObject {
 
-    public final int x,y;
+    private final int x, y;
 
     private MapObjectType mapObjectType;
 
+    /**
+     * Create a new instance
+     * @param type the type of this MapObject
+     * @param x position
+     * @param y position
+     */
     public MapObject(MapObjectType type, int x, int y){
 
         this.mapObjectType = type;
@@ -28,5 +35,13 @@ public class MapObject {
 
     public Point getPosition(){
         return new Point(x,y);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

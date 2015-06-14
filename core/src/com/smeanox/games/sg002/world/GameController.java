@@ -57,6 +57,7 @@ public class GameController {
 	 * @param scenario the scenario
 	 */
 	private void initScenario(Scenario scenario) {
+		Consts.seed = scenario.getSeed();
 		Consts.walkDiagonal = scenario.isWalkDiagonal();
 		Consts.multipleActionsPerObject = scenario.isMultipleActionsPerObject();
 		Consts.startGameObjectMinDistance = scenario.getStartGameObjectMinDistance();
@@ -165,7 +166,13 @@ public class GameController {
 	 */
 	public void saveGame(String fileName) {
 		try {
-			XmlWriter writer = new XmlWriter(new FileWriter(Gdx.files.local(fileName).file()));
+			FileHandle file;
+			if(Consts.headlessMode){
+				file = new FileHandle(fileName);
+			} else {
+				file = Gdx.files.local(fileName);
+			}
+			XmlWriter writer = new XmlWriter(new FileWriter(file.file()));
 			writer.element("Game");
 			writer.attribute("scenario", scenario.getId());
 			writer.element("Players");
@@ -195,11 +202,16 @@ public class GameController {
 	public void loadGame(String fileName) {
 		try {
 			XmlReader reader = new XmlReader();
-			FileHandle file = Gdx.files.local(fileName);
+			FileHandle file;
+			if(Consts.headlessMode) {
+				file = new FileHandle(fileName);
+			} else {
+				file = Gdx.files.local(fileName);
+			}
 			if (!file.exists()) {
 				return;
 			}
-			XmlReader.Element root = reader.parse(Gdx.files.local(fileName));
+			XmlReader.Element root = reader.parse(file);
 			Scenario scenarioLoad = Scenario.getScanarioById(root.getAttribute("scenario"));
 			initScenario(scenarioLoad);
 			gameWorld.initScenario(scenarioLoad);

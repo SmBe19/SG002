@@ -98,7 +98,7 @@ public class GameView {
 	 * @return the GameObject or null if there is no GameObject
 	 */
 	public GameObject getActiveGameObject() {
-		return gameWorld.getWorldMap(activeX, activeY);
+		return gameWorld.getWorldGameObject(activeX, activeY);
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class GameView {
 
 		GameObject gameObject;
 		MapObject mapObject;
-		GameObject activeGameObject = gameWorld.getWorldMap(activeX, activeY);
+		GameObject activeGameObject = gameWorld.getWorldGameObject(activeX, activeY);
 		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
 			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
 				//render MapObjects
@@ -235,10 +235,11 @@ public class GameView {
 				renderField(spriteBatch, mapObject.getMapObjectType().getTexture(), x, y);
 
 				//render GameObjects
-				gameObject = gameWorld.getWorldMap(x, y);
+				gameObject = gameWorld.getWorldGameObject(x, y);
 				if (gameObject != null) {
 					spriteBatch.setColor(gameObject.getPlayer().getColor());
-					if(gameWorld.wasUsed(x, y) && gameWorld.getWorldMap(x,y).getPlayer().equals(gameWorld.getActivePlayer())){
+					if(gameWorld.wasUsed(x, y) && gameWorld.getWorldGameObject(x, y).getPlayer().equals(activePlayer)
+							&& !gameObject.getGameObjectType().isCanDoAction(Action.ActionType.NONE)){
 						spriteBatch.setColor(Consts.usedColor);
 					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);

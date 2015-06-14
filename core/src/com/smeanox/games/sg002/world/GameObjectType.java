@@ -210,7 +210,12 @@ public class GameObjectType {
 		GameObjectType.startGameObjectType = startGameObjectType;
 	}
 
-	public boolean isCanDoAction(Action.ActionType action) {
+	/**
+	 * Checks whether this GameObjectType can perform the given action
+	 * @param action the action
+	 * @return true if it can perform the action
+	 */
+public boolean isCanDoAction(Action.ActionType action) {
 		switch (action) {
 			case MOVE:
 				return getRadiusWalkMax() > 0;
@@ -218,6 +223,8 @@ public class GameObjectType {
 				return isCanFight();
 			case PRODUCE:
 				return isCanProduce();
+			case NONE:
+				return getRadiusWalkMax() <= 0 && !isCanFight() && !isCanProduce();
 		}
 		return false;
 	}

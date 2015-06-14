@@ -17,7 +17,7 @@ import java.util.Set;
 
 /**
  * Reads a given XML file and creates the mapObjectTypes
- * @author Benjamin Schmid
+ * @author Fabian Lyck
  */
 public class MapObjectTypeReader {
 	private MapObjectTypeReader(){
@@ -53,11 +53,10 @@ public class MapObjectTypeReader {
 					for (XmlReader.Element e : allowedIds) {
 						allowedGameObjects.remove(GameObjectType.getGameObjectTypeById(e.getAttribute("id")));
 					}
-				} catch (NullPointerException e){
+				} catch (NullPointerException ignored){
 				}
 
 				MapObjectType aMapObjectType = new MapObjectType(textureName, id, allowedGameObjects);
-				System.out.println("Loading " + textureName);
 				Assets.addToLoadQueue(textureName, Texture.class);
 				ids.add(id);
 

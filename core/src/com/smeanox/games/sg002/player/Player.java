@@ -52,7 +52,7 @@ public abstract class Player {
 	protected abstract void play();
 
 	/**
-	 * Update the AI
+	 * Update the Player
 	 *
 	 * @param delta time passed since last update
 	 */

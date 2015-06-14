@@ -89,15 +89,15 @@ public class Consts {
 	 */
 	public static final Color gridColor = new Color(0.9f, 0.9f, 0.9f, 0.25f);
 	/**
-	 * The color to displey the canMove marker in
+	 * The color to display the canMove marker in
 	 */
 	public static final Color canMoveColor = Color.BLUE;
 	/**
-	 * The color to displey the canMove marker in
+	 * The color to display the canMove marker in
 	 */
 	public static final Color canFightColor = Color.RED;
 	/**
-	 * The color to displey the canMove marker in
+	 * The color to display the canMove marker in
 	 */
 	public static final Color canProduceColor = Color.ORANGE;
 
@@ -124,13 +124,19 @@ public class Consts {
 	public static final float aiSleep = 0.5f;
 
 	// Game Settings, read from scenario
-	/**
-	 * Whether the GameObjects can move diagonal (different radius form)
-	 */
-	public static boolean walkDiagonal = false;
 
 	/**
-	 * Whether an object can perform multiple actions per round (one of each)
+	 * The seed used for randomness
+	 */
+	public static long seed = 314159265358979L;
+
+	/**
+	 * Whether the GameObjects can move diagonal (different radius form). The distance is diffX + diffY (false) or max(diffX, diffY) (true)
+	 */
+	public static boolean walkDiagonal = true;
+
+	/**
+	 * Whether an object can perform multiple actions per round (one of each type) or only one per round
 	 */
 	public static boolean multipleActionsPerObject = true;
 
