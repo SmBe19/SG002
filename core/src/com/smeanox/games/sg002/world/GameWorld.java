@@ -89,6 +89,10 @@ public class GameWorld {
 		return worldMap;
 	}
 
+	public HashSet<GameObject> getGameObjects(){
+		return gameObjects;
+	}
+
 	/**
 	 * Whether the given position is a goldMountain
 	 * @param x position
