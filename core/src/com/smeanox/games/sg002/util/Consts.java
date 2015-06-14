@@ -100,10 +100,6 @@ public class Consts {
 	 * The color to display the canMove marker in
 	 */
 	public static final Color canProduceColor = Color.ORANGE;
-	/**
-	 * The color used to display the goldMountain in
-	 */
-	public static final Color goldMountainColor = Color.LIGHT_GRAY;
 
 	/**
 	 * The minimal zoom factor for the hp text to show up
@@ -143,16 +139,6 @@ public class Consts {
 	 * Whether an object can perform multiple actions per round (one of each type) or only one per round
 	 */
 	public static boolean multipleActionsPerObject = true;
-
-	/**
-	 * Whether GoldMines can only be built at specific places
-	 */
-	public static boolean goldMountains = true;
-
-	/**
-	 * The number of goldMountains that are available on the map
-	 */
-	public static int goldMountainCount = 10;
 
 	/**
 	 * The minimal distance between two start GameObjects

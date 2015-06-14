@@ -12,6 +12,7 @@ import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.Action;
 import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameWorld;
+import com.smeanox.games.sg002.world.MapObject;
 
 /**
  * Render the GameWorld
@@ -97,7 +98,7 @@ public class GameView {
 	 * @return the GameObject or null if there is no GameObject
 	 */
 	public GameObject getActiveGameObject() {
-		return gameWorld.getWorldMap(activeX, activeY);
+		return gameWorld.getWorldGameObject(activeX, activeY);
 	}
 
 	/**
@@ -224,18 +225,21 @@ public class GameView {
 		renderGrid(spriteBatch);
 
 		GameObject gameObject;
-		GameObject activeGameObject = gameWorld.getWorldMap(activeX, activeY);
-		for (int y = 0; y < gameWorld.getMapSizeY(); y++) {
-			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
-				if(gameWorld.isGoldMountain(x, y)){
-					spriteBatch.setColor(Consts.goldMountainColor);
-					renderField(spriteBatch, Assets.goldMountain, x, y);
-				}
+		MapObject mapObject;
+		GameObject activeGameObject = gameWorld.getWorldGameObject(activeX, activeY);
+		for(int y = 0; y < gameWorld.getMapSizeY(); y++){
+			for(int x = 0; x < gameWorld.getMapSizeX(); x++){
+				//render MapObjects
+				mapObject = gameWorld.getWorldMapObject(x, y);
+				spriteBatch.setColor(Color.WHITE);
+				renderField(spriteBatch, mapObject.getMapObjectType().getTexture(), x, y);
 
-				gameObject = gameWorld.getWorldMap(x, y);
+				//render GameObjects
+				gameObject = gameWorld.getWorldGameObject(x, y);
 				if (gameObject != null) {
 					spriteBatch.setColor(gameObject.getPlayer().getColor());
-					if (gameWorld.wasUsed(x, y) && !gameObject.getGameObjectType().isCanDoAction(Action.ActionType.NONE)) {
+					if(gameWorld.wasUsed(x, y) && gameWorld.getWorldGameObject(x, y).getPlayer().equals(activePlayer)
+							&& !gameObject.getGameObjectType().isCanDoAction(Action.ActionType.NONE)){
 						spriteBatch.setColor(Consts.usedColor);
 					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);

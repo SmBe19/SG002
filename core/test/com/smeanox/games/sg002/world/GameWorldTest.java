@@ -45,6 +45,7 @@ public class GameWorldTest {
 		ArrayList<Player> players = new ArrayList<Player>();
 		for (int i = 0; i < 8; i++) {
 			players.add(new LocalPlayer());
+			players.get(i).setId(i);
 		}
 
 		for(Player player : players){
@@ -96,24 +97,25 @@ public class GameWorldTest {
 		for (int y = 0; y < gameWorld.getMapSizeY(); y++) {
 			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
 				if (y % 2 == 0 || x % 3 == 0) {
-					gameWorld.getWorldMap()[y][x] = new GameObject(GameObjectType.getStartGameObjectType(), player);
+					gameWorld.getWorldGameObjects()[y][x] = new GameObject(GameObjectType.getStartGameObjectType(),
+							player);
 				}
 			}
 		}
 
-		assertNull(gameWorld.getWorldMap(-1, 0));
-		assertNull(gameWorld.getWorldMap(0, -1));
-		assertNull(gameWorld.getWorldMap(-1, -1));
-		assertNull(gameWorld.getWorldMap(15, 0));
-		assertNull(gameWorld.getWorldMap(0, 20));
-		assertNull(gameWorld.getWorldMap(15, 20));
+		assertNull(gameWorld.getWorldGameObject(-1, 0));
+		assertNull(gameWorld.getWorldGameObject(0, -1));
+		assertNull(gameWorld.getWorldGameObject(-1, -1));
+		assertNull(gameWorld.getWorldGameObject(15, 0));
+		assertNull(gameWorld.getWorldGameObject(0, 20));
+		assertNull(gameWorld.getWorldGameObject(15, 20));
 
 		for (int y = 0; y < gameWorld.getMapSizeY(); y++) {
 			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
 				if (y % 2 == 0 || x % 3 == 0) {
-					assertNotNull(gameWorld.getWorldMap(x, y));
+					assertNotNull(gameWorld.getWorldGameObject(x, y));
 				} else {
-					assertNull(gameWorld.getWorldMap(x, y));
+					assertNull(gameWorld.getWorldGameObject(x, y));
 				}
 			}
 		}

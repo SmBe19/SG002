@@ -1,11 +1,10 @@
 package com.smeanox.games.sg002.world;
 
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.smeanox.games.sg002.player.Player;
-import com.smeanox.games.sg002.util.Consts;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -18,11 +17,13 @@ public class GameWorld {
 	private int mapSizeX;
 	private int mapSizeY;
 
-	private GameObject[][] worldMap;
-	private boolean[][] goldMountain;
+	private GameObject[][] worldGameObjects;
+	private MapObject[][] worldMapObjects;
 
 	private Player activePlayer;
 	private HashSet<GameObject> gameObjects;
+
+	private Scenario scenario;
 
 	/**
 	 * Create a new instance
@@ -41,25 +42,20 @@ public class GameWorld {
 	 * @param scenario the scenario to use
 	 */
 	public void initScenario(Scenario scenario) {
+		this.scenario = scenario;
+
 		mapSizeX = scenario.getMapSizeX();
 		mapSizeY = scenario.getMapSizeY();
 
-		worldMap = new GameObject[mapSizeY][mapSizeX];
-		goldMountain = new boolean[mapSizeY][mapSizeX];
-
-		MathUtils.random.setSeed(scenario.getSeed());
-
-		if(scenario.isGoldMountains()) {
-			for (int i = 0; i < scenario.getGoldMountainCount(); i++) {
-				int x, y;
-				int infinityLoop = 1000000;
-				do {
-					x = MathUtils.random(mapSizeX - 1);
-					y = MathUtils.random(mapSizeY - 1);
-					infinityLoop--;
-				} while (infinityLoop > 0 && goldMountain[y][x]);
-				goldMountain[y][x] = true;
+		worldGameObjects = new GameObject[mapSizeY][mapSizeX];
+		worldMapObjects = new MapObject[mapSizeY][mapSizeX];
+		for (int y = 0; y < mapSizeY; y++) {
+			for (int x = 0; x < mapSizeX; x++) {
+				worldMapObjects[y][x] = new MapObject(MapObjectType.getDefaultMapObjectType(), x, y);
 			}
+		}
+		for (Point point : scenario.getGoldPos()) {
+			worldMapObjects[point.y][point.x] = new MapObject(MapObjectType.getMapObjectTypeById("gold"), point.x, point.y);
 		}
 	}
 
@@ -71,22 +67,8 @@ public class GameWorld {
 		return mapSizeY;
 	}
 
-	/**
-	 * Return the GameObject at the given position or null if there is no GameObject
-	 *
-	 * @param x position
-	 * @param y position
-	 * @return the GameObject or null
-	 */
-	public GameObject getWorldMap(int x, int y) {
-		if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
-			return null;
-		}
-		return worldMap[y][x];
-	}
-
-	public GameObject[][] getWorldMap() {
-		return worldMap;
+	public Player getActivePlayer() {
+		return activePlayer;
 	}
 
 	public HashSet<GameObject> getGameObjects(){
@@ -94,20 +76,39 @@ public class GameWorld {
 	}
 
 	/**
-	 * Whether the given position is a goldMountain
+	 * Return the GameObject at the given position or null if there is no GameObject
+	 *
 	 * @param x position
 	 * @param y position
-	 * @return true if it is a goldMountain
+	 * @return the GameObject or null
 	 */
-	public boolean isGoldMountain(int x, int y){
-		if(x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY){
-			return false;
+	public GameObject getWorldGameObject(int x, int y) {
+		if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
+			return null;
 		}
-		return goldMountain[y][x];
+		return worldGameObjects[y][x];
 	}
 
-	public boolean[][] getGoldMountain(){
-		return goldMountain;
+	/**
+	 * Return the MapObject at the given position or null if there is no MapObject
+	 *
+	 * @param x position
+	 * @param y position
+	 * @return the MapObject or null
+	 */
+	public MapObject getWorldMapObject(int x, int y) {
+		if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
+			return null;
+		}
+		return worldMapObjects[y][x];
+	}
+
+	public GameObject[][] getWorldGameObjects() {
+		return worldGameObjects;
+	}
+
+	public MapObject[][] getWorldMapObjects() {
+		return worldMapObjects;
 	}
 
 	/**
@@ -118,41 +119,12 @@ public class GameWorld {
 	 */
 	public void addStartGameObjects(Player player, GameObjectType gameObjectType) {
 		int x, y;
-		int infinityLoop = 1000000;
-		do {
-			x = MathUtils.random(mapSizeX - 1);
-			y = MathUtils.random(mapSizeY - 1);
-			infinityLoop--;
-		} while (infinityLoop > 0 && !canAddStartGameObject(x, y));
-
-		worldMap[y][x] = new GameObject(gameObjectType, player);
-		worldMap[y][x].setPositionX(x);
-		worldMap[y][x].setPositionY(y);
-		gameObjects.add(worldMap[y][x]);
-	}
-
-	/**
-	 * Check if the startGameObject can be placed here
-	 *
-	 * @param px position
-	 * @param py position
-	 * @return true if it is possible
-	 */
-	private boolean canAddStartGameObject(int px, int py) {
-		if (px < 0 || py < 0 || px >= mapSizeX || py >= mapSizeY) {
-			return false;
-		}
-		for (int y = py - Consts.startGameObjectMinDistance; y <= py + Consts.startGameObjectMinDistance; y++) {
-			for (int x = px - Consts.startGameObjectMinDistance; x <= px + Consts.startGameObjectMinDistance; x++) {
-				if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
-					continue;
-				}
-				if (getWorldMap(x, y) != null) {
-					return false;
-				}
-			}
-		}
-		return true;
+		x = scenario.getStartPos(player.getId()).x;
+		y = scenario.getStartPos(player.getId()).y;
+		worldGameObjects[y][x] = new GameObject(gameObjectType, player);
+		worldGameObjects[y][x].setPositionX(x);
+		worldGameObjects[y][x].setPositionY(y);
+		gameObjects.add(worldGameObjects[y][x]);
 	}
 
 	/**
@@ -179,9 +151,8 @@ public class GameWorld {
 	 */
 	private int calcMoneyPerRound(Player activePlayer) {
 		int sol = 0;
-
-		for(GameObject gameObject : gameObjects){
-			if(gameObject.getPlayer() == activePlayer){
+		for (GameObject gameObject : gameObjects) {
+			if (gameObject.getPlayer() == activePlayer) {
 				sol += gameObject.getGameObjectType().getValuePerRound();
 			}
 		}
@@ -213,8 +184,8 @@ public class GameWorld {
 	 * @return true if the player didn't lose yet
 	 */
 	public boolean isPlayerStillAlive(Player player) {
-		for(GameObject gameObject : gameObjects){
-			if(gameObject.getPlayer() == player){
+		for (GameObject gameObject : gameObjects) {
+			if (gameObject.getPlayer() == player) {
 				return true;
 			}
 		}
@@ -229,10 +200,10 @@ public class GameWorld {
 	 * @param y coordinates
 	 */
 	public void removeGameObject(int x, int y) {
-		if(worldMap[y][x] != null){
-			gameObjects.remove(worldMap[y][x]);
+		if (worldGameObjects[y][x] != null) {
+			gameObjects.remove(worldGameObjects[y][x]);
 		}
-		worldMap[y][x] = null;
+		worldGameObjects[y][x] = null;
 	}
 
 	/**
@@ -247,10 +218,10 @@ public class GameWorld {
 			/*if (x < 0 || y < 0 || x >= mapSizeX || y >= mapSizeY) {
 				return true;//what happened here?
 			}
-			if (worldMap[x][y] == null) return true; //this shouldn't happen either*/
-			return !worldMap[y][x].isCanDoAction(Action.ActionType.MOVE) &&
-					!worldMap[y][x].isCanDoAction(Action.ActionType.PRODUCE) &&
-					!worldMap[y][x].isCanDoAction(Action.ActionType.FIGHT);
+			if (worldGameObjects[x][y] == null) return true; //this shouldn't happen either*/
+			return !worldGameObjects[y][x].isCanDoAction(Action.ActionType.MOVE) &&
+					!worldGameObjects[y][x].isCanDoAction(Action.ActionType.PRODUCE) &&
+					!worldGameObjects[y][x].isCanDoAction(Action.ActionType.FIGHT);
 		} catch (NullPointerException ex) {
 			ex.printStackTrace();
 		} catch (IndexOutOfBoundsException ex) { // java 6 compatibility
@@ -276,13 +247,13 @@ public class GameWorld {
 			return false;
 		}
 
-		GameObject gameObject = getWorldMap(startX, startY);
+		GameObject gameObject = getWorldGameObject(startX, startY);
 		// there is no GameObject at the start
 		if (gameObject == null) {
 			return false;
 		}
 		// the destination is blocked
-		if (getWorldMap(endX, endY) != null) {
+		if (getWorldGameObject(endX, endY) != null) {
 			return false;
 		}
 		// the destination is not within radius
@@ -309,11 +280,11 @@ public class GameWorld {
 		if (!canMove(startX, startY, endX, endY)) {
 			return false;
 		}
-		worldMap[endY][endX] = worldMap[startY][startX];
-		worldMap[startY][startX] = null;
-		getWorldMap(endX, endY).setPositionX(endX);
-		getWorldMap(endX, endY).setPositionY(endY);
-		getWorldMap(endX, endY).use(Action.ActionType.MOVE);
+		worldGameObjects[endY][endX] = worldGameObjects[startY][startX];
+		worldGameObjects[startY][startX] = null;
+		getWorldGameObject(endX, endY).setPositionX(endX);
+		getWorldGameObject(endX, endY).setPositionY(endY);
+		getWorldGameObject(endX, endY).use(Action.ActionType.MOVE);
 		return true;
 	}
 
@@ -334,36 +305,29 @@ public class GameWorld {
 			return false;
 		}
 
-		GameObject gameObject = getWorldMap(startX, startY);
+		GameObject gameObject = getWorldGameObject(startX, startY);
 		// there is no GameObject at the start
 		if (gameObject == null) {
 			return false;
 		}
 		// the destination is blocked
-		if (getWorldMap(endX, endY) != null) {
+		if (getWorldGameObject(endX, endY) != null) {
 			return false;
 		}
 		// the destination is not within radius
 		if (!gameObject.canProduceTo(endX, endY)) {
 			return false;
 		}
+		// target mapObject does not allow this gameObjectType
+		if (!getWorldMapObject(endX, endY).getMapObjectType().isGameObjectTypeAllowed(gameObjectType)) {
+			return false;
+		}
 		// the active GameObjectType can't produce the desired GameObjectType
 		if (!gameObject.getGameObjectType().getCanProduceList().contains(gameObjectType)) {
 			return false;
 		}
-		// the active GameObjectType can only be built on a mountain
-		if(gameObjectType.isGoldMountain() && !isGoldMountain(endX, endY)){
-			return false;
-		}
-		// the active GameObjectType can not be built on a mountain
-		// uncomment if only goldMountain GameObjectTypes should be built on goldMountains
-		/*
-		if(!gameObjectType.isGoldMountain() && isGoldMountain(endX, endY)){
-			return false;
-		}
-		*/
 		// the new GameObject is too expensive
-		if (activePlayer.getMoney() < gameObjectType.getValue()) {
+		if (getActivePlayer().getMoney() < gameObjectType.getValue()) {
 			return false;
 		}
 		// the gameObject has been used already
@@ -386,13 +350,13 @@ public class GameWorld {
 		if (!canProduce(startX, startY, endX, endY, gameObjectType)) {
 			return false;
 		}
-		GameObject newGameObject = new GameObject(gameObjectType, activePlayer);
+		GameObject newGameObject = new GameObject(gameObjectType, getActivePlayer());
 		newGameObject.setPositionX(endX);
 		newGameObject.setPositionY(endY);
-		worldMap[endY][endX] = newGameObject;
+		worldGameObjects[endY][endX] = newGameObject;
 		gameObjects.add(newGameObject);
-		activePlayer.addMoney(-gameObjectType.getValue());
-		getWorldMap(startX, startY).use(Action.ActionType.PRODUCE);
+		getActivePlayer().addMoney(-gameObjectType.getValue());
+		getWorldGameObject(startX, startY).use(Action.ActionType.PRODUCE);
 		for (Action.ActionType a : Action.ActionType.values()) {
 			newGameObject.use(a);//not able to do anything after being built
 		}
@@ -416,17 +380,17 @@ public class GameWorld {
 			return false;
 		}
 
-		GameObject gameObject = getWorldMap(startX, startY);
+		GameObject gameObject = getWorldGameObject(startX, startY);
 		// there is no GameObject at the start
 		if (gameObject == null) {
 			return false;
 		}
 		// there is no GameObject at the destination
-		if (getWorldMap(endX, endY) == null) {
+		if (getWorldGameObject(endX, endY) == null) {
 			return false;
 		}
 		// the destination is not within radius
-		if (!gameObject.canFight(getWorldMap(endX, endY))) {
+		if (!gameObject.canFight(getWorldGameObject(endX, endY))) {
 			return false;
 		}
 		// the gameObject has been used already
@@ -449,16 +413,16 @@ public class GameWorld {
 		if (!canFight(startX, startY, endX, endY)) {
 			return 0;
 		}
-		int damage = getWorldMap(startX, startY).fight(getWorldMap(endX, endY));
-		if (getWorldMap(endX, endY).getHp() <= 0) {
-			activePlayer.addMoney(getWorldMap(endX, endY).getGameObjectType().getValueOnDestruction());
-			Player otherPlayer = getWorldMap(endX, endY).getPlayer();
+		int damage = getWorldGameObject(startX, startY).fight(getWorldGameObject(endX, endY));
+		if (getWorldGameObject(endX, endY).getHp() <= 0) {
+			getActivePlayer().addMoney(getWorldGameObject(endX, endY).getGameObjectType().getValueOnDestruction());
+			Player otherPlayer = getWorldGameObject(endX, endY).getPlayer();
 			removeGameObject(endX, endY);
 			if (!isPlayerStillAlive(otherPlayer)) {
-				conquerPlayer(activePlayer, otherPlayer);
+				conquerPlayer(getActivePlayer(), otherPlayer);
 			}
 		}
-		getWorldMap(startX, startY).use(Action.ActionType.FIGHT);
+		getWorldGameObject(startX, startY).use(Action.ActionType.FIGHT);
 		return damage;
 	}
 
@@ -470,9 +434,8 @@ public class GameWorld {
 	 */
 	private void conquerPlayer(Player conqueror, Player loser) {
 		conqueror.addMoney(loser.getMoney());
-
-		for(GameObject gameObject : gameObjects){
-			if(gameObject.getPlayer() == loser){
+		for (GameObject gameObject : gameObjects) {
+			if (gameObject.getPlayer() == loser) {
 				gameObject.setPlayer(conqueror);
 			}
 		}
@@ -485,17 +448,14 @@ public class GameWorld {
 	 */
 	public void save(XmlWriter writer) throws IOException {
 		writer.element("GameObjects");
-
-		// could be replaced by foreach on gameObjects, but like this we can check whether the x / y positions correspond
-
 		for (int y = 0; y < mapSizeY; y++) {
 			for (int x = 0; x < mapSizeX; x++) {
-				if (getWorldMap(x, y) != null) {
+				if (getWorldGameObject(x, y) != null) {
 					writer.element("GameObject");
-					if (getWorldMap(x, y).getPositionX() != x || getWorldMap(x, y).getPositionY() != y) {
-						throw new IOException("Position in worldMap and gameObject doesn't correspond!");
+					if (getWorldGameObject(x, y).getPositionX() != x || getWorldGameObject(x, y).getPositionY() != y) {
+						throw new IOException("Position in worldGameObjects and gameObject doesn't correspond!");
 					}
-					getWorldMap(x, y).save(writer);
+					getWorldGameObject(x, y).save(writer);
 					writer.pop();
 				}
 			}
@@ -509,11 +469,11 @@ public class GameWorld {
 	 * @param reader the XmlReader.Element to read from
 	 */
 	public void load(XmlReader.Element reader) {
-		worldMap = new GameObject[mapSizeY][mapSizeX];
+		worldGameObjects = new GameObject[mapSizeY][mapSizeX];
 		XmlReader.Element gameObjects = reader.getChildByName("GameObjects");
 		for (XmlReader.Element gameObjectXML : gameObjects.getChildrenByName("GameObject")) {
 			GameObject gameObject = new GameObject(gameObjectXML);
-			worldMap[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
+			worldGameObjects[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
 			this.gameObjects.add(gameObject);
 		}
 	}

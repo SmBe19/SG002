@@ -60,7 +60,6 @@ public class GameController {
 		Consts.seed = scenario.getSeed();
 		Consts.walkDiagonal = scenario.isWalkDiagonal();
 		Consts.multipleActionsPerObject = scenario.isMultipleActionsPerObject();
-		Consts.goldMountains = scenario.isGoldMountains();
 		Consts.startGameObjectMinDistance = scenario.getStartGameObjectMinDistance();
 
 		if (gameWorld == null) {

@@ -97,7 +97,6 @@ public class GameObjectTypeReader {
 				Language.getStrings().get(element.getAttribute("name")),
 				element.getAttribute("texture"),
 				hp.getIntAttribute("defaultHP"),
-				element.getBooleanAttribute("goldMountain"),
 				value.getIntAttribute("value"),
 				value.getIntAttribute("valuePerRound"),
 				value.getIntAttribute("valueOnDestruction"),

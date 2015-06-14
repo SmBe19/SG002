@@ -25,7 +25,6 @@ public class GameObjectType {
 
 	// Stats
 	private int defaultHP;
-	private boolean goldMountain;
 	private int value;
 	private int valuePerRound;
 	private int valueOnDestruction;
@@ -45,7 +44,6 @@ public class GameObjectType {
 			String name,
 			String textureName,
 			int defaultHP,
-			boolean goldMountain,
 			int value,
 			int valuePerRound,
 			int valueOnDestruction,
@@ -63,7 +61,6 @@ public class GameObjectType {
 		this.name = name;
 		this.textureName = textureName;
 		this.defaultHP = defaultHP;
-		this.goldMountain = goldMountain;
 		this.value = value;
 		this.valuePerRound = valuePerRound;
 		this.valueOnDestruction = valueOnDestruction;
@@ -104,10 +101,6 @@ public class GameObjectType {
 
 	public int getDefaultHP() {
 		return defaultHP;
-	}
-
-	public boolean isGoldMountain(){
-		return goldMountain;
 	}
 
 	public int getValue() {
@@ -222,7 +215,7 @@ public class GameObjectType {
 	 * @param action the action
 	 * @return true if it can perform the action
 	 */
-	public boolean isCanDoAction(Action.ActionType action) {
+public boolean isCanDoAction(Action.ActionType action) {
 		switch (action) {
 			case MOVE:
 				return getRadiusWalkMax() > 0;

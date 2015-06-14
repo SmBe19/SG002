@@ -407,8 +407,8 @@ public class GameScreen extends AbstractScreen {
 	private void centerCameraOnActivePlayer() {
 		for (int y = 0; y < gameController.getGameWorld().getMapSizeY(); y++) {
 			for (int x = 0; x < gameController.getGameWorld().getMapSizeX(); x++) {
-				if (gameController.getGameWorld().getWorldMap(x, y) != null
-						&& gameController.getGameWorld().getWorldMap(x, y).getPlayer()
+				if (gameController.getGameWorld().getWorldGameObject(x, y) != null
+						&& gameController.getGameWorld().getWorldGameObject(x, y).getPlayer()
 						== gameController.getActivePlayer()) {
 					setCameraPosition(gameView.getPositionByField(x, y));
 				}
