@@ -37,7 +37,10 @@ public class ScenarioReader {
 						scenario.getIntAttribute("mapSizeY"),
 						scenario.getBooleanAttribute("walkDiagonal"),
 						scenario.getBooleanAttribute("multipleActionsPerObject"),
-						scenario.getIntAttribute("startGameObjectMinDistance"));
+						scenario.getBooleanAttribute("goldMountains"),
+						scenario.getIntAttribute("goldMountainCount"),
+						scenario.getIntAttribute("startGameObjectMinDistance"),
+						Long.parseLong(scenario.getAttribute("seed")));
 				ids.add(scenario.getAttribute("id"));
 			}
 		} catch (IOException e) {

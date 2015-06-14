@@ -227,10 +227,15 @@ public class GameView {
 		GameObject activeGameObject = gameWorld.getWorldMap(activeX, activeY);
 		for (int y = 0; y < gameWorld.getMapSizeY(); y++) {
 			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
+				if(gameWorld.isGoldMountain(x, y)){
+					spriteBatch.setColor(Consts.goldMountainColor);
+					renderField(spriteBatch, Assets.goldMountain, x, y);
+				}
+
 				gameObject = gameWorld.getWorldMap(x, y);
 				if (gameObject != null) {
 					spriteBatch.setColor(gameObject.getPlayer().getColor());
-					if (gameWorld.wasUsed(x, y)) {
+					if (gameWorld.wasUsed(x, y) && !gameObject.getGameObjectType().isCanDoAction(Action.ActionType.NONE)) {
 						spriteBatch.setColor(Consts.usedColor);
 					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);
