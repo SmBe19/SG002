@@ -43,6 +43,7 @@ import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameObjectType;
 import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
 
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -307,8 +308,8 @@ public class GameScreen extends AbstractScreen {
 							case MOVE:
 							case FIGHT:
 							case PRODUCE:
-								vector2 = gameView.getFieldByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
-								finishAction((int) vector2.x, (int) vector2.y);
+								Point point = gameView.getFieldByPosition(unproject(Gdx.input.getX(), Gdx.input.getY()));
+								finishAction(point.x, point.y);
 								break;
 						}
 					}

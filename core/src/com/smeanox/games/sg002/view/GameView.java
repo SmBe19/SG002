@@ -14,6 +14,8 @@ import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameWorld;
 import com.smeanox.games.sg002.world.MapObject;
 
+import java.awt.Point;
+
 /**
  * Render the GameWorld
  *
@@ -108,11 +110,11 @@ public class GameView {
 	 * @param y coordinates in world space
 	 * @return the coordinates of the field
 	 */
-	public Vector2 getFieldByPosition(float x, float y) {
+	public Point getFieldByPosition(float x, float y) {
 		int newActiveX, newActiveY;
 		newActiveX = (int) (x / (Consts.fieldSizeX * Consts.devScaleY * zoom));
 		newActiveY = (int) (y / (Consts.fieldSizeY * Consts.devScaleY * zoom));
-		return new Vector2(newActiveX, newActiveY);
+		return new Point(newActiveX, newActiveY);
 	}
 
 	/**
@@ -121,7 +123,7 @@ public class GameView {
 	 * @param vector2 coordinates in world space
 	 * @return the coordinates of the field
 	 */
-	public Vector2 getFieldByPosition(Vector2 vector2) {
+	public Point getFieldByPosition(Vector2 vector2) {
 		return getFieldByPosition(vector2.x, vector2.y);
 	}
 
