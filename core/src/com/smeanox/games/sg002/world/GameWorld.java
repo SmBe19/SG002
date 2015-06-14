@@ -298,12 +298,16 @@ public class GameWorld {
 		if(!gameObject.canProduceTo(endX, endY)){
 			return false;
 		}
+		// target mapObject doesnt allow this gameObjectType
+		if (!getWorldMapObject(endX, endY).getMapObjectType().isGameObjectTypeAllowed(gameObjectType)){
+			return false;
+		}
 		// the active GameObjectType can't produce the desired GameObjectType
 		if(!gameObject.getGameObjectType().getCanProduceList().contains(gameObjectType)){
 			return false;
 		}
 		// the new GameObject is too expensive
-		if(activePlayer.getMoney() < gameObjectType.getValue()){
+		if(getActivePlayer().getMoney() < gameObjectType.getValue()){
 			return false;
 		}
 		// the gameObject has been used already
@@ -325,11 +329,11 @@ public class GameWorld {
 		if(!canProduce(startX, startY, endX, endY, gameObjectType)){
 			return false;
 		}
-		GameObject newGameObject = new GameObject(gameObjectType, activePlayer);
+		GameObject newGameObject = new GameObject(gameObjectType, getActivePlayer());
 		newGameObject.setPositionX(endX);
 		newGameObject.setPositionY(endY);
 		worldGameObjects[endY][endX] = newGameObject;
-		activePlayer.addMoney(-gameObjectType.getValue());
+		getActivePlayer().addMoney(-gameObjectType.getValue());
 		getWorldMap(startX, startY).use(Action.ActionType.PRODUCE);
 		gameObjects.add(newGameObject);
 		for (Action.ActionType a : Action.ActionType.values()){
@@ -388,11 +392,11 @@ public class GameWorld {
 		}
 		int damage = getWorldMap(startX, startY).fight(getWorldMap(endX, endY));
 		if(getWorldMap(endX, endY).getHp() <= 0){
-			activePlayer.addMoney(getWorldMap(endX, endY).getGameObjectType().getValueOnDestruction());
+			getActivePlayer().addMoney(getWorldMap(endX, endY).getGameObjectType().getValueOnDestruction());
 			Player otherPlayer = getWorldMap(endX, endY).getPlayer();
 			removeGameObject(endX, endY);
 			if(!isPlayerStillAlive(otherPlayer)){
-				conquerPlayer(activePlayer, otherPlayer);
+				conquerPlayer(getActivePlayer(), otherPlayer);
 			}
 		}
 		getWorldMap(startX, startY).use(Action.ActionType.FIGHT);
@@ -441,5 +445,9 @@ public class GameWorld {
 			worldGameObjects[gameObject.getPositionY()][gameObject.getPositionX()] = gameObject;
 			this.gameObjects.add(gameObject);
 		}
+	}
+
+	public Player getActivePlayer() {
+		return activePlayer;
 	}
 }

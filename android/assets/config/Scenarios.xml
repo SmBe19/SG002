@@ -12,7 +12,7 @@
                   mapSizeX="50" mapSizeY="50" walkDiagonal="true" startGameObjectMinDistance="5" seed="42" maxGold="20"/>
         <Scenario id="giant" name="scenario.giant.name" startMoney="1000" maxPlayerCount="64"
                   mapSizeX="200" mapSizeY="200" walkDiagonal="true" startGameObjectMinDistance="8" seed="42" maxGold="70"/>
-		<Scenario id="tourney" mapSizeX="35" mapSizeY="35" name="scenario.tourney.name" startMoney="500" maxPlayerCount="2"
+		<Scenario id="tourney" mapSizeX="35" mapSizeY="35" name="scenario.tourney.name" startMoney="1000" maxPlayerCount="2"
 				  walkDiagonal="true" startGameObjectMinDistance="0" seed="42">
 			<StartPos>
 				<Start x="2" y="2" />

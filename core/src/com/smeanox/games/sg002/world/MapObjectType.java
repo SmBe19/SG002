@@ -57,6 +57,7 @@ public class MapObjectType {
      * @return true if it is allowed
      */
     public boolean isGameObjectTypeAllowed(GameObjectType gameObjectType){
+        System.out.println(gameObjectType.getName() + " is allowed on " + id + ": " + allowedGameObjectTypes.contains(gameObjectType));
         return allowedGameObjectTypes.contains(gameObjectType);
     }
 

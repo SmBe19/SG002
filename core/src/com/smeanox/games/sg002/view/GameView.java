@@ -188,7 +188,7 @@ public class GameView {
 				gameObject = gameWorld.getWorldMap(x, y);
 				if(gameObject != null){
 					spriteBatch.setColor(gameObject.getPlayer().getColor());
-					if(gameWorld.wasUsed(x, y)){
+					if(gameWorld.wasUsed(x, y) && gameWorld.getWorldMap(x,y).getPlayer().equals(gameWorld.getActivePlayer())){
 						spriteBatch.setColor(Consts.usedColor);
 					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);
