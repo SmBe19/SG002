@@ -177,11 +177,27 @@ public class GameView {
 	 * @param y           coordinate of the field to draw
 	 */
 	private void renderField(SpriteBatch spriteBatch, Texture texture, int x, int y) {
+		renderField(spriteBatch, texture, x, y, 0f, 0f, 1f, 1f);
+	}
+
+	/**
+	 * render a Texture on a given field with a specified offset and size
+	 *
+	 * @param spriteBatch spriteBatch to use
+	 * @param texture     the texture to draw
+	 * @param x           coordinate of the field to draw
+	 * @param y           coordinate of the field to draw
+	 * @param offX        relative offset of the texture, 0.0 is left border, 1.0 is right border of the field
+	 * @param offY        relative offset of the texture, 0.0 is top border, 1.0 is bottom border of the field
+	 * @param width       relative width of the texture, 1.0 is width of the field
+	 * @param height      relative height of the texture, 1.0 is height of the field
+	 */
+	private void renderField(SpriteBatch spriteBatch, Texture texture, int x, int y, float offX, float offY, float width, float height) {
 		spriteBatch.draw(texture,
-				x * aFieldSizeX,
-				y * aFieldSizeY,
-				aFieldSizeX,
-				aFieldSizeY);
+				(x + offX) * aFieldSizeX,
+				(y + offY) * aFieldSizeY,
+				aFieldSizeX * width,
+				aFieldSizeY * height);
 	}
 
 	/**
@@ -239,12 +255,16 @@ public class GameView {
 				//render GameObjects
 				gameObject = gameWorld.getWorldGameObject(x, y);
 				if (gameObject != null) {
+					spriteBatch.setColor(((float)gameObject.getHp() / gameObject.getGameObjectType().getDefaultHP() > 0.4) ? Color.GREEN : Color.RED);
+					renderField(spriteBatch, Assets.healthbar, x, y, 0f, 0f, (float)gameObject.getHp() / gameObject.getGameObjectType().getDefaultHP(), 1f);
+
 					spriteBatch.setColor(gameObject.getPlayer().getColor());
 					if(gameWorld.wasUsed(x, y) && gameWorld.getWorldGameObject(x, y).getPlayer().equals(activePlayer)
 							&& !gameObject.getGameObjectType().isCanDoAction(Action.ActionType.NONE)){
 						spriteBatch.setColor(Consts.usedColor);
 					}
 					renderField(spriteBatch, gameObject.getGameObjectType().getTexture(), x, y);
+
 
 					if (zoom >= Consts.hpDisplayMinZoom) {
 						Assets.liberationMicroShadow.bitmapFont.setColor(Consts.hpColor);

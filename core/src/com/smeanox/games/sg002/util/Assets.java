@@ -38,6 +38,10 @@ public class Assets {
 	 */
 	public static Texture selection;
 	/**
+	 * healthbar tex
+	 */
+	public static Texture healthbar;
+	/**
 	 * grid
 	 */
 	public static Texture grid;
@@ -112,6 +116,7 @@ public class Assets {
 		manager.load("images/possibleFieldFight.png", Texture.class, param);
 		manager.load("images/possibleFieldProduce.png", Texture.class, param);
 		manager.load("images/gold.png", Texture.class, param);
+		manager.load("images/healthbar.png", Texture.class, param);
 
 		finishedCompletly = false;
 	}
@@ -169,6 +174,7 @@ public class Assets {
 		possibleFieldFight = manager.get("images/possibleFieldFight.png", Texture.class);
 		possibleFieldProduce = manager.get("images/possibleFieldProduce.png", Texture.class);
 		gold = manager.get("images/gold.png", Texture.class);
+		healthbar = manager.get("images/healthbar.png", Texture.class);
 
 
 		setGameObjectTypeTextures();
