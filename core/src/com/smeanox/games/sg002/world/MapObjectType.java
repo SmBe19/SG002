@@ -14,7 +14,8 @@ public class MapObjectType {
 
 	private static Map<String, MapObjectType> idmap = new HashMap<String, MapObjectType>();
 
-	private static MapObjectType defaultMapObjectType;
+
+	private static MapObjectType defaultMapObjectType; // field without anything special(i.e. gold)
 
 	private Texture texture;
 	private String textureName;
@@ -89,12 +90,20 @@ public class MapObjectType {
 		return idmap.values();
 	}
 
+	/**
+	 * set the mapobjecttype which will be used for all fields which are non-special(i.e. no gold)
+	 * @param mot
+	 */
 	public static void setDefaultMapObjectType(MapObjectType mot) {
 		defaultMapObjectType = mot;
 	}
 
+	/**
+	 * get the mapobjecttype which will be used for all fields which are non-special(i.e. no gold)
+	 */
 	public static MapObjectType getDefaultMapObjectType() {
 		return defaultMapObjectType;
 	}
+
 
 }
