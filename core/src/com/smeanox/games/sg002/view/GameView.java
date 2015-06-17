@@ -14,7 +14,7 @@ import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameWorld;
 import com.smeanox.games.sg002.world.MapObject;
 
-import java.awt.Point;
+import com.smeanox.games.sg002.data.Point;
 
 /**
  * Render the GameWorld

@@ -4,7 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.XmlReader;
 import com.smeanox.games.sg002.world.Scenario;
 
-import java.awt.Point;
+import com.smeanox.games.sg002.data.Point;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
 import com.smeanox.games.sg002.player.Player;
 
-import java.awt.Point;
+import com.smeanox.games.sg002.data.Point;
 import java.io.IOException;
 import java.util.HashSet;
 

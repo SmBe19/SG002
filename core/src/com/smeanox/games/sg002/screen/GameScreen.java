@@ -43,7 +43,7 @@ import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameObjectType;
 import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
 
-import java.awt.Point;
+import com.smeanox.games.sg002.data.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
 

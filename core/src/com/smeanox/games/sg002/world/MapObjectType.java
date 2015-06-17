@@ -40,7 +40,6 @@ public class MapObjectType {
 	}
 
 	public String getTextureName() {
-		System.out.println(textureName);
 		return textureName;
 	}
 

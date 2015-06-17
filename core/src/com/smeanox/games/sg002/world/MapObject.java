@@ -1,6 +1,6 @@
 package com.smeanox.games.sg002.world;
 
-import java.awt.Point;
+import com.smeanox.games.sg002.data.Point;
 
 /**
  * Describes the mapObjectType for a given position

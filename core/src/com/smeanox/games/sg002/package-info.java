@@ -10,6 +10,7 @@
 package com.smeanox.games.sg002;
 
 /*
+TODO: add useMapType to scenario
 TODO: Balancing
 TODO: AI
 TODO: Extern AI

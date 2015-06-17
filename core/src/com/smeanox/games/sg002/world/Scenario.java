@@ -2,7 +2,7 @@ package com.smeanox.games.sg002.world;
 
 import com.badlogic.gdx.math.MathUtils;
 
-import java.awt.Point;
+import com.smeanox.games.sg002.data.Point;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
