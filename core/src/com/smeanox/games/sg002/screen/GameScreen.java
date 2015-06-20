@@ -89,7 +89,9 @@ public class GameScreen extends AbstractScreen {
 			@Override
 			public void onNextPlayer(Player nextPlayer) {
 				updateLabels();
-				centerCameraOnActivePlayer();
+				if(nextPlayer.isShowGUI()) {
+					centerCameraOnActivePlayer();
+				}
 				cancelAction();
 				setActionButtonsVisible(false);
 			}

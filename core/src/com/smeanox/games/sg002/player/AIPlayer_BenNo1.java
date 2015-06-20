@@ -26,7 +26,7 @@ public class AIPlayer_BenNo1 extends AIPlayer {
 		// we're still alive
 		if (positions.get("townCenter").size() > 0) {
 			// we need more villagers
-			if (positions.get("villager").size() < 3) {
+			if (positions.get("villager").size() < 4) {
 				int towncenter = positions.get("townCenter").get(0);
 				int field = getFirstFreeProduceField(towncenter, GameObjectType.getGameObjectTypeById("villager"));
 				if (field >= 0) {
@@ -53,16 +53,17 @@ public class AIPlayer_BenNo1 extends AIPlayer {
 			// move villagers / build something
 			for (Integer pos : positions.get("villager")) {
 				// build
-				if (MathUtils.randomBoolean(0.1f)) {
+				int field = getFirstFreeProduceField(pos, GameObjectType.getGameObjectTypeById("goldMine"));
+				if (MathUtils.randomBoolean(field >= 0 ? 0.95f : 0.1f)) {
 					String toBuild = MathUtils.randomBoolean(0.1f) ? "townCenter" : "goldMine";
-					int field = getFirstFreeProduceField(pos, GameObjectType.getGameObjectTypeById(toBuild));
+					field = getFirstFreeProduceField(pos, GameObjectType.getGameObjectTypeById(toBuild));
 					if (field >= 0) {
 						gameWorld.produce(extractX(pos), extractY(pos), extractX(field), extractY(field),
 								GameObjectType.getGameObjectTypeById(toBuild));
 					}
 					// move
 				} else {
-					int field = getRandomFreeMoveField(pos);
+					field = getRandomFreeMoveField(pos);
 					if (field >= 0) {
 						gameWorld.move(extractX(pos), extractY(pos), extractX(field), extractY(field));
 					}

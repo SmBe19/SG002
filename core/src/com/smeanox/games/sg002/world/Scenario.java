@@ -269,6 +269,9 @@ public class Scenario {
 				if (o1.getMaxPlayerCount() != o2.getMaxPlayerCount()) {
 					return o1.getMaxPlayerCount() - o2.getMaxPlayerCount();
 				}
+				if(o1.getMapSizeX() != o2.getMapSizeX()){
+					return o1.getMapSizeX() - o2.getMapSizeX();
+				}
 				if (o1.getStartMoney() != o2.getStartMoney()) {
 					return o1.getStartMoney() - o2.getStartMoney();
 				}

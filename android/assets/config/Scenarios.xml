@@ -1,27 +1,54 @@
 <Config>
     <Scenarios>
-        <Scenario id="small" name="scenario.small.name" startMoney="1000" maxPlayerCount="2" multipleActionsPerObject="true"
-                  mapSizeX="20" mapSizeY="20" walkDiagonal="true" startGameObjectMinDistance="2" seed="42" maxGold="5"/>
-        <Scenario id="big" name="scenario.big.name" startMoney="1000" maxPlayerCount="8" multipleActionsPerObject="true"
-                  mapSizeX="40" mapSizeY="40" walkDiagonal="true" startGameObjectMinDistance="4"  seed="42" maxGold="10"/>
-        <Scenario id="bigPlenty" name="scenario.bigPlenty.name" startMoney="100000" maxPlayerCount="8" multipleActionsPerObject="true"
-                  mapSizeX="40" mapSizeY="40" walkDiagonal="true" startGameObjectMinDistance="4"  seed="42" maxGold="10"/>
-        <Scenario id="bigLittle" name="scenario.bigLittle.name" startMoney="50" maxPlayerCount="8" multipleActionsPerObject="true"
-                  mapSizeX="40" mapSizeY="40" walkDiagonal="true" startGameObjectMinDistance="4" seed="42" maxGold="10"/>
-        <Scenario id="vast" name="scenario.vast.name" startMoney="1000" maxPlayerCount="32" multipleActionsPerObject="true"
-                  mapSizeX="100" mapSizeY="100" walkDiagonal="true" startGameObjectMinDistance="5" seed="42" maxGold="20"/>
-        <Scenario id="giant" name="scenario.giant.name" startMoney="1000" maxPlayerCount="64" multipleActionsPerObject="true"
-                  mapSizeX="400" mapSizeY="400" walkDiagonal="true" startGameObjectMinDistance="8" seed="42" maxGold="70"/>
-		<Scenario id="tourney" name="scenario.tourney.name" startMoney="1000" maxPlayerCount="2" multipleActionsPerObject="true"
-                  mapSizeX="35" mapSizeY="35" walkDiagonal="true" startGameObjectMinDistance="0" seed="42" maxGold="2">
-			<StartPos>
-				<Start x="2" y="2" />
-				<Start x="32" y="32" />
-			</StartPos>
-			<GoldPos>
-				<Gold x="0" y="0" />
-				<Gold x="34" y="34" />
-			</GoldPos>
-		</Scenario>
+        <Scenario name="scenario.small.name" id="small" mapSizeX="20" mapSizeY="20"
+                  maxGold="5"
+                  maxPlayerCount="2" multipleActionsPerObject="true" seed="42"
+                  startGameObjectMinDistance="2"
+                  startMoney="1000" walkDiagonal="true"/>
+        <Scenario name="scenario.big.name" id="big" mapSizeX="40" mapSizeY="40"
+                  maxGold="10"
+                  maxPlayerCount="8" multipleActionsPerObject="true" seed="42"
+                  startGameObjectMinDistance="4"
+                  startMoney="1000" walkDiagonal="true"/>
+        <Scenario name="scenario.bigPlenty.name" id="bigPlenty" mapSizeX="40"
+                  mapSizeY="40" maxGold="10"
+                  maxPlayerCount="8" multipleActionsPerObject="true" seed="42"
+                  startGameObjectMinDistance="4"
+                  startMoney="100000" walkDiagonal="true"/>
+        <Scenario name="scenario.bigLittle.name" id="bigLittle" mapSizeX="40" mapSizeY="40"
+                  maxGold="10"
+                  maxPlayerCount="8" multipleActionsPerObject="true" seed="42"
+                  startGameObjectMinDistance="4"
+                  startMoney="50" walkDiagonal="true"/>
+        <Scenario name="scenario.vast.name" id="vast" mapSizeX="100" mapSizeY="100"
+                  maxGold="20"
+                  maxPlayerCount="32" multipleActionsPerObject="true" seed="42"
+                  startGameObjectMinDistance="5"
+                  startMoney="1000" walkDiagonal="true"/>
+        <Scenario name="scenario.giant.name" id="giant" mapSizeX="400" mapSizeY="400"
+                  maxGold="70"
+                  maxPlayerCount="64" multipleActionsPerObject="true" seed="42"
+                  startGameObjectMinDistance="8"
+                  startMoney="1000" walkDiagonal="true"/>
+        <Scenario name="scenario.tourney.name" id="tourney" mapSizeX="35" mapSizeY="35"
+                  maxGold="8"
+                  maxPlayerCount="2" multipleActionsPerObject="true" seed="42"
+                  startGameObjectMinDistance="0"
+                  startMoney="1000" walkDiagonal="true">
+            <StartPos>
+                <Start x="4" y="4"/>
+                <Start x="30" y="30"/>
+            </StartPos>
+            <GoldPos>
+                <Gold x="0" y="0"/>
+                <Gold x="34" y="34"/>
+                <Gold x="0" y="34"/>
+                <Gold x="34" y="0"/>
+                <Gold x="15" y="15"/>
+                <Gold x="19" y="19"/>
+                <Gold x="15" y="19"/>
+                <Gold x="19" y="15"/>
+            </GoldPos>
+        </Scenario>
     </Scenarios>
 </Config>
