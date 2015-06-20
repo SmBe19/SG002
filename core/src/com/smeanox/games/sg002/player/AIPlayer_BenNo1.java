@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.player;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.smeanox.games.sg002.data.Point;
 import com.smeanox.games.sg002.world.GameObjectType;
 
 import java.util.HashMap;
@@ -15,67 +16,59 @@ public class AIPlayer_BenNo1 extends AIPlayer {
 
 	@Override
 	protected void playAI() {
-		HashMap<String, LinkedList<Integer>> positions = new HashMap<String, LinkedList<Integer>>();
+		HashMap<String, LinkedList<Point>> positions = new HashMap<String, LinkedList<Point>>();
 		for (GameObjectType gameObjectType : GameObjectType.getAllGameObjectTypes()) {
 			positions.put(gameObjectType.getId(), getMyPositions(gameObjectType));
 		}
 
-		GameObjectType[] military = new GameObjectType[]{GameObjectType.getGameObjectTypeById("infantry"),
-				GameObjectType.getGameObjectTypeById("knight"), GameObjectType.getGameObjectTypeById("archer")};
+		GameObjectType[] military = new GameObjectType[]{
+				GameObjectType.getGameObjectTypeById("villager"),
+				GameObjectType.getGameObjectTypeById("infantry"),
+				GameObjectType.getGameObjectTypeById("knight"),
+				GameObjectType.getGameObjectTypeById("archer")
+		};
 
 		// we're still alive
 		if (positions.get("townCenter").size() > 0) {
 			// we need more villagers
-			if (positions.get("villager").size() < 4) {
-				int towncenter = positions.get("townCenter").get(0);
-				int field = getFirstFreeProduceField(towncenter, GameObjectType.getGameObjectTypeById("villager"));
-				if (field >= 0) {
-					gameWorld.produce(extractX(towncenter), extractY(towncenter),
-							extractX(field), extractY(field),
-							GameObjectType.getGameObjectTypeById("villager"));
+			for (Point pos : positions.get("townCenter")) {
+				if (MathUtils.randomBoolean(0.15f)) {
+					continue;
 				}
-				// build an army
-			} else {
-				for (Integer pos : positions.get("townCenter")) {
-					if (MathUtils.randomBoolean(0.1f)) {
-						continue;
-					}
 
-					int toProduce = MathUtils.random(2);
-					int field = getFirstFreeProduceField(pos, military[toProduce]);
-					if (field >= 0) {
-						gameWorld.produce(extractX(pos), extractY(pos), extractX(field), extractY(field),
-								military[toProduce]);
-					}
+				int toProduce = MathUtils.random(military.length - 1);
+				Point field = getFirstFreeProduceField(pos, military[toProduce]);
+				if (field != null) {
+					gameWorld.produce(pos.x, pos.y, field.x, field.y, military[toProduce]);
 				}
 			}
 
 			// move villagers / build something
-			for (Integer pos : positions.get("villager")) {
+			for (Point pos : positions.get("villager")) {
 				// build
-				int field = getFirstFreeProduceField(pos, GameObjectType.getGameObjectTypeById("goldMine"));
-				if (MathUtils.randomBoolean(field >= 0 ? 0.95f : 0.1f)) {
+				Point field = getFirstFreeProduceField(pos, GameObjectType.getGameObjectTypeById("goldMine"));
+				if (MathUtils.randomBoolean(field != null ? 0.95f : 0.1f)) {
 					String toBuild = MathUtils.randomBoolean(0.1f) ? "townCenter" : "goldMine";
 					field = getFirstFreeProduceField(pos, GameObjectType.getGameObjectTypeById(toBuild));
-					if (field >= 0) {
-						gameWorld.produce(extractX(pos), extractY(pos), extractX(field), extractY(field),
+					if (field != null) {
+						gameWorld.produce(pos.x, pos.y, field.x, field.y,
 								GameObjectType.getGameObjectTypeById(toBuild));
 					}
 					// move
 				} else {
 					field = getRandomFreeMoveField(pos);
-					if (field >= 0) {
-						gameWorld.move(extractX(pos), extractY(pos), extractX(field), extractY(field));
+					if (field != null) {
+						gameWorld.move(pos.x, pos.y, field.x, field.y);
 					}
 				}
 			}
 
 			// we have an emergency !!!
 		} else {
-			for (Integer pos : positions.get("villager")) {
-				int field = getRandomFreeProduceField(pos, GameObjectType.getGameObjectTypeById("townCenter"));
-				if (field >= 0) {
-					gameWorld.produce(extractX(pos), extractY(pos), extractX(field), extractY(field),
+			for (Point pos : positions.get("villager")) {
+				Point field = getRandomFreeProduceField(pos, GameObjectType.getGameObjectTypeById("townCenter"));
+				if (field != null) {
+					gameWorld.produce(pos.x, pos.y, field.x, field.y,
 							GameObjectType.getGameObjectTypeById("townCenter"));
 				}
 			}
@@ -83,18 +76,18 @@ public class AIPlayer_BenNo1 extends AIPlayer {
 
 		// use the army
 		for (GameObjectType aMilitary : military) {
-			for (Integer pos : positions.get(aMilitary.getId())) {
+			for (Point pos : positions.get(aMilitary.getId())) {
 				// attack
 				if (MathUtils.randomBoolean(0.5f)) {
-					int field = getRandomFightField(pos);
-					if (field >= 0) {
-						gameWorld.fight(extractX(pos), extractY(pos), extractX(field), extractY(field));
+					Point field = getRandomFightField(pos);
+					if (field != null) {
+						gameWorld.fight(pos.x, pos.y, field.x, field.y);
 					}
 					// move
 				} else {
-					int field = getRandomFreeMoveField(pos);
-					if (field >= 0) {
-						gameWorld.move(extractX(pos), extractY(pos), extractX(field), extractY(field));
+					Point field = getRandomFreeMoveField(pos);
+					if (field != null) {
+						gameWorld.move(pos.x, pos.y, field.x, field.y);
 					}
 				}
 			}

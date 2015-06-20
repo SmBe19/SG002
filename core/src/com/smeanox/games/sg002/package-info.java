@@ -14,5 +14,7 @@ TODO: add useMapType to scenario
 TODO: Balancing
 TODO: AI
 TODO: Extern AI
-TODO: Multiplayer
+TODO: Headless mode for Tournament
+TODO: Tournament mode
+TODO: ev. Multiplayer
  */
