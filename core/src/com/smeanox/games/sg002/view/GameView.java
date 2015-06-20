@@ -16,6 +16,11 @@ import com.smeanox.games.sg002.world.MapObject;
 
 import com.smeanox.games.sg002.data.Point;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Render the GameWorld
  *
@@ -29,6 +34,8 @@ public class GameView {
 	private float aFieldSizeY;
 	private int activeX;
 	private int activeY;
+	private boolean needCacheRefresh;
+	private Map<Action.ActionType, Set<Point>> canActionToCache;
 	private TextureRegion backgroundRegions[][];
 
 	/**
@@ -41,6 +48,10 @@ public class GameView {
 		activeX = -1;
 		activeY = -1;
 		zoom = 0.1f;
+		canActionToCache = new HashMap<Action.ActionType, Set<Point>>();
+		for(Action.ActionType actionType : Action.ActionType.values()){
+			canActionToCache.put(actionType, new HashSet<Point>());
+		}
 		glyphLayout = new GlyphLayout();
 		initBackgroundRegions();
 	}
@@ -84,6 +95,7 @@ public class GameView {
 
 	public void setActiveX(int activeX) {
 		this.activeX = activeX;
+		needCacheRefresh = true;
 	}
 
 	public int getActiveY() {
@@ -92,6 +104,7 @@ public class GameView {
 
 	public void setActiveY(int activeY) {
 		this.activeY = activeY;
+		needCacheRefresh = true;
 	}
 
 	/**
@@ -157,6 +170,7 @@ public class GameView {
 			activeX = newActiveX;
 			activeY = newActiveY;
 		}
+		needCacheRefresh = true;
 	}
 
 	/**
@@ -242,6 +256,10 @@ public class GameView {
 		renderBackground(spriteBatch);
 		renderGrid(spriteBatch);
 
+		if(needCacheRefresh){
+			rebuildCache();
+		}
+
 		GameObject gameObject;
 		MapObject mapObject;
 		GameObject activeGameObject = gameWorld.getWorldGameObject(activeX, activeY);
@@ -280,18 +298,45 @@ public class GameView {
 					spriteBatch.setColor(activePlayer.getColor());
 					renderField(spriteBatch, Assets.selection, x, y);
 				} else {
-					if (activeGameObject != null && activeGameObject.canMoveTo(x, y)) {
+					if (canActionToCache.get(Action.ActionType.MOVE).contains(new Point(x, y))) {
 						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.MOVE) ? Consts.usedColor : Consts.canMoveColor);
 						renderField(spriteBatch, Assets.possibleFieldMove, x, y);
 					}
-					if (activeGameObject != null && activeGameObject.canFightTo(x, y)) {
+					if (canActionToCache.get(Action.ActionType.FIGHT).contains(new Point(x, y))) {
 						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.FIGHT) ? Consts.usedColor : Consts.canFightColor);
 						renderField(spriteBatch, Assets.possibleFieldFight, x, y);
 					}
-					if (activeGameObject != null && activeGameObject.canProduceTo(x, y)) {
+					if (canActionToCache.get(Action.ActionType.PRODUCE).contains(new Point(x, y))) {
 						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.PRODUCE) ? Consts.usedColor : Consts.canProduceColor);
 						renderField(spriteBatch, Assets.possibleFieldProduce, x, y);
 					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Rebuild the cache of fields that are available for a given action
+	 */
+	private void rebuildCache(){
+		needCacheRefresh = false;
+		for(Action.ActionType actionType : Action.ActionType.values()){
+			canActionToCache.get(actionType).clear();
+		}
+		GameObject activeGameObject = gameWorld.getWorldGameObject(activeX, activeY);
+		if(activeGameObject == null) {
+			return;
+		}
+		for(int y = 0; y < gameWorld.getMapSizeY(); y++) {
+			for (int x = 0; x < gameWorld.getMapSizeX(); x++) {
+				if (activeGameObject.canMoveTo(x, y)) {
+					canActionToCache.get(Action.ActionType.MOVE).add(new Point(x, y));
+				}
+				if (activeGameObject.canFightTo(x, y)) {
+					canActionToCache.get(Action.ActionType.FIGHT).add(new Point(x, y));
+				}
+				if (activeGameObject.canProduceTo(x, y)) {
+					canActionToCache.get(Action.ActionType.PRODUCE).add(new Point(x, y));
 				}
 			}
 		}

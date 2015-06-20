@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.smeanox.games.sg002.debug.FPSTracker;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.screen.gui.Button;
 import com.smeanox.games.sg002.screen.gui.ClickHandler;
@@ -273,6 +274,8 @@ public class GameScreen extends AbstractScreen {
 
 	@Override
 	public void render(float delta) {
+		FPSTracker.get().frame(delta);
+
 		boolean wasClick = updateGUI(delta, wasDrag);
 		updateInput(delta, wasClick);
 		gameController.update(delta);
