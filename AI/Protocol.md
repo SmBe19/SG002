@@ -21,13 +21,21 @@ The stats for each type will be available in a seperate document, atm it can be 
 ## Startup
 The UAS receives the values of the used scenario on one line, values seperated by one space:
 
-`playerCount startMoney mapWidth mapHeight numOfAI`
+`playerCount startMoney mapWidth mapHeight numOfAI numOfGold`
 
 * `playerCount`: the number of players participating in the game
 * `startMoney`: the amount of money each player receives at the start of the game
 * `mapWidth`: the width of the map
 * `mapHeight`: the height of the map
 * `numOfAI`: the number the UAI is assigned to
+* `numOfGold`: the number of places where a goldMine can be built
+
+For each place where a goldMine can be built, one line follows:
+
+`goldX goldY`
+
+* `goldX`: the x position
+* `goldY`: the y position
 
 ## Round
 At the start of each round the UAI will receive the state of the other players, the current game state and all actions the other players performed. Afterwards the UAI should output the desired actions.
