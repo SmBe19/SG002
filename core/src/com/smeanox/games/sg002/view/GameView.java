@@ -273,7 +273,7 @@ public class GameView {
 				//render GameObjects
 				gameObject = gameWorld.getWorldGameObject(x, y);
 				if (gameObject != null) {
-					spriteBatch.setColor(((float)gameObject.getHp() / gameObject.getGameObjectType().getDefaultHP() > 0.4) ? Color.GREEN : Color.RED);
+					spriteBatch.setColor(((float)gameObject.getHp() / gameObject.getGameObjectType().getDefaultHP() > 0.4) ? Consts.hpFullColor : Consts.hpLowColor);
 					renderField(spriteBatch, Assets.healthbar, x, y, 0f, 0f, (float)gameObject.getHp() / gameObject.getGameObjectType().getDefaultHP(), 1f);
 
 					spriteBatch.setColor(gameObject.getPlayer().getColor());

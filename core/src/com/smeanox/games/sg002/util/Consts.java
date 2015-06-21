@@ -81,6 +81,14 @@ public class Consts {
 	 */
 	public static final Color hpColor = Color.WHITE;
 	/**
+	 * The color to display the healthbar in if the hp are nearly full
+	 */
+	public static final Color hpFullColor = Color.GREEN;
+	/**
+	 * The color to display the healthbar in if the hp are low
+	 */
+	public static final Color hpLowColor = Color.RED;
+	/**
 	 * The color to display if the GameObject was used
 	 */
 	public static final Color usedColor = Color.DARK_GRAY;
