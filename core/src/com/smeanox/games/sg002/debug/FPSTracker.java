@@ -15,7 +15,7 @@ public class FPSTracker {
 	private FPSTracker(){
 		timePassed = 0;
 		framesRendered = 0;
-		printEveryXSecond = 1;
+		printEveryXSecond = 10;
 	}
 
 	public static FPSTracker get(){

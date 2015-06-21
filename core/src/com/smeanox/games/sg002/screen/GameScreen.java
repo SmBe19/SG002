@@ -431,6 +431,10 @@ public class GameScreen extends AbstractScreen {
 
 		nameLabel.setText(gameController.getActivePlayer().getName());
 		nameLabel.setTextColor(gameController.getActivePlayer().getColor());
+
+		if(gameController.countLivingPlayers() < 2){
+			nextPlayerButton.setActive(false);
+		}
 	}
 
 	/**
@@ -575,7 +579,9 @@ public class GameScreen extends AbstractScreen {
 	 * The user finished clicked "next player"
 	 */
 	private void proposeEndPlaying() {
-		if (gameController.getActivePlayer().proposeEndPlaying()) {
+		if(gameController.countLivingPlayers() < 2){
+			return;
+		} else if (gameController.getActivePlayer().proposeEndPlaying()) {
 			cancelAction();
 		}
 	}

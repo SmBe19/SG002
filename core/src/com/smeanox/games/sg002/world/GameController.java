@@ -92,19 +92,32 @@ public class GameController {
 	 * Called by the active player when he finished his round
 	 */
 	public void finishedRound() {
-		if (!playerIterator.hasNext()) {
+		if(countLivingPlayers() < 2){
+			return;
+		}
+		Player oldActivePlayer = activePlayer;
+		nextPlayer();
+		if(oldActivePlayer == activePlayer){
+			throw new IllegalStateException("Something's broken");
+		}
+		startRound(activePlayer);
+	}
+
+	/**
+	 * Sets the activePlayer to the next player that is still alive
+	 */
+	private void nextPlayer(){
+		if(!playerIterator.hasNext()){
 			playerIterator = players.iterator();
 		}
 		activePlayer = playerIterator.next();
-		if (gameWorld.isPlayerStillAlive(activePlayer)) {
-			startRound(activePlayer);
-		} else {
-			finishedRound();
+		if(!gameWorld.isPlayerStillAlive(activePlayer)){
+			nextPlayer();
 		}
 	}
 
 	/**
-	 * Increases the playerIterator until the given player is the active player
+	 * Increas the playerIterator until the given player is the active player
 	 *
 	 * @param player the player that should be the active player afterwards
 	 */
@@ -117,6 +130,20 @@ public class GameController {
 			}
 		}
 		startRound(activePlayer, false);
+	}
+
+	/**
+	 * Count the number of players that are still alive
+	 * @return the number of players
+	 */
+	public int countLivingPlayers(){
+		int count = 0;
+		for(Player player : players){
+			if(gameWorld.isPlayerStillAlive(player)){
+				count++;
+			}
+		}
+		return count;
 	}
 
 	/**
