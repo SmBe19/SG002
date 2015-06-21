@@ -95,7 +95,7 @@ public class GameObject {
 	 * @return true if the action can be performed
 	 */
 	public boolean isCanDoAction(ActionType action) {
-		return !usedActions.contains(action) && getGameObjectType().isCanDoAction(action);
+		return !usedActions.contains(action) && gameObjectType.isCanDoAction(action);
 	}
 
 	/**
@@ -158,7 +158,9 @@ public class GameObject {
 	 */
 	public boolean canMoveTo(int x, int y) {
 		int diffTot = getDiff(x, y);
-		return diffTot >= gameObjectType.getRadiusWalkMin() && diffTot <= gameObjectType.getRadiusWalkMax();
+		return gameObjectType.isCanDoAction(ActionType.MOVE)
+				&& diffTot >= gameObjectType.getRadiusWalkMin()
+				&& diffTot <= gameObjectType.getRadiusWalkMax();
 	}
 
 	/**
@@ -170,7 +172,9 @@ public class GameObject {
 	 */
 	public boolean canProduceTo(int x, int y) {
 		int diffTot = getDiff(x, y);
-		return diffTot >= gameObjectType.getRadiusProduceMin() && diffTot <= gameObjectType.getRadiusProduceMax();
+		return gameObjectType.isCanDoAction(ActionType.PRODUCE)
+				&& diffTot >= gameObjectType.getRadiusProduceMin()
+				&& diffTot <= gameObjectType.getRadiusProduceMax();
 	}
 
 	/**
@@ -182,7 +186,9 @@ public class GameObject {
 	 */
 	public boolean canFightTo(int x, int y) {
 		int diffTot = getDiff(x, y);
-		return diffTot >= gameObjectType.getRadiusFightMin() && diffTot <= gameObjectType.getRadiusFightMax();
+		return gameObjectType.isCanDoAction(ActionType.FIGHT)
+				&& diffTot >= gameObjectType.getRadiusFightMin()
+				&& diffTot <= gameObjectType.getRadiusFightMax();
 	}
 
 	/**

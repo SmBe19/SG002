@@ -297,18 +297,43 @@ public class GameView {
 				if (x == activeX && y == activeY) {
 					spriteBatch.setColor(activePlayer.getColor());
 					renderField(spriteBatch, Assets.selection, x, y);
-				} else {
-					if (canActionToCache.get(Action.ActionType.MOVE).contains(new Point(x, y))) {
-						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.MOVE) ? Consts.usedColor : Consts.canMoveColor);
-						renderField(spriteBatch, Assets.possibleFieldMove, x, y);
-					}
-					if (canActionToCache.get(Action.ActionType.FIGHT).contains(new Point(x, y))) {
-						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.FIGHT) ? Consts.usedColor : Consts.canFightColor);
-						renderField(spriteBatch, Assets.possibleFieldFight, x, y);
-					}
-					if (canActionToCache.get(Action.ActionType.PRODUCE).contains(new Point(x, y))) {
-						spriteBatch.setColor(activeGameObject.wasUsed(Action.ActionType.PRODUCE) ? Consts.usedColor : Consts.canProduceColor);
-						renderField(spriteBatch, Assets.possibleFieldProduce, x, y);
+				}
+			}
+		}
+
+		if(activeGameObject != null) {
+			for (Action.ActionType actionType : Action.ActionType.values()) {
+				Color actionColor = Consts.usedColor;
+				switch (actionType) {
+					case MOVE:
+						actionColor = Consts.canMoveColor;
+						break;
+					case FIGHT:
+						actionColor = Consts.canFightColor;
+						break;
+					case PRODUCE:
+						actionColor = Consts.canProduceColor;
+						break;
+				}
+				spriteBatch.setColor(activeGameObject.wasUsed(actionType) ? Consts.usedColor : actionColor);
+
+				Texture fieldTexture = null;
+
+				switch (actionType) {
+					case MOVE:
+						fieldTexture = Assets.possibleFieldMove;
+						break;
+					case FIGHT:
+						fieldTexture = Assets.possibleFieldFight;
+						break;
+					case PRODUCE:
+						fieldTexture = Assets.possibleFieldProduce;
+						break;
+				}
+
+				if (fieldTexture != null) {
+					for (Point point : canActionToCache.get(actionType)) {
+						renderField(spriteBatch, fieldTexture, point.x, point.y);
 					}
 				}
 			}

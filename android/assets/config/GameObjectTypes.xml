@@ -22,7 +22,7 @@
         <GameObjectType id="villager" name="gameObjectType.villager.name" texture="images/villager.png">
             <HP defaultHP="60"/>
             <Value value="100" valuePerRound="1" valueOnDestruction="1"/>
-            <Radius radiusWalkMin="0" radiusWalkMax="5" radiusProduceMin="1" radiusProduceMax="1" radiusFightMin="0" radiusFightMax="2"/>
+            <Radius radiusWalkMin="1" radiusWalkMax="5" radiusProduceMin="1" radiusProduceMax="1" radiusFightMin="1" radiusFightMax="2"/>
             <DamageTable canFight="true">
                 <Damage gameObjectType="townCenter" value="5"/>
                 <Damage gameObjectType="villager" value="5"/>
@@ -39,7 +39,7 @@
         <GameObjectType id="knight" name="gameObjectType.knight.name" texture="images/knight.png">
             <HP defaultHP="80"/>
             <Value value="220" valuePerRound="5" valueOnDestruction="110"/>
-            <Radius radiusWalkMin="0" radiusWalkMax="2" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="0" radiusFightMax="5"/>
+            <Radius radiusWalkMin="1" radiusWalkMax="2" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="1" radiusFightMax="5"/>
             <DamageTable canFight="true">
                 <Damage gameObjectType="townCenter" value="26"/>
                 <Damage gameObjectType="villager" value="26"/>
@@ -53,7 +53,7 @@
         <GameObjectType id="archer" name="gameObjectType.archer.name" texture="images/archer.png">
             <HP defaultHP="60"/>
             <Value value="180" valuePerRound="5" valueOnDestruction="90"/>
-            <Radius radiusWalkMin="0" radiusWalkMax="3" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="4" radiusFightMax="8"/>
+            <Radius radiusWalkMin="1" radiusWalkMax="3" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="4" radiusFightMax="8"/>
             <DamageTable canFight="true">
                 <Damage gameObjectType="townCenter" value="14"/>
                 <Damage gameObjectType="villager" value="14"/>
@@ -67,7 +67,7 @@
         <GameObjectType id="infantry" name="gameObjectType.infantry.name" texture="images/infantry.png">
             <HP defaultHP="40"/>
             <Value value="200" valuePerRound="5" valueOnDestruction="100"/>
-            <Radius radiusWalkMin="0" radiusWalkMax="5" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="0" radiusFightMax="2"/>
+            <Radius radiusWalkMin="1" radiusWalkMax="5" radiusProduceMin="0" radiusProduceMax="0" radiusFightMin="1" radiusFightMax="2"/>
             <DamageTable canFight="true">
                 <Damage gameObjectType="townCenter" value="22"/>
                 <Damage gameObjectType="villager" value="22"/>
