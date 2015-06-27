@@ -93,6 +93,7 @@ public class GameObjectTypeReader {
 		XmlReader.Element canProduce = element.getChildByName("CanProduce");
 
 		return new GameObjectType(
+				element.getIntAttribute("externalId"),
 				element.getAttribute("id"),
 				Language.getStrings().get(element.getAttribute("name")),
 				element.getAttribute("texture"),

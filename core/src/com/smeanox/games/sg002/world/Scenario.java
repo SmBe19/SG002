@@ -229,6 +229,14 @@ public class Scenario {
 	}
 
 	/**
+	 * The number of gold resources
+	 * @return the number of gold resources
+	 */
+	public int getMaxGold(){
+		return maxGold;
+	}
+
+	/**
 	 * Get positions of gold resources on the map
 	 *
 	 * @return an array of points representing x and y coordinates of the gold resources

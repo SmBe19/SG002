@@ -178,12 +178,20 @@ public class GameController {
 		}
 	}
 
+	public LinkedList<Player> getPlayers(){
+		return players;
+	}
+
 	public Player getActivePlayer() {
 		return activePlayer;
 	}
 
 	public GameWorld getGameWorld() {
 		return gameWorld;
+	}
+
+	public Scenario getScenario(){
+		return scenario;
 	}
 
 	/**

@@ -74,7 +74,7 @@ After reading the input the UAI should output all desired actions in the order t
 * `endY`: the y position of the Field to which the action should be performed to
 * `[gameObjectType]`: if the actionType is `2` (produce), the id of the type that should be produced.
 
-If the desired action is not valid the AI is terminated and the game ends. The line has to be preceded by one integer on a separate line, the number of desired actions.
+If the desired action is not valid the AI is terminated and the game ends. The list has to be preceded by one integer on a separate line, the number of desired actions.
 
 ## Example
 Lines preceded with `<` are outputet by the engine, lines preceded with `>` are outputet by the UAI.

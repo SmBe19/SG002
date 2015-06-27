@@ -13,8 +13,10 @@ package com.smeanox.games.sg002;
 TODO: add useMapType to scenario
 TODO: Balancing
 TODO: AI
-TODO: Extern AI
+TODO: External AI
+TODO: Logger for game
 TODO: Headless mode for Tournament
 TODO: Tournament mode
+TODO: Replay of logged games
 TODO: ev. Multiplayer
  */

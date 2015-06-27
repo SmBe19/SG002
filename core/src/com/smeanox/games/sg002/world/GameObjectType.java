@@ -18,6 +18,7 @@ public class GameObjectType {
 	private static HashMap<String, GameObjectType> idToGameObjectType = new HashMap<String, GameObjectType>();
 	private static GameObjectType startGameObjectType;
 
+	private int externalId;
 	private String id;
 	private String name;
 	private String textureName;
@@ -40,6 +41,7 @@ public class GameObjectType {
 	private ArrayList<GameObjectType> canProduceList;
 
 	public GameObjectType(
+			int externalId,
 			String id,
 			String name,
 			String textureName,
@@ -57,6 +59,7 @@ public class GameObjectType {
 			HashMap<GameObjectType, Integer> damageTable,
 			boolean canProduce,
 			ArrayList<GameObjectType> canProduceList) {
+		this.externalId = externalId;
 		this.id = id;
 		this.name = name;
 		this.textureName = textureName;
@@ -79,6 +82,10 @@ public class GameObjectType {
 	}
 
 	// Getter
+	public int getExternalId(){
+		return externalId;
+	}
+
 	public String getId() {
 		return id;
 	}

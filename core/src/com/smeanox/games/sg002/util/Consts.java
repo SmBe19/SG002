@@ -159,6 +159,29 @@ public class Consts {
 	public static final String quickSaveFileName = "quicksave.xml";
 
 	/**
+	 * Time in ms an external program has time to output a move, afterwards it will be terminated
+	 */
+	public static final int EXTERNAL_LONG_TIMEOUT = 1750;
+
+	/**
+	 * Time in ms an external program has time to output a move, afterwards a warning will be logged
+	 */
+	public static final int EXTERNAL_SHORT_TIMEOUT = 750;
+
+	/**
+	 * The maximal number of lines an external program may output to stderr. If more are printed
+	 * they are ignored
+	 */
+	public static final int EXTERNAL_MAX_STDERR_LINES = 1000;
+
+	/**
+	 * The maximal number of times an external program may output a move after the short
+	 * timeout but before the long timeout. If a program uses more than the allowed number
+	 * it will be terminated
+	 */
+	public static final int EXTERNAL_MAX_TIMEOUT_COUNT = 100;
+
+	/**
 	 * Keyboard Shortcuts
 	 */
 	public static class KeyboardShortcuts {
