@@ -11,6 +11,7 @@ package com.smeanox.games.sg002;
 
 /*
 TODO: add useMapType to scenario
+TODO: menu (load on mainMenu, to mainMenu on PauseMenu)
 TODO: Balancing
 TODO: AI
 TODO: External AI

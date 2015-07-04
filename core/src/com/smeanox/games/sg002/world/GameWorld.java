@@ -8,7 +8,10 @@ import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Consts;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * Contains all information about the active game
@@ -23,7 +26,9 @@ public class GameWorld {
 	private MapObject[][] worldMapObjects;
 
 	private Player activePlayer;
-	private HashSet<GameObject> gameObjects;
+	private final HashSet<GameObject> gameObjects;
+
+	private final Map<Player, LinkedList<Action>> playerActions;
 
 	private Scenario scenario;
 	private GameLogger logger;
@@ -40,6 +45,7 @@ public class GameWorld {
 		initScenario(scenario);
 
 		gameObjects = new HashSet<GameObject>();
+		playerActions = new HashMap<Player, LinkedList<Action>>();
 	}
 
 	/**
@@ -117,6 +123,10 @@ public class GameWorld {
 		return worldMapObjects;
 	}
 
+	public Map<Player, LinkedList<Action>> getPlayerActions() {
+		return playerActions;
+	}
+
 	/**
 	 * Add the starting GameObjects for the given player at a random position
 	 *
@@ -147,6 +157,10 @@ public class GameWorld {
 			}
 		}
 		activePlayer.addMoney(calcMoneyPerRound(activePlayer));
+		if (!playerActions.containsKey(activePlayer)) {
+			playerActions.put(activePlayer, new LinkedList<Action>());
+		}
+		playerActions.get(activePlayer).clear();
 	}
 
 	/**
@@ -294,6 +308,8 @@ public class GameWorld {
 
 		logger.game(getActivePlayer().getId() + " " + Consts.MOVE_ID + " " +
 				startX + " " + startY + " " + endX + " " + endY);
+		playerActions.get(getActivePlayer()).add(new Action(Action.ActionType.MOVE,
+				startX, startY, endX, endY));
 		return true;
 	}
 
@@ -373,6 +389,8 @@ public class GameWorld {
 		logger.game(getActivePlayer().getId() + " " + Consts.PRODUCE_ID + " " +
 				startX + " " + startY + " " + endX + " " + endY +
 				" " + gameObjectType.getExternalId());
+		playerActions.get(getActivePlayer()).add(new Action(Action.ActionType.PRODUCE,
+				startX, startY, endX, endY, gameObjectType));
 		return true;
 	}
 
@@ -439,6 +457,8 @@ public class GameWorld {
 
 		logger.game(getActivePlayer().getId() + " " + Consts.FIGHT_ID + " " +
 				startX + " " + startY + " " + endX + " " + endY);
+		playerActions.get(getActivePlayer()).add(new Action(Action.ActionType.FIGHT,
+				startX, startY, endX, endY));
 		return damage;
 	}
 

@@ -32,7 +32,7 @@ public abstract class Player {
 	/**
 	 * Inform the player that he can start playing
 	 */
-	public final void startPlaying() {
+	public final void startPlaying() throws ProtocolViolationException {
 		isPlaying = true;
 		gameWorld = gameController.getGameWorld();
 		play();
@@ -49,7 +49,7 @@ public abstract class Player {
 	/**
 	 * Perform the moves for this round
 	 */
-	protected abstract void play();
+	protected abstract void play() throws ProtocolViolationException;
 
 	/**
 	 * Update the Player

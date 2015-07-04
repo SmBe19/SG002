@@ -42,6 +42,7 @@ import com.smeanox.games.sg002.world.Action;
 import com.smeanox.games.sg002.world.GameController;
 import com.smeanox.games.sg002.world.GameObject;
 import com.smeanox.games.sg002.world.GameObjectType;
+import com.smeanox.games.sg002.world.actionHandler.GameEndHandler;
 import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
 
 import com.smeanox.games.sg002.data.Point;
@@ -111,6 +112,14 @@ public class GameScreen extends AbstractScreen {
 		setProduceButtonsVisible(false);
 
 		initKeys();
+
+		gameController.addGameEndHandler(new GameEndHandler() {
+			@Override
+			public void onGameEnd() {
+				nextPlayerButton.setText(Language.getStrings().get("gameScreen.gameEnded"));
+				updateLabels();
+			}
+		});
 
 		gameController.startGame();
 	}
@@ -438,7 +447,7 @@ public class GameScreen extends AbstractScreen {
 		nameLabel.setText(gameController.getActivePlayer().getName());
 		nameLabel.setTextColor(gameController.getActivePlayer().getColor());
 
-		if(gameController.countLivingPlayers() < 2){
+		if(gameController.isGameEnded()){
 			nextPlayerButton.setActive(false);
 		}
 	}
@@ -585,9 +594,7 @@ public class GameScreen extends AbstractScreen {
 	 * The user finished clicked "next player"
 	 */
 	private void proposeEndPlaying() {
-		if(gameController.countLivingPlayers() < 2){
-			return;
-		} else if (gameController.getActivePlayer().proposeEndPlaying()) {
+		if (gameController.getActivePlayer().proposeEndPlaying()) {
 			cancelAction();
 		}
 	}
@@ -642,8 +649,6 @@ public class GameScreen extends AbstractScreen {
 		aAction.endX = x;
 		aAction.endY = y;
 		if (gameController.getActivePlayer().proposeAction(aAction)) {
-			updateLabels();
-
 			setActionButtonsVisible(false);
 			setProduceButtonsVisible(false);
 			aAction.actionType = Action.ActionType.NONE;

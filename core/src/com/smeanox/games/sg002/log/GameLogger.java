@@ -119,7 +119,7 @@ public class GameLogger {
 	 * Log something for game replay
 	 * @param s the string to log
 	 */
-	public void game(String s){
+	public synchronized void game(String s){
 		if(printStdOut){
 			System.out.println(s);
 		}
@@ -132,7 +132,7 @@ public class GameLogger {
 	 * Log something related to the technical side of simulating the game
 	 * @param s the string to log
 	 */
-	public void tech(String s){
+	public synchronized void tech(String s){
 		if(printStdErr){
 			System.err.println("[TECH] " + s);
 		}
@@ -143,7 +143,7 @@ public class GameLogger {
 	 * @param id the id of the AI
 	 * @param s the string to log
 	 */
-	public void progStdErr(String id, String s){
+	public synchronized void progStdErr(String id, String s){
 		if(printStdErr){
 			System.err.println("[STDERR] [" + id + "] " + s);
 		}
@@ -154,9 +154,12 @@ public class GameLogger {
 	 * @param id the id of the AI
 	 * @param s the string to log
 	 */
-	public void progBehaviour(String id, String s){
+	public synchronized void progBehaviour(String id, String s){
 		if(printStdErr){
 			System.err.println("[BEHAVIOUR] [" + id + "] " + s);
+		}
+		if(behaviourLogWriter != null){
+			behaviourLogWriter.println("[" + id + "] "  + s);
 		}
 	}
 }

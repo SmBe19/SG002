@@ -52,6 +52,7 @@ For the current game state each GameObject currently on the map is listed, one G
 * `posX`: the x position
 * `posY`: the y position
 * `gameObjectType`: the id of the type of the GameObject
+* `hp`: the health points the object has
 
 The list is preceded by one integer on a separate line, the number of GameObjects.
 

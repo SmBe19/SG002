@@ -8,7 +8,9 @@ import com.smeanox.games.sg002.data.Point;
 import com.smeanox.games.sg002.log.GameLogger;
 import com.smeanox.games.sg002.player.ExternalAIPlayer;
 import com.smeanox.games.sg002.player.Player;
+import com.smeanox.games.sg002.player.ProtocolViolationException;
 import com.smeanox.games.sg002.util.Consts;
+import com.smeanox.games.sg002.world.actionHandler.GameEndHandler;
 import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
 
 import java.io.FileWriter;
@@ -28,8 +30,10 @@ public class GameController {
 	private LinkedList<Player> players;
 	private Iterator<Player> playerIterator;
 	private Player activePlayer;
+	private boolean gameEnded;
 
 	private LinkedList<NextPlayerHandler> nextPlayerHandlers;
+	private LinkedList<GameEndHandler> gameEndHandlers;
 
 	/**
 	 * Create a new instance and load the given save file
@@ -39,6 +43,7 @@ public class GameController {
 	public GameController(String fileName) {
 		players = new LinkedList<Player>();
 		loadGame(fileName);
+		gameEnded = false;
 	}
 
 	/**
@@ -67,6 +72,8 @@ public class GameController {
 		initScenario(scenario);
 
 		gameWorld = new GameWorld(scenario, logger);
+
+		gameEnded = false;
 	}
 
 	/**
@@ -85,6 +92,10 @@ public class GameController {
 	 * Finish the game and clean up
 	 */
 	public void endGame(){
+		if(gameEnded){
+			return;
+		}
+		gameEnded = true;
 		for(Player player : players){
 			if(player instanceof ExternalAIPlayer){
 				try {
@@ -95,6 +106,7 @@ public class GameController {
 			}
 		}
 		logger.close();
+		fireOnGameEnd();
 	}
 
 	/**
@@ -140,9 +152,14 @@ public class GameController {
 	 * Called by the active player when he finished his round
 	 */
 	public void finishedRound() {
-		if (countLivingPlayers() < 2) {
+		if(gameEnded){
 			return;
 		}
+		if (countLivingPlayers() < 2) {
+			endGame();
+			return;
+		}
+		logger.game(Consts.NEXT_ROUND_ID);
 		Player oldActivePlayer = activePlayer;
 		nextPlayer();
 		if (oldActivePlayer == activePlayer) {
@@ -160,6 +177,9 @@ public class GameController {
 		}
 		activePlayer = playerIterator.next();
 		if (!gameWorld.isPlayerStillAlive(activePlayer)) {
+			if(gameWorld.getPlayerActions().containsKey(activePlayer)) {
+				gameWorld.getPlayerActions().get(activePlayer).clear();
+			}
 			nextPlayer();
 		}
 	}
@@ -213,7 +233,11 @@ public class GameController {
 	private void startRound(Player player, boolean reenableUsedActions) {
 		gameWorld.startRound(player, reenableUsedActions);
 		fireOnNextPlayer(player);
-		player.startPlaying();
+		try {
+			player.startPlaying();
+		} catch (ProtocolViolationException e) {
+			endGame();
+		}
 	}
 
 	/**
@@ -245,6 +269,10 @@ public class GameController {
 
 	public GameLogger getLogger() {
 		return logger;
+	}
+
+	public boolean isGameEnded() {
+		return gameEnded;
 	}
 
 	/**
@@ -369,6 +397,44 @@ public class GameController {
 		nextPlayerHandlers.remove(handler);
 		if (nextPlayerHandlers.isEmpty()) {
 			nextPlayerHandlers = null;
+		}
+	}
+
+	/**
+	 * Fire an event that the game ended
+	 */
+	protected void fireOnGameEnd() {
+		if (gameEndHandlers != null) {
+			for (GameEndHandler c : gameEndHandlers) {
+				c.onGameEnd();
+			}
+		}
+	}
+
+	/**
+	 * add a {@link GameEndHandler}
+	 *
+	 * @param handler the GameEndHandler
+	 */
+	public void addGameEndHandler(GameEndHandler handler) {
+		if (gameEndHandlers == null) {
+			gameEndHandlers = new LinkedList<GameEndHandler>();
+		}
+		gameEndHandlers.add(handler);
+	}
+
+	/**
+	 * remove a {@link GameEndHandler}
+	 *
+	 * @param handler the GameEndHandler
+	 */
+	public void removeGameEndHandler(GameEndHandler handler) {
+		if (gameEndHandlers == null) {
+			return;
+		}
+		gameEndHandlers.remove(handler);
+		if (gameEndHandlers.isEmpty()) {
+			gameEndHandlers = null;
 		}
 	}
 }

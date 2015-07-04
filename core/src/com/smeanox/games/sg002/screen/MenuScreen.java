@@ -30,6 +30,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.smeanox.games.sg002.log.GameLogger;
 import com.smeanox.games.sg002.player.AIPlayer_BenNo1;
+import com.smeanox.games.sg002.player.ExternalAIPlayer;
 import com.smeanox.games.sg002.player.LocalPlayer;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.screen.gui.Button;
@@ -217,6 +218,11 @@ public class MenuScreen extends AbstractScreen {
 		for (int i = 0; i < playerCount; i++) {
 			playerNames.add(Language.getStrings().format("menu.playerName.default", (i + 1)));
 		}
+		// TODO remove debug
+		// playerNames.set(0, "Ex:TestAI.exe");
+		// playerNames.set(1, "Ex:TestAI.exe");
+		// -----------------
+
 		displayDialog = true;
 		processedPlayerNames = 0;
 	}
@@ -237,6 +243,9 @@ public class MenuScreen extends AbstractScreen {
 			// FIXME make nicer
 			if ("BenNo1".equals(playerNames.get(i))) {
 				player = new AIPlayer_BenNo1();
+			} else if (playerNames.get(i).startsWith("Ex:")) {
+				player = new ExternalAIPlayer();
+				((ExternalAIPlayer)player).setCommand(playerNames.get(i).substring(3));
 			} else {
 				player = new LocalPlayer();
 			}

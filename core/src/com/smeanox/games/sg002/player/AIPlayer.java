@@ -44,7 +44,7 @@ public abstract class AIPlayer extends Player {
 	}
 
 	@Override
-	protected final void play() {
+	protected final void play() throws ProtocolViolationException {
 		if(MathUtils.random instanceof RandomXS128) {
 			if(seed0 == 0 && seed1 == 0){
 				seed0 = System.currentTimeMillis();
@@ -59,7 +59,7 @@ public abstract class AIPlayer extends Player {
 	/**
 	 * Perform the moves for this round
 	 */
-	protected abstract void playAI();
+	protected abstract void playAI() throws ProtocolViolationException;
 
 	/**
 	 * Update the AI

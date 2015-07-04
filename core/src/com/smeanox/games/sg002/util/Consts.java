@@ -197,6 +197,11 @@ public class Consts {
 	public static final String PRODUCE_ID = "2";
 
 	/**
+	 * ID used for logging
+	 */
+	public static final String NEXT_ROUND_ID = "---";
+
+	/**
 	 * Keyboard Shortcuts
 	 */
 	public static class KeyboardShortcuts {
