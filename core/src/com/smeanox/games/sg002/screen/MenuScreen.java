@@ -28,6 +28,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.smeanox.games.sg002.log.GameLogger;
 import com.smeanox.games.sg002.player.AIPlayer_BenNo1;
 import com.smeanox.games.sg002.player.LocalPlayer;
 import com.smeanox.games.sg002.player.Player;
@@ -36,6 +37,7 @@ import com.smeanox.games.sg002.screen.gui.ClickHandler;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.util.Language;
+import com.smeanox.games.sg002.util.TournamentContext;
 import com.smeanox.games.sg002.world.GameController;
 import com.smeanox.games.sg002.world.Scenario;
 
@@ -200,7 +202,7 @@ public class MenuScreen extends AbstractScreen {
 
 		if (wasBackDown && !(Gdx.input.isKeyPressed(Input.Keys.BACK)
 				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))) {
-			Gdx.app.exit();
+			ScreenManager.exit();
 		}
 
 		wasBackDown = Gdx.input.isKeyPressed(Input.Keys.BACK)
@@ -223,7 +225,13 @@ public class MenuScreen extends AbstractScreen {
 	 * Start the game
 	 */
 	private void startGame() {
-		GameController gameController = new GameController(scenario);
+		GameLogger logger = new GameLogger();
+		logger.setGameLogPath(TournamentContext.gameLog);
+		logger.setBehaviourLogPath(TournamentContext.behaviourLog);
+		logger.setPrintStdOut(TournamentContext.printStdOut);
+		logger.setPrintStdErr(TournamentContext.printStdErr);
+
+		GameController gameController = new GameController(scenario, logger);
 		for (int i = 0; i < playerCount; i++) {
 			Player player;
 			// FIXME make nicer

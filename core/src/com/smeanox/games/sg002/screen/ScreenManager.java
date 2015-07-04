@@ -1,6 +1,8 @@
 package com.smeanox.games.sg002.screen;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.world.GameController;
 
 /**
@@ -74,8 +76,36 @@ public class ScreenManager {
 	 * @param gameController the GameController to start the game with
 	 */
 	public static void showGame(GameController gameController) {
+		if(gameScreen != null){
+			gameScreen.dispose();
+		}
 		gameScreen = null;
 		gameScreen = new GameScreen(gameController);
 		game.setScreen(gameScreen);
+	}
+
+	/**
+	 * Exit the game
+	 */
+	public static void exit(){
+		if(splashScreen != null) {
+			splashScreen.dispose();
+			splashScreen = null;
+		}
+		if(menuScreen != null) {
+			menuScreen.dispose();
+			menuScreen = null;
+		}
+		if(gameScreen != null) {
+			gameScreen.dispose();
+			gameScreen = null;
+		}
+		if(pauseScreen != null) {
+			pauseScreen.dispose();
+			pauseScreen = null;
+		}
+		Assets.dispose();
+
+		Gdx.app.exit();
 	}
 }

@@ -150,7 +150,7 @@ public class PauseScreen extends AbstractScreen {
 	 * Quit the game
 	 */
 	private void quitGame() {
-		Gdx.app.exit();
+		ScreenManager.exit();
 	}
 
 	public void setGameController(GameController gameController) {

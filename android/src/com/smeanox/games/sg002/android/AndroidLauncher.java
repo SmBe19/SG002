@@ -7,10 +7,14 @@ import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
 import com.smeanox.games.sg002.SG002;
 import com.smeanox.games.sg002.util.Consts;
+import com.smeanox.games.sg002.util.TournamentContext;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
+		TournamentContext.printStdOut = false;
+		TournamentContext.printStdErr = false;
+
 		super.onCreate(savedInstanceState);
 		//Consts.textureFilter = Texture.TextureFilter.Nearest; //To enable texture filtering on Android change this line to:
 		Consts.textureFilter = Texture.TextureFilter.MipMapLinearLinear;

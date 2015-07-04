@@ -260,7 +260,10 @@ public class Assets {
 	/**
 	 * Dispose all assets
 	 */
-	public static void unload() {
-		manager.dispose();
+	public static void dispose() {
+		if(manager != null) {
+			manager.dispose();
+			manager = null;
+		}
 	}
 }

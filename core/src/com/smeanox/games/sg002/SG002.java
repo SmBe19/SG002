@@ -34,4 +34,9 @@ public class SG002 extends Game {
 		ScreenManager.init(this);
 		ScreenManager.showSplash();
 	}
+
+	@Override
+	public void dispose() {
+		ScreenManager.exit();
+	}
 }

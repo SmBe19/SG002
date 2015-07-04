@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
+import com.smeanox.games.sg002.data.Point;
+import com.smeanox.games.sg002.log.GameLogger;
+import com.smeanox.games.sg002.player.ExternalAIPlayer;
 import com.smeanox.games.sg002.player.Player;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
@@ -19,6 +22,7 @@ import java.util.LinkedList;
  * @author Benjamin Schmid
  */
 public class GameController {
+	private GameLogger logger;
 	private Scenario scenario;
 	private GameWorld gameWorld;
 	private LinkedList<Player> players;
@@ -43,12 +47,26 @@ public class GameController {
 	 * @param scenario the scenario to use
 	 */
 	public GameController(Scenario scenario) {
+		this(scenario, GameLogger.createDummyLogger());
+	}
+
+	/**
+	 * Create a new instance
+	 *
+	 * @param scenario the scenario to use
+	 * @param logger   the logger to use to log the game
+	 */
+	public GameController(Scenario scenario, GameLogger logger) {
 		this.scenario = scenario;
+		this.logger = logger;
+		if (this.logger == null) {
+			this.logger = GameLogger.createDummyLogger();
+		}
 		players = new LinkedList<Player>();
 
 		initScenario(scenario);
 
-		gameWorld = new GameWorld(scenario);
+		gameWorld = new GameWorld(scenario, logger);
 	}
 
 	/**
@@ -61,10 +79,22 @@ public class GameController {
 		Consts.walkDiagonal = scenario.isWalkDiagonal();
 		Consts.multipleActionsPerObject = scenario.isMultipleActionsPerObject();
 		Consts.startGameObjectMinDistance = scenario.getStartGameObjectMinDistance();
+	}
 
-		if (gameWorld == null) {
-			gameWorld = new GameWorld(scenario);
+	/**
+	 * Finish the game and clean up
+	 */
+	public void endGame(){
+		for(Player player : players){
+			if(player instanceof ExternalAIPlayer){
+				try {
+					((ExternalAIPlayer) player).terminate();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+		logger.close();
 	}
 
 	/**
@@ -84,6 +114,24 @@ public class GameController {
 	 * Start the game
 	 */
 	public void startGame() {
+		logger.game(players.size() + " " + scenario.getStartMoney() + " " +
+				scenario.getMapSizeX() + " " + scenario.getMapSizeY() + " " +
+				scenario.getMaxGold());
+		StringBuilder playerNames = new StringBuilder();
+		for(Player player : players){
+			if(player != players.getFirst()){
+				playerNames.append(" ");
+			}
+			playerNames.append(player.getName());
+		}
+		logger.game(playerNames.toString());
+		for(Point point : scenario.getGoldPos()){
+			logger.game(point.x + " " + point.y);
+		}
+		for (int i = 0; i < players.size(); i++) {
+			logger.game(scenario.getStartPos(i).x + " " + scenario.getStartPos(i).y);
+		}
+
 		playerIterator = players.iterator();
 		finishedRound();
 	}
@@ -92,12 +140,12 @@ public class GameController {
 	 * Called by the active player when he finished his round
 	 */
 	public void finishedRound() {
-		if(countLivingPlayers() < 2){
+		if (countLivingPlayers() < 2) {
 			return;
 		}
 		Player oldActivePlayer = activePlayer;
 		nextPlayer();
-		if(oldActivePlayer == activePlayer){
+		if (oldActivePlayer == activePlayer) {
 			throw new IllegalStateException("Something's broken");
 		}
 		startRound(activePlayer);
@@ -106,12 +154,12 @@ public class GameController {
 	/**
 	 * Sets the activePlayer to the next player that is still alive
 	 */
-	private void nextPlayer(){
-		if(!playerIterator.hasNext()){
+	private void nextPlayer() {
+		if (!playerIterator.hasNext()) {
 			playerIterator = players.iterator();
 		}
 		activePlayer = playerIterator.next();
-		if(!gameWorld.isPlayerStillAlive(activePlayer)){
+		if (!gameWorld.isPlayerStillAlive(activePlayer)) {
 			nextPlayer();
 		}
 	}
@@ -134,12 +182,13 @@ public class GameController {
 
 	/**
 	 * Count the number of players that are still alive
+	 *
 	 * @return the number of players
 	 */
-	public int countLivingPlayers(){
+	public int countLivingPlayers() {
 		int count = 0;
-		for(Player player : players){
-			if(gameWorld.isPlayerStillAlive(player)){
+		for (Player player : players) {
+			if (gameWorld.isPlayerStillAlive(player)) {
 				count++;
 			}
 		}
@@ -178,7 +227,7 @@ public class GameController {
 		}
 	}
 
-	public LinkedList<Player> getPlayers(){
+	public LinkedList<Player> getPlayers() {
 		return players;
 	}
 
@@ -190,8 +239,12 @@ public class GameController {
 		return gameWorld;
 	}
 
-	public Scenario getScenario(){
+	public Scenario getScenario() {
 		return scenario;
+	}
+
+	public GameLogger getLogger() {
+		return logger;
 	}
 
 	/**
@@ -202,7 +255,7 @@ public class GameController {
 	public void saveGame(String fileName) {
 		try {
 			FileHandle file;
-			if(Consts.headlessMode){
+			if (Consts.headlessMode) {
 				file = new FileHandle(fileName);
 			} else {
 				file = Gdx.files.local(fileName);
@@ -238,7 +291,7 @@ public class GameController {
 		try {
 			XmlReader reader = new XmlReader();
 			FileHandle file;
-			if(Consts.headlessMode) {
+			if (Consts.headlessMode) {
 				file = new FileHandle(fileName);
 			} else {
 				file = Gdx.files.local(fileName);

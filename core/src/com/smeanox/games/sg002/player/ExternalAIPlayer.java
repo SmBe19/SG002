@@ -1,6 +1,7 @@
 package com.smeanox.games.sg002.player;
 
 import com.smeanox.games.sg002.data.Point;
+import com.smeanox.games.sg002.log.GameLogger;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.Action;
 import com.smeanox.games.sg002.world.GameObject;
@@ -23,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 public class ExternalAIPlayer extends Player {
 
 	protected boolean finishedPlaying;
+
+	private GameLogger logger;
 
 	private String command;
 	private Process process;
@@ -70,6 +73,11 @@ public class ExternalAIPlayer extends Player {
 
 		terminating = false;
 		usedTimeouts = 0;
+
+		logger = gameController.getLogger();
+		if(logger == null){
+			logger = GameLogger.createDummyLogger();
+		}
 	}
 
 	/**
@@ -96,12 +104,10 @@ public class ExternalAIPlayer extends Player {
 			public void run() {
 				try{
 					int exitStatus = process.waitFor();
-					// TODO replace with real logging
-					System.err.println(name + " exited with status " + exitStatus);
+					logger.progBehaviour(id + "/" + name, "exited with status " + exitStatus);
 				} catch (InterruptedException e) {
 					process.destroy();
-					// TODO replace with real logging
-					System.err.println(name + " did not exit properly and was therefor killed");
+					logger.progBehaviour(id + "/" + name, "did not exit properly and was therefore killed");
 				}
 			}
 		};
@@ -141,7 +147,7 @@ public class ExternalAIPlayer extends Player {
 	 */
 	private void feedScenario(){
 		Scenario scenario = gameController.getScenario();
-		programIn.println(joinValues(scenario.getMaxPlayerCount(), scenario.getStartMoney(),
+		programIn.println(joinValues(gameController.getPlayers().size(), scenario.getStartMoney(),
 				scenario.getMapSizeX(), scenario.getMapSizeY(), id, scenario.getMaxGold()));
 
 		for(Point point : scenario.getGoldPos()){
@@ -197,18 +203,22 @@ public class ExternalAIPlayer extends Player {
 					nextLine = programOutQueue.poll(Consts.EXTERNAL_LONG_TIMEOUT, TimeUnit.MILLISECONDS);
 					if(nextLine == null){
 						// process is blocked or in endless loop
-						// TODO report protocol violation (throw up;)
+						logger.progBehaviour(id + "/" + name, "did not print a line within " +
+								(Consts.EXTERNAL_SHORT_TIMEOUT + Consts.EXTERNAL_LONG_TIMEOUT) + "ms");
 						return null;
 					} else {
-						// TODO log long waiting time
+						logger.progBehaviour(id + "/" + name, "used between "
+								+ Consts.EXTERNAL_SHORT_TIMEOUT + " and " +
+								(Consts.EXTERNAL_SHORT_TIMEOUT + Consts.EXTERNAL_LONG_TIMEOUT) + "ms");
 						usedTimeouts++;
 						if(usedTimeouts > Consts.EXTERNAL_MAX_TIMEOUT_COUNT){
-							// TODO report protocol violation (throw up;)
+							logger.progBehaviour(id + "/" + name, "used all allowed timeouts" +
+									"(e.g. it took too long to output a line too often)");
 						}
 					}
 				} else {
 					// process crashed
-					// TODO report protocol violation (throw up;)
+					logger.progBehaviour(id + "/" + name, "exited instead of printing a line");
 					return null;
 				}
 			}
@@ -238,11 +248,11 @@ public class ExternalAIPlayer extends Player {
 			String[] parts = nextLine.split(" ");
 
 			Action desiredAction = new Action();
-			if("0".equals(parts[0])){
+			if(Consts.MOVE_ID.equals(parts[0])){
 				desiredAction.actionType = Action.ActionType.MOVE;
-			} else if("1".equals(parts[0])){
+			} else if(Consts.FIGHT_ID.equals(parts[0])){
 				desiredAction.actionType = Action.ActionType.FIGHT;
-			} else if("2".equals(parts[0])){
+			} else if(Consts.PRODUCE_ID.equals(parts[0])){
 				desiredAction.actionType = Action.ActionType.PRODUCE;
 			}
 
@@ -301,6 +311,8 @@ public class ExternalAIPlayer extends Player {
 			}
 		}
 		feedRound();
+
+		// TODO handle desired action
 	}
 
 	/**

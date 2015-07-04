@@ -30,7 +30,7 @@ public class GameWorldTest {
 	public void setup(){
 		TestUtil.setupConfig();
 		scenario = TestUtil.createTestScenario();
-		gameController = new GameController(scenario);
+		gameController = new GameController(scenario, null);
 		gameWorld = gameController.getGameWorld();
 	}
 

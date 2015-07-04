@@ -14,7 +14,7 @@ TODO: add useMapType to scenario
 TODO: Balancing
 TODO: AI
 TODO: External AI
-TODO: Logger for game
+TODO: logger for game
 TODO: Headless mode for Tournament
 TODO: Tournament mode
 TODO: Replay of logged games

@@ -45,6 +45,7 @@ import com.smeanox.games.sg002.world.GameObjectType;
 import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
 
 import com.smeanox.games.sg002.data.Point;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -405,6 +406,11 @@ public class GameScreen extends AbstractScreen {
 				|| Gdx.input.isKeyPressed(Consts.KeyboardShortcuts.backKey))) {
 			pauseGame();
 		}
+	}
+
+	@Override
+	public void dispose() {
+		gameController.endGame();
 	}
 
 	/**

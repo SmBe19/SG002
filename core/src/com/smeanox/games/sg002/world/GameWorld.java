@@ -2,9 +2,11 @@ package com.smeanox.games.sg002.world;
 
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlWriter;
-import com.smeanox.games.sg002.player.Player;
-
 import com.smeanox.games.sg002.data.Point;
+import com.smeanox.games.sg002.log.GameLogger;
+import com.smeanox.games.sg002.player.Player;
+import com.smeanox.games.sg002.util.Consts;
+
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -24,13 +26,17 @@ public class GameWorld {
 	private HashSet<GameObject> gameObjects;
 
 	private Scenario scenario;
+	private GameLogger logger;
 
 	/**
 	 * Create a new instance
 	 *
 	 * @param scenario the scenario to use
+	 * @param logger   the logger to use to log the game
 	 */
-	public GameWorld(Scenario scenario) {
+	public GameWorld(Scenario scenario, GameLogger logger) {
+		this.logger = logger;
+
 		initScenario(scenario);
 
 		gameObjects = new HashSet<GameObject>();
@@ -71,7 +77,7 @@ public class GameWorld {
 		return activePlayer;
 	}
 
-	public HashSet<GameObject> getGameObjects(){
+	public HashSet<GameObject> getGameObjects() {
 		return gameObjects;
 	}
 
@@ -285,6 +291,9 @@ public class GameWorld {
 		getWorldGameObject(endX, endY).setPositionX(endX);
 		getWorldGameObject(endX, endY).setPositionY(endY);
 		getWorldGameObject(endX, endY).use(Action.ActionType.MOVE);
+
+		logger.game(getActivePlayer().getId() + " " + Consts.MOVE_ID + " " +
+				startX + " " + startY + " " + endX + " " + endY);
 		return true;
 	}
 
@@ -360,6 +369,10 @@ public class GameWorld {
 		for (Action.ActionType a : Action.ActionType.values()) {
 			newGameObject.use(a);//not able to do anything after being built
 		}
+
+		logger.game(getActivePlayer().getId() + " " + Consts.PRODUCE_ID + " " +
+				startX + " " + startY + " " + endX + " " + endY +
+				" " + gameObjectType.getExternalId());
 		return true;
 	}
 
@@ -423,6 +436,9 @@ public class GameWorld {
 			}
 		}
 		getWorldGameObject(startX, startY).use(Action.ActionType.FIGHT);
+
+		logger.game(getActivePlayer().getId() + " " + Consts.FIGHT_ID + " " +
+				startX + " " + startY + " " + endX + " " + endY);
 		return damage;
 	}
 

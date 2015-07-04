@@ -182,6 +182,21 @@ public class Consts {
 	public static final int EXTERNAL_MAX_TIMEOUT_COUNT = 100;
 
 	/**
+	 * ID used for logging and external AI
+	 */
+	public static final String MOVE_ID = "0";
+
+	/**
+	 * ID used for logging and external AI
+	 */
+	public static final String FIGHT_ID = "1";
+
+	/**
+	 * ID used for logging and external AI
+	 */
+	public static final String PRODUCE_ID = "2";
+
+	/**
 	 * Keyboard Shortcuts
 	 */
 	public static class KeyboardShortcuts {

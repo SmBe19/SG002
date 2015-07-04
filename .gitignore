@@ -67,3 +67,5 @@ build/
 ## Game
 quicksave.xml
 sg002debug.*
+gamelog.txt
+behaviourlog.txt
