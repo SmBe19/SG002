@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.util.GameObjectTypeReader;
 import com.smeanox.games.sg002.util.Language;
+import com.smeanox.games.sg002.util.ProgramArguments;
 import com.smeanox.games.sg002.util.ScenarioReader;
 import com.smeanox.games.sg002.world.Scenario;
 
@@ -18,10 +19,8 @@ import java.util.Locale;
 public class TestUtil {
 
 	public static void setupConfig() {
-		Consts.headlessMode = true;
-		Language.loadStringsForHeadless(Locale.getDefault());
-		GameObjectTypeReader.readGameObjectTypes(new FileHandle("config/GameObjectTypes.xml"));
-		ScenarioReader.readScenarios(new FileHandle("config/Scenarios.xml"));
+		ProgramArguments.noGUI = true;
+		SG002NoGui.prepare();
 	}
 
 	public static Scenario createTestScenario() {

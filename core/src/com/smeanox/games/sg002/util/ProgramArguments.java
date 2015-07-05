@@ -25,6 +25,18 @@ public class ProgramArguments {
 
 	public static boolean printStdErr = false;
 
+	public static String tournamentLog = null;
+
+	public static String evaluationLog = null;
+
+	public static boolean tournamentStdOut = true;
+
+	public static boolean tournamentStdErr = true;
+
+	public static boolean evaluationStdOut = true;
+
+	public static boolean evaluationStdErr = true;
+
 	public static String playersFile = null;
 
 	public static String namesFile = null;
@@ -36,6 +48,10 @@ public class ProgramArguments {
 	public static String scenario = null;
 
 	public static int playerCount = -1;
+
+	public static boolean evaluation = true;
+
+	public static String tournamentFile = null;
 
 	public static boolean autoStart = false;
 
@@ -74,6 +90,24 @@ public class ProgramArguments {
 				} else if ("-stderr".equals(args[i])) {
 					printStdErr = "1".equals(args[i+1]);
 					i += 1;
+				} else if ("-tournamentlog".equals(args[i])) {
+					tournamentLog = args[i + 1];
+					i += 1;
+				} else if ("-evaluationlog".equals(args[i])) {
+					evaluationLog = args[i + 1];
+					i += 1;
+				} else if ("-tournamentstdout".equals(args[i])) {
+					tournamentStdOut = "1".equals(args[i+1]);
+					i += 1;
+				} else if ("-tournamentstderr".equals(args[i])) {
+					tournamentStdErr = "1".equals(args[i+1]);
+					i += 1;
+				} else if ("-evaluationstdout".equals(args[i])) {
+					evaluationStdOut = "1".equals(args[i+1]);
+					i += 1;
+				} else if ("-evaluationstderr".equals(args[i])) {
+					evaluationStdErr = "1".equals(args[i+1]);
+					i += 1;
 				} else if ("-players".equals(args[i])) {
 					playersFile = args[i + 1];
 					i += 1;
@@ -97,6 +131,12 @@ public class ProgramArguments {
 					i += 1;
 				} else if ("-replay".equals(args[i])) {
 					replay = args[i + 1];
+					i += 1;
+				} else if ("-evaluation".equals(args[i])) {
+					evaluation = "1".equals(args[i+1]);
+					i += 1;
+				} else if ("-tournament".equals(args[i])) {
+					tournamentFile = args[i + 1];
 					i += 1;
 				} else if ("-printfps".equals(args[i])) {
 					printFPS = "1".equals(args[i+1]);
@@ -131,6 +171,12 @@ public class ProgramArguments {
 				"[-behaviourlog file] " +
 				"[-stdout 0/1] " +
 				"[-stderr 0/1] " +
+				"[-tournamentlog file] " +
+				"[-evaluationlog file] " +
+				"[-tournamentlogstdout 0/1] " +
+				"[-tournamentlogstderr 0/1] " +
+				"[-evaluationstdout 0/1] " +
+				"[-evaluationstderr 0/1] " +
 				"[-players file] " +
 				"[-names file] " +
 				"[-playersoverride 0/1] " +
@@ -169,6 +215,18 @@ public class ProgramArguments {
 				return false;
 			}
 		}
+
+		if(noGUI){
+			if(playerCount < 2 || playersFile == null || namesFile == null){
+				System.out.println("not enough info for nogui");
+				return false;
+			}
+			if(tournamentFile != null && scenario != null){
+				System.out.println("only tournament or scenario may be specified");
+				return false;
+			}
+		}
+
 		return true;
 	}
 

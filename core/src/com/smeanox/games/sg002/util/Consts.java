@@ -15,12 +15,6 @@ import java.util.LinkedList;
 public class Consts {
 
 	/**
-	 * Whether the application is running in a headless mode. In this mode {@link Gdx} won't be
-	 * available and no Assets are loaded
-	 */
-	public static boolean headlessMode = false;
-
-	/**
 	 * The width in pixels the game was developed on. Everything will be scaled accordingly.
 	 */
 	public static final int devWidth = 800;
@@ -129,29 +123,12 @@ public class Consts {
 	/**
 	 * number of seconds the AI should wait until the next player plays
 	 */
-	public static final float aiSleep = 0.5f;
-
-	// Game Settings, read from scenario
+	public static float aiSleep = 0.5f;
 
 	/**
-	 * The seed used for randomness
+	 * The delta used for update in noGUI mode
 	 */
-	public static long seed = 314159265358979L;
-
-	/**
-	 * Whether the GameObjects can move diagonal (different radius form). The distance is diffX + diffY (false) or max(diffX, diffY) (true)
-	 */
-	public static boolean walkDiagonal = true;
-
-	/**
-	 * Whether an object can perform multiple actions per round (one of each type) or only one per round
-	 */
-	public static boolean multipleActionsPerObject = true;
-
-	/**
-	 * The minimal distance between two start GameObjects
-	 */
-	public static int startGameObjectMinDistance = 2;
+	public static float headlessFrameDuration = 0.1f;
 
 	/**
 	 * The name of the file used for QuickSaving
@@ -210,6 +187,28 @@ public class Consts {
 	 * Command used to start the AI 'BenNo1'
 	 */
 	public static final String COMMAND_BENNO1 = ":BenNo1";
+
+	// Game Settings, read from scenario
+
+	/**
+	 * The seed used for randomness
+	 */
+	public static long seed = 314159265358979L;
+
+	/**
+	 * Whether the GameObjects can move diagonal (different radius form). The distance is diffX + diffY (false) or max(diffX, diffY) (true)
+	 */
+	public static boolean walkDiagonal = true;
+
+	/**
+	 * Whether an object can perform multiple actions per round (one of each type) or only one per round
+	 */
+	public static boolean multipleActionsPerObject = true;
+
+	/**
+	 * The minimal distance between two start GameObjects
+	 */
+	public static int startGameObjectMinDistance = 2;
 
 	/**
 	 * Keyboard Shortcuts

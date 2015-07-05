@@ -32,12 +32,14 @@
                   startMoney="1000" walkDiagonal="true"/>
         <Scenario name="scenario.tourney.name" id="tourney" mapSizeX="35" mapSizeY="35"
                   maxGold="8"
-                  maxPlayerCount="2" multipleActionsPerObject="true" seed="42"
+                  maxPlayerCount="4" multipleActionsPerObject="true" seed="42"
                   startGameObjectMinDistance="0"
                   startMoney="1000" walkDiagonal="true">
             <StartPos>
                 <Start x="4" y="4"/>
                 <Start x="30" y="30"/>
+                <Start x="4" y="30"/>
+                <Start x="30" y="4"/>
             </StartPos>
             <GoldPos>
                 <Gold x="0" y="0"/>

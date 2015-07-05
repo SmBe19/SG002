@@ -382,6 +382,7 @@ public class MenuScreen extends AbstractScreen {
 	 */
 	private void startGame() {
 		GameLogger logger = new GameLogger();
+		logger.setLogFolder(ProgramArguments.logFolder);
 		logger.setGameLogPath(ProgramArguments.gameLog);
 		logger.setBehaviourLogPath(ProgramArguments.behaviourLog);
 		logger.setPrintStdOut(ProgramArguments.printStdOut);

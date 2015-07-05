@@ -41,7 +41,7 @@ public class GameObjectTypeReader {
 				GameObjectType aGameObjectType = readGameObjectType(gameObjectType);
 				damageTables.put(aGameObjectType, damageTable);
 				canProduces.put(aGameObjectType, canProduce);
-				if (!Consts.headlessMode) {
+				if (!ProgramArguments.noGUI) {
 					Assets.addToLoadQueue(gameObjectType.getAttribute("texture"), Texture.class);
 				}
 				ids.add(gameObjectType.getAttribute("id"));

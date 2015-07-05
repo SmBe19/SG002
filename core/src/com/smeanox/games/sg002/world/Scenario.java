@@ -223,7 +223,8 @@ public class Scenario {
 	 */
 	public Point getStartPos(int player) {
 		if (player >= maxPlayerCount || player < 0) {
-			throw new IllegalArgumentException("" + player);
+			throw new IllegalArgumentException("map is not allowed to be played with more than "
+					+ maxPlayerCount + " players (was " + player + 1 + ")");
 		}
 		return startPos[player];
 	}

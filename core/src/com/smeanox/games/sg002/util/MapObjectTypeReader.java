@@ -58,7 +58,9 @@ public class MapObjectTypeReader {
 				}
 
 				MapObjectType aMapObjectType = new MapObjectType(textureName, id, allowedGameObjects);
-				Assets.addToLoadQueue(textureName, Texture.class);
+				if(!ProgramArguments.noGUI) {
+					Assets.addToLoadQueue(textureName, Texture.class);
+				}
 				ids.add(id);
 
 				if (mapObjectType.getBooleanAttribute("default", false)) {
