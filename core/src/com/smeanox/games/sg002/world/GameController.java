@@ -13,6 +13,8 @@ import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.world.actionHandler.GameEndHandler;
 import com.smeanox.games.sg002.world.actionHandler.NextPlayerHandler;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
@@ -71,7 +73,7 @@ public class GameController {
 
 		initScenario(scenario);
 
-		gameWorld = new GameWorld(scenario, logger);
+		gameWorld = new GameWorld(scenario);
 
 		gameEnded = false;
 	}
@@ -155,6 +157,26 @@ public class GameController {
 		if(gameEnded){
 			return;
 		}
+
+		if(gameWorld.getPlayerActions().get(activePlayer) != null) {
+			for (Action action : gameWorld.getPlayerActions().get(activePlayer)) {
+				String startEnd = action.startX + " " + action.startY + " " + action.endX + " " + action.endY;
+				switch (action.actionType) {
+					case MOVE:
+						logger.game(Consts.MOVE_ID + " " + startEnd);
+						break;
+					case FIGHT:
+						logger.game(Consts.FIGHT_ID + " " + startEnd);
+						break;
+					case PRODUCE:
+						logger.game(Consts.PRODUCE_ID + " " + startEnd + " " + action.produceGameObjectType.getExternalId());
+						break;
+					case NONE:
+						break;
+				}
+			}
+		}
+
 		if (countLivingPlayers() < 2) {
 			endGame();
 			return;
@@ -165,6 +187,7 @@ public class GameController {
 		if (oldActivePlayer == activePlayer) {
 			throw new IllegalStateException("Something's broken");
 		}
+		logger.game("" + activePlayer.getId());
 		startRound(activePlayer);
 	}
 
@@ -282,13 +305,8 @@ public class GameController {
 	 */
 	public void saveGame(String fileName) {
 		try {
-			FileHandle file;
-			if (Consts.headlessMode) {
-				file = new FileHandle(fileName);
-			} else {
-				file = Gdx.files.local(fileName);
-			}
-			XmlWriter writer = new XmlWriter(new FileWriter(file.file()));
+			File file = new File(fileName);
+			XmlWriter writer = new XmlWriter(new FileWriter(file));
 			writer.element("Game");
 			writer.attribute("scenario", scenario.getId());
 			writer.element("Players");
@@ -318,16 +336,11 @@ public class GameController {
 	public void loadGame(String fileName) {
 		try {
 			XmlReader reader = new XmlReader();
-			FileHandle file;
-			if (Consts.headlessMode) {
-				file = new FileHandle(fileName);
-			} else {
-				file = Gdx.files.local(fileName);
-			}
+			File file = new File(fileName);
 			if (!file.exists()) {
 				return;
 			}
-			XmlReader.Element root = reader.parse(file);
+			XmlReader.Element root = reader.parse(new FileReader(file));
 			Scenario scenarioLoad = Scenario.getScanarioById(root.getAttribute("scenario"));
 			initScenario(scenarioLoad);
 			gameWorld.initScenario(scenarioLoad);

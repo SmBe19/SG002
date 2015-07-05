@@ -37,6 +37,7 @@ import com.smeanox.games.sg002.screen.gui.ClickHandler;
 import com.smeanox.games.sg002.util.Assets;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.util.Language;
+import com.smeanox.games.sg002.util.ProgramArguments;
 import com.smeanox.games.sg002.view.GameView;
 import com.smeanox.games.sg002.world.Action;
 import com.smeanox.games.sg002.world.GameController;
@@ -91,10 +92,13 @@ public class GameScreen extends AbstractScreen {
 		gameController.addNextPlayerHandler(new NextPlayerHandler() {
 			@Override
 			public void onNextPlayer(Player nextPlayer) {
-				updateLabels();
 				if(nextPlayer.isShowGUI()) {
 					centerCameraOnActivePlayer();
+					nextPlayerButton.setVisible(true);
+				} else {
+					nextPlayerButton.setVisible(false);
 				}
+				updateLabels();
 				cancelAction();
 				setActionButtonsVisible(false);
 			}
@@ -284,7 +288,9 @@ public class GameScreen extends AbstractScreen {
 
 	@Override
 	public void render(float delta) {
-		FPSTracker.get().frame(delta);
+		if(ProgramArguments.printFPS) {
+			FPSTracker.get().frame(delta);
+		}
 
 		boolean wasClick = updateGUI(delta, wasDrag);
 		updateInput(delta, wasClick);
@@ -449,6 +455,7 @@ public class GameScreen extends AbstractScreen {
 
 		if(gameController.isGameEnded()){
 			nextPlayerButton.setActive(false);
+			nextPlayerButton.setVisible(true);
 		}
 	}
 

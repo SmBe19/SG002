@@ -7,6 +7,7 @@ import com.smeanox.games.sg002.util.Language;
 import com.smeanox.games.sg002.util.ScenarioReader;
 import com.smeanox.games.sg002.world.Scenario;
 
+import java.io.File;
 import java.util.Locale;
 
 /**

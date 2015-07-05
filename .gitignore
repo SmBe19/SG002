@@ -70,3 +70,5 @@ sg002debug.*
 gamelog.txt
 behaviourlog.txt
 TestAI.exe
+players.txt
+names.txt

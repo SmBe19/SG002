@@ -33,15 +33,19 @@ import com.smeanox.games.sg002.player.AIPlayer_BenNo1;
 import com.smeanox.games.sg002.player.ExternalAIPlayer;
 import com.smeanox.games.sg002.player.LocalPlayer;
 import com.smeanox.games.sg002.player.Player;
+import com.smeanox.games.sg002.player.ReplayLoader;
 import com.smeanox.games.sg002.screen.gui.Button;
 import com.smeanox.games.sg002.screen.gui.ClickHandler;
 import com.smeanox.games.sg002.util.Assets;
+import com.smeanox.games.sg002.util.ConfigFileUtil;
 import com.smeanox.games.sg002.util.Consts;
 import com.smeanox.games.sg002.util.Language;
-import com.smeanox.games.sg002.util.TournamentContext;
+import com.smeanox.games.sg002.util.ProgramArguments;
 import com.smeanox.games.sg002.world.GameController;
 import com.smeanox.games.sg002.world.Scenario;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -55,8 +59,11 @@ public class MenuScreen extends AbstractScreen {
 	private Scenario scenario;
 	private int playerCount;
 	private int processedPlayerNames;
-	private boolean displayDialog;
+	private int processedPlayerCommands;
+	private boolean displayNameDialog;
+	private boolean displayCommandDialog;
 	private LinkedList<String> playerNames;
+	private LinkedList<String> playerCommands;
 
 	private Button playerCountLabel;
 	private Button scenarioLabel;
@@ -66,6 +73,9 @@ public class MenuScreen extends AbstractScreen {
 
 	private boolean wasBackDown;
 
+	private ReplayLoader replayLoader;
+	private boolean replayLoaderStarted;
+
 	/**
 	 * Create a new instance
 	 */
@@ -73,12 +83,29 @@ public class MenuScreen extends AbstractScreen {
 		super();
 
 		playerCount = 2;
-		displayDialog = false;
+		displayNameDialog = false;
+		displayCommandDialog = false;
 
-		createUI();
+		if(ProgramArguments.replay == null) {
+			createUI();
 
-		scenarioIterator = Scenario.getAllScenariosSorted().iterator();
-		nextScenario();
+			scenarioIterator = Scenario.getAllScenariosSorted().iterator();
+			nextScenario();
+
+			if (ProgramArguments.scenario != null) {
+				if (!forwardScenario(ProgramArguments.scenario)) {
+					System.out.println("scenario not found: " + ProgramArguments.scenario);
+					ScreenManager.exit();
+				}
+			}
+
+			if (ProgramArguments.playerCount >= 2) {
+				playerCount = ProgramArguments.playerCount - 1;
+				increasePlayerCount();
+			}
+		} else {
+			createGUILoading();
+		}
 	}
 
 	/**
@@ -142,6 +169,30 @@ public class MenuScreen extends AbstractScreen {
 	}
 
 	/**
+	 * Create all GUI elements for loading
+	 */
+	private void createGUILoading(){
+		LinkedList<Button> toLayout = new LinkedList<Button>();
+		Button b;
+
+		// loading
+		b = new Button(null, Assets.liberationMedium, Language.getStrings().get("menu.loading"),
+				Color.BLUE, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
+		addGUIElement(b);
+		toLayout.add(b);
+
+		// game name
+		b = new Button(null, Assets.liberationLarge, Language.getStrings().get("game.name"),
+				Color.ORANGE, Color.WHITE, Color.LIGHT_GRAY, Color.DARK_GRAY);
+		addGUIElement(b);
+		toLayout.add(b);
+
+		layout(toLayout, 1, 2, 0, 0, 0, 0, 300, 60, 0, 30);
+
+		toLayout.clear();
+	}
+
+	/**
 	 * cycle through scenarios
 	 */
 	private void nextScenario() {
@@ -153,6 +204,24 @@ public class MenuScreen extends AbstractScreen {
 
 		setScenarioLabelText();
 		setPlayerCountText();
+	}
+
+	/**
+	 * Forward to the scenario with the given id
+	 *
+	 * @param id the id
+	 * @return true if the scenario was found
+	 */
+	private boolean forwardScenario(String id) {
+		String startId = scenario.getId();
+		if (startId.equals(id)) {
+			return true;
+		}
+		do {
+			nextScenario();
+		} while (!id.equals(scenario.getId()) && !startId.equals(scenario.getId()));
+
+		return !startId.equals(scenario.getId());
 	}
 
 	/**
@@ -188,17 +257,65 @@ public class MenuScreen extends AbstractScreen {
 
 	@Override
 	public void render(float delta) {
+		if (ProgramArguments.replay != null) {
+			startReplay();
+
+			clearScreen();
+			updateGUI(delta, false);
+			renderGUI(delta);
+			return;
+		}
+
+		if (ProgramArguments.autoStart) {
+			prepareStart();
+			startGame();
+			return;
+		}
+
 		clearScreen();
 		updateGUI(delta, false);
 		renderGUI(delta);
 
-		if (processedPlayerNames >= playerCount) {
+		if (processedPlayerNames >= playerCount && processedPlayerCommands >= playerCount) {
 			startGame();
-		} else if (displayDialog) {
-			Gdx.input.getTextInput(new PlayerNameListener(processedPlayerNames),
+		} else if (displayNameDialog) {
+			Gdx.input.getTextInput(new PlayerInfoListener(processedPlayerNames, playerNames, new PlayerInfoHandler() {
+						@Override
+						public void infoReceived() {
+							processedPlayerNames++;
+							displayCommandDialog = true;
+						}
+
+						@Override
+						public void infoCanceled() {
+							displayNameDialog = false;
+							displayCommandDialog = false;
+							processedPlayerNames = -1;
+							processedPlayerCommands = -1;
+						}
+					}),
 					Language.getStrings().get("menu.playerName.dialog"),
 					playerNames.get(processedPlayerNames), "");
-			displayDialog = false;
+			displayNameDialog = false;
+		} else if (displayCommandDialog) {
+			Gdx.input.getTextInput(new PlayerInfoListener(processedPlayerCommands, playerCommands, new PlayerInfoHandler() {
+						@Override
+						public void infoReceived() {
+							processedPlayerCommands++;
+							displayNameDialog = true;
+						}
+
+						@Override
+						public void infoCanceled() {
+							displayNameDialog = false;
+							displayCommandDialog = false;
+							processedPlayerNames = -1;
+							processedPlayerCommands = -1;
+						}
+					}),
+					Language.getStrings().get("menu.playerCommand.dialog"),
+					playerCommands.get(processedPlayerCommands), "");
+			displayCommandDialog = false;
 		}
 
 		if (wasBackDown && !(Gdx.input.isKeyPressed(Input.Keys.BACK)
@@ -218,13 +335,46 @@ public class MenuScreen extends AbstractScreen {
 		for (int i = 0; i < playerCount; i++) {
 			playerNames.add(Language.getStrings().format("menu.playerName.default", (i + 1)));
 		}
-		// TODO remove debug
-		// playerNames.set(0, "Ex:TestAI.exe");
-		// playerNames.set(1, "Ex:TestAI.exe");
-		// -----------------
 
-		displayDialog = true;
+		playerCommands = new LinkedList<String>();
+		for (int i = 0; i < playerCount; i++) {
+			playerCommands.add(Consts.COMMAND_LOCAL);
+		}
+
 		processedPlayerNames = 0;
+		processedPlayerCommands = 0;
+
+		if (ProgramArguments.namesFile != null) {
+			File namesFile = new File(ProgramArguments.namesFile);
+			try {
+				LinkedList<String> names = ConfigFileUtil.readAllLines(namesFile);
+				for (int i = 0; i < names.size() && i < playerCount; i++) {
+					playerNames.set(i, names.get(i));
+				}
+				if (!ProgramArguments.allowNamesOverride) {
+					processedPlayerNames = names.size();
+				}
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		if (ProgramArguments.playersFile != null) {
+			File playersFile = new File(ProgramArguments.playersFile);
+			try {
+				LinkedList<String> players = ConfigFileUtil.readAllLines(playersFile);
+				for (int i = 0; i < players.size() && i < playerCount; i++) {
+					playerCommands.set(i, players.get(i));
+				}
+				if (!ProgramArguments.allowPlayersOverride) {
+					processedPlayerCommands = players.size();
+				}
+			} catch (FileNotFoundException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		displayNameDialog = true;
 	}
 
 	/**
@@ -232,26 +382,21 @@ public class MenuScreen extends AbstractScreen {
 	 */
 	private void startGame() {
 		GameLogger logger = new GameLogger();
-		logger.setGameLogPath(TournamentContext.gameLog);
-		logger.setBehaviourLogPath(TournamentContext.behaviourLog);
-		logger.setPrintStdOut(TournamentContext.printStdOut);
-		logger.setPrintStdErr(TournamentContext.printStdErr);
+		logger.setGameLogPath(ProgramArguments.gameLog);
+		logger.setBehaviourLogPath(ProgramArguments.behaviourLog);
+		logger.setPrintStdOut(ProgramArguments.printStdOut);
+		logger.setPrintStdErr(ProgramArguments.printStdErr);
 
 		GameController gameController = new GameController(scenario, logger);
 		for (int i = 0; i < playerCount; i++) {
 			Player player;
-			// FIXME make nicer
-			if ("BenNo1".equals(playerNames.get(i))) {
-				player = new AIPlayer_BenNo1();
-			} else if (playerNames.get(i).startsWith("Ex:")) {
-				player = new ExternalAIPlayer();
-				((ExternalAIPlayer)player).setCommand(playerNames.get(i).substring(3));
-			} else {
+			if (Consts.COMMAND_LOCAL.equals(playerCommands.get(i))) {
 				player = new LocalPlayer();
-			}
-			// FIXME Remove me
-			if (i > 0) {
-				//player = new AIPlayer_BenNo1();
+			} else if (Consts.COMMAND_BENNO1.equals(playerCommands.get(i))) {
+				player = new AIPlayer_BenNo1();
+			} else {
+				player = new ExternalAIPlayer();
+				((ExternalAIPlayer) player).setCommand(playerCommands.get(i));
 			}
 			gameController.addPlayer(player);
 			player.setColor(Consts.playerColors[i % Consts.playerColors.length]);
@@ -261,27 +406,54 @@ public class MenuScreen extends AbstractScreen {
 		ScreenManager.showGame(gameController);
 	}
 
+	private void startReplay() {
+		if (replayLoaderStarted) {
+			if (!replayLoader.isAlive()) {
+				GameController gameController = replayLoader.getResult();
+				if (gameController == null) {
+					System.out.println("Loading of replay failed");
+					ScreenManager.exit();
+				} else {
+					ScreenManager.showGame(gameController);
+				}
+				replayLoaderStarted = false;
+			}
+		} else {
+			replayLoader = new ReplayLoader();
+			replayLoader.start();
+			replayLoaderStarted = true;
+		}
+	}
+
 	/**
 	 * Wait for the user to input a player name
 	 */
-	private class PlayerNameListener implements Input.TextInputListener {
+	private class PlayerInfoListener implements Input.TextInputListener {
 		private int player;
+		private LinkedList<String> list;
+		private PlayerInfoHandler handler;
 
-		public PlayerNameListener(int player) {
+		public PlayerInfoListener(int player, LinkedList<String> list, PlayerInfoHandler handler) {
 			this.player = player;
+			this.list = list;
+			this.handler = handler;
 		}
 
 		@Override
 		public void input(String text) {
-			playerNames.set(player, text);
-			processedPlayerNames++;
-			displayDialog = true;
+			list.set(player, text);
+			handler.infoReceived();
 		}
 
 		@Override
 		public void canceled() {
-			processedPlayerNames = -1;
-			displayDialog = false;
+			handler.infoCanceled();
 		}
+	}
+
+	private interface PlayerInfoHandler {
+		void infoReceived();
+
+		void infoCanceled();
 	}
 }

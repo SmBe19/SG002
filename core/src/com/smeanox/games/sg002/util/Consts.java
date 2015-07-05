@@ -202,6 +202,16 @@ public class Consts {
 	public static final String NEXT_ROUND_ID = "---";
 
 	/**
+	 * Command used to start a local player
+	 */
+	public static final String COMMAND_LOCAL = ":local";
+
+	/**
+	 * Command used to start the AI 'BenNo1'
+	 */
+	public static final String COMMAND_BENNO1 = ":BenNo1";
+
+	/**
 	 * Keyboard Shortcuts
 	 */
 	public static class KeyboardShortcuts {

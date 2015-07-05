@@ -10,6 +10,8 @@ import com.smeanox.games.sg002.util.Language;
 import com.smeanox.games.sg002.util.MapObjectTypeReader;
 import com.smeanox.games.sg002.util.ScenarioReader;
 
+import java.io.File;
+
 /**
  * Main Class of the game
  *

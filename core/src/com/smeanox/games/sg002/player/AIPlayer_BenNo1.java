@@ -12,7 +12,7 @@ import java.util.LinkedList;
  *
  * @author Benjamin Schmid
  */
-public class AIPlayer_BenNo1 extends AIPlayer {
+public class AIPlayer_BenNo1 extends LocalAIPlayer {
 
 	@Override
 	protected void playAI() {

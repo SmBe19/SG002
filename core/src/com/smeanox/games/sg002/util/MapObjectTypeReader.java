@@ -7,24 +7,25 @@ import com.badlogic.gdx.utils.XmlReader;
 import com.smeanox.games.sg002.world.GameObjectType;
 import com.smeanox.games.sg002.world.MapObjectType;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
  * Reads a given XML file and creates the mapObjectTypes
+ *
  * @author Fabian Lyck
  */
 public class MapObjectTypeReader {
-	private MapObjectTypeReader(){
+	private MapObjectTypeReader() {
 	}
 
 	/**
 	 * Reads all the MapObjectTypes from the given file
+	 *
 	 * @param file file to read from
 	 * @return list with all the read ids
 	 */
@@ -43,7 +44,7 @@ public class MapObjectTypeReader {
 					for (XmlReader.Element e : allowedIds) {
 						allowedGameObjects.add(GameObjectType.getGameObjectTypeById(e.getAttribute("id")));
 					}
-				} catch (NullPointerException e){
+				} catch (NullPointerException e) {
 					for (GameObjectType got : GameObjectType.getAllGameObjectTypes()) {
 						allowedGameObjects.add(got);
 					}
@@ -53,14 +54,14 @@ public class MapObjectTypeReader {
 					for (XmlReader.Element e : allowedIds) {
 						allowedGameObjects.remove(GameObjectType.getGameObjectTypeById(e.getAttribute("id")));
 					}
-				} catch (NullPointerException ignored){
+				} catch (NullPointerException ignored) {
 				}
 
 				MapObjectType aMapObjectType = new MapObjectType(textureName, id, allowedGameObjects);
 				Assets.addToLoadQueue(textureName, Texture.class);
 				ids.add(id);
 
-				if(mapObjectType.getBooleanAttribute("default", false)){
+				if (mapObjectType.getBooleanAttribute("default", false)) {
 					MapObjectType.setDefaultMapObjectType(aMapObjectType);
 				}
 			}

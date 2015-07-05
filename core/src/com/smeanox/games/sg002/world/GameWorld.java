@@ -31,17 +31,13 @@ public class GameWorld {
 	private final Map<Player, LinkedList<Action>> playerActions;
 
 	private Scenario scenario;
-	private GameLogger logger;
 
 	/**
 	 * Create a new instance
 	 *
 	 * @param scenario the scenario to use
-	 * @param logger   the logger to use to log the game
 	 */
-	public GameWorld(Scenario scenario, GameLogger logger) {
-		this.logger = logger;
-
+	public GameWorld(Scenario scenario) {
 		initScenario(scenario);
 
 		gameObjects = new HashSet<GameObject>();
@@ -306,8 +302,6 @@ public class GameWorld {
 		getWorldGameObject(endX, endY).setPositionY(endY);
 		getWorldGameObject(endX, endY).use(Action.ActionType.MOVE);
 
-		logger.game(getActivePlayer().getId() + " " + Consts.MOVE_ID + " " +
-				startX + " " + startY + " " + endX + " " + endY);
 		playerActions.get(getActivePlayer()).add(new Action(Action.ActionType.MOVE,
 				startX, startY, endX, endY));
 		return true;
@@ -386,9 +380,6 @@ public class GameWorld {
 			newGameObject.use(a);//not able to do anything after being built
 		}
 
-		logger.game(getActivePlayer().getId() + " " + Consts.PRODUCE_ID + " " +
-				startX + " " + startY + " " + endX + " " + endY +
-				" " + gameObjectType.getExternalId());
 		playerActions.get(getActivePlayer()).add(new Action(Action.ActionType.PRODUCE,
 				startX, startY, endX, endY, gameObjectType));
 		return true;
@@ -455,8 +446,6 @@ public class GameWorld {
 		}
 		getWorldGameObject(startX, startY).use(Action.ActionType.FIGHT);
 
-		logger.game(getActivePlayer().getId() + " " + Consts.FIGHT_ID + " " +
-				startX + " " + startY + " " + endX + " " + endY);
 		playerActions.get(getActivePlayer()).add(new Action(Action.ActionType.FIGHT,
 				startX, startY, endX, endY));
 		return damage;
