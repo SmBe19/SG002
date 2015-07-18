@@ -63,7 +63,7 @@ public class GameWorld {
 			}
 		}
 		for (Point point : scenario.getGoldPos()) {
-			worldMapObjects[point.y][point.x] = new MapObject(MapObjectType.getMapObjectTypeById("gold"), point.x, point.y);
+			worldMapObjects[point.y][point.x] = new MapObject(MapObjectType.getMapObjectTypeById(Consts.GOLD_MAP_TYPE), point.x, point.y);
 		}
 	}
 

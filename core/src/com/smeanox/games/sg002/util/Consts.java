@@ -159,6 +159,11 @@ public class Consts {
 	public static final int EXTERNAL_MAX_TIMEOUT_COUNT = 100;
 
 	/**
+	 * ID of mapObjectType for gold
+	 */
+	public static final String GOLD_MAP_TYPE = "gold";
+
+	/**
 	 * ID used for logging and external AI
 	 */
 	public static final String MOVE_ID = "0";

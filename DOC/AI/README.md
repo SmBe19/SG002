@@ -1,5 +1,7 @@
 # AI
-This folder contains different AI implementations. As we do not want to spoil the fun of developing an AI for yourself, no AIs shall get pushed to GitHub.
+This folder contains information regarding AIs.
+
+External AIs are located in the `AI` folder. As we do not want to spoil the fun of developing an AI for yourself, no AIs shall get pushed to GitHub.
 To still be able to use source control for the AIs, the AIs shall be commited in a seperate branch called 'AI', which won't be commited to GitHub.
 Once *The Event™* is over, we can merge this branch into the master branch and make it available for everyone.
 

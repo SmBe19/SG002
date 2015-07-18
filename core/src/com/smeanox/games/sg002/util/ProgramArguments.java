@@ -173,8 +173,8 @@ public class ProgramArguments {
 				"[-stderr 0/1] " +
 				"[-tournamentlog file] " +
 				"[-evaluationlog file] " +
-				"[-tournamentlogstdout 0/1] " +
-				"[-tournamentlogstderr 0/1] " +
+				"[-tournamentstdout 0/1] " +
+				"[-tournamentstderr 0/1] " +
 				"[-evaluationstdout 0/1] " +
 				"[-evaluationstderr 0/1] " +
 				"[-players file] " +
@@ -185,6 +185,8 @@ public class ProgramArguments {
 				"[-playercount count] " +
 				"[-autostart 0/1] " +
 				"[-replay file] " +
+				"[-evaluation 0/1] " +
+				"[-tournament file] " +
 				"[-printfps 0/1");
 	}
 

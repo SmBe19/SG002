@@ -1,5 +1,5 @@
 # Protocol for user AI
-This document explains the protocol used to communicate between the engine and a User AI (UAI)
+This document explains the protocol used to communicate between the engine and a User AI (UAI), sometimes reffered to as `External AI`.
 
 ## Miscellanious
 User AIs are started in a seperate process. Std I/O is used to communicate. Thus they can be written in any language.

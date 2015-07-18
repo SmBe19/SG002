@@ -65,11 +65,10 @@ BACKSPACE ... cancel action
 
 ## Miscellaneous
 
-Use `BenNo1` as the name for a player to let the AI control this player.
+When you start a game, you are asked to specify a command. Use `:local` for a human player, `:BenNo1` for a sample AI and `path/to/AI` for an external AI.
 
 ## More to come
 
  * Improved artwork
  * AI
- * Ability to add external AI's (read: write your own in whatever language you like)
  * Multiplayer
