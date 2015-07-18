@@ -158,6 +158,26 @@ public class GameController {
 			return;
 		}
 
+		writeActionsLog();
+
+		if (countLivingPlayers() < 2) {
+			endGame();
+			return;
+		}
+		logger.game(Consts.NEXT_ROUND_ID);
+		Player oldActivePlayer = activePlayer;
+		nextPlayer();
+		if (oldActivePlayer == activePlayer) {
+			throw new IllegalStateException("Something's broken");
+		}
+		logger.game("" + activePlayer.getId());
+		startRound(activePlayer);
+	}
+
+	/**
+	 * write the performed actions to the log file
+	 */
+	private void writeActionsLog() {
 		if(gameWorld.getPlayerActions().get(activePlayer) != null) {
 			for (Action action : gameWorld.getPlayerActions().get(activePlayer)) {
 				String startEnd = action.startX + " " + action.startY + " " + action.endX + " " + action.endY;
@@ -176,19 +196,6 @@ public class GameController {
 				}
 			}
 		}
-
-		if (countLivingPlayers() < 2) {
-			endGame();
-			return;
-		}
-		logger.game(Consts.NEXT_ROUND_ID);
-		Player oldActivePlayer = activePlayer;
-		nextPlayer();
-		if (oldActivePlayer == activePlayer) {
-			throw new IllegalStateException("Something's broken");
-		}
-		logger.game("" + activePlayer.getId());
-		startRound(activePlayer);
 	}
 
 	/**
@@ -259,6 +266,7 @@ public class GameController {
 		try {
 			player.startPlaying();
 		} catch (ProtocolViolationException e) {
+			writeActionsLog();
 			endGame();
 		}
 	}

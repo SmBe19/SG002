@@ -1,5 +1,5 @@
 # Protocol for user AI
-This document explains the protocoll used to communicate between the engine and a User AI (UAI)
+This document explains the protocol used to communicate between the engine and a User AI (UAI)
 
 ## Miscellanious
 User AIs are started in a seperate process. Std I/O is used to communicate. Thus they can be written in any language.
@@ -17,6 +17,13 @@ Each GameObjectType is assigned an id:
 * `5`: `infantry`
 
 The stats for each type will be available in a seperate document, atm it can be viewed at /android/assets/config/GameObjectTypes.xml.
+
+## Actions
+Each action as assigned an id:
+
+* `0`: `move`
+* `1`: `fight`
+* `2`: `produce`
 
 ## Startup
 The UAS receives the values of the used scenario on one line, values seperated by one space:
@@ -82,7 +89,8 @@ Lines preceded with `<` are outputet by the engine, lines preceded with `>` are 
 
 ### Startup
 
-    < 3 1000 10 10 1
+    < 3 1000 10 10 1 1
+    < 5 5
 
 ### Round
 

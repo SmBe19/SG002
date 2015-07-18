@@ -8,20 +8,20 @@ using namespace std;
 
 pair<int, int> getRandomPosition(GameWorld& gameWorld, GameObject gameObject, int minRadius, int maxRadius, bool free, bool needGold){
 	int startX, startY;
-	startX = gameObject.getX();
-	startY = gameObject.getY();
+	startX = gameObject.x;
+	startY = gameObject.y;
 	
 	vector<pair<int, int> > positions;
 	for(int x = startX - maxRadius; x <= startX + maxRadius; x++){
 		for(int y = startY - maxRadius; y <= startY + maxRadius; y++){
-			if(x < 0 || y < 0 || x >= gameWorld.getWidth() || y >= gameWorld.getHeight()){
+			if(x < 0 || y < 0 || x >= gameWorld.width || y >= gameWorld.height){
 				continue;
 			}
 			if(max(abs(startX - x), abs(startY - y)) < minRadius){
 				continue;
 			}
-			if(gameWorld.getWorldMap(x, y).isPresent() != free
-					&& (free || gameWorld.getWorldMap(x, y).getPlayer() != gameWorld.getMyId())
+			if(gameWorld.getWorldMap(x, y).present != free
+					&& (free || gameWorld.getWorldMap(x, y).player != gameWorld.myId)
 					&& (!needGold || gameWorld.isGold(x, y))){
 				positions.push_back(make_pair(x, y));
 			}
@@ -36,40 +36,40 @@ pair<int, int> getRandomPosition(GameWorld& gameWorld, GameObject gameObject, in
 }
 
 void play(GameWorld& gameWorld){
-	for(int i = 0; i < gameWorld.getGameObjectCount(); i++){
-		GameObject aObject = gameWorld.getGameObject(i);
-		if(aObject.getPlayer() == gameWorld.getMyId()){
-			GameObjectType gameObjectType = gameWorld.getGameObjectType(aObject.getGameObjectType());
+	for(int i = 0; i < gameWorld.gameObjectCount; i++){
+		GameObject aObject = gameWorld.gameObjects[i];
+		if(aObject.player == gameWorld.myId){
+			GameObjectType gameObjectType = gameWorld.getGameObjectType(aObject.gameObjectType);
 			
 			// Produce if we can
-			if(gameObjectType.isCanProduce()){
-				vector<int> options = gameWorld.getGameObjectType(aObject.getGameObjectType()).getProduceList();
+			if(gameObjectType.canProduce){
+				vector<int> options = gameWorld.getGameObjectType(aObject.gameObjectType).produceList;
 				int newGameObjectType = options[rand() % options.size()];
 				pair<int, int> pos = getRandomPosition(gameWorld, aObject,
-						gameObjectType.getRadiusProduceMin(), gameObjectType.getRadiusProduceMax(), true, newGameObjectType == 1);
+						gameObjectType.radiusProduceMin, gameObjectType.radiusProduceMax, true, newGameObjectType == 1);
 				
-				if(pos != make_pair(-1, -1) && gameWorld.getGameObjectType(newGameObjectType).getValue() <= gameWorld.getPlayerMoney(gameWorld.getMyId())){
-					gameWorld.produce(aObject.getX(), aObject.getY(), pos.first, pos.second, newGameObjectType);
+				if(pos != make_pair(-1, -1) && gameWorld.getGameObjectType(newGameObjectType).value <= gameWorld.getPlayerMoney(gameWorld.myId)){
+					gameWorld.produce(aObject.x, aObject.y, pos.first, pos.second, newGameObjectType);
 				}
 			}
 			
 			// Fight if we can
-			if(gameObjectType.isCanFight()){
+			if(gameObjectType.canFight){
 				pair<int, int> pos = getRandomPosition(gameWorld, aObject,
-						gameObjectType.getRadiusFightMin(), gameObjectType.getRadiusFightMax(), false, false);
+						gameObjectType.radiusFightMin, gameObjectType.radiusFightMax, false, false);
 				
 				if(pos != make_pair(-1, -1)){
-					gameWorld.fight(aObject.getX(), aObject.getY(), pos.first, pos.second);
+					gameWorld.fight(aObject.x, aObject.y, pos.first, pos.second);
 				}
 			}
 			
 			// Move if we can
-			if(gameObjectType.isCanMove()){
+			if(gameObjectType.canMove){
 				pair<int, int> pos = getRandomPosition(gameWorld, aObject,
-						gameObjectType.getRadiusWalkMin(), gameObjectType.getRadiusWalkMax(), true, false);
+						gameObjectType.radiusWalkMin, gameObjectType.radiusWalkMax, true, false);
 				
 				if(pos != make_pair(-1, -1)){
-					gameWorld.move(aObject.getX(), aObject.getY(), pos.first, pos.second);
+					gameWorld.move(aObject.x, aObject.y, pos.first, pos.second);
 				}
 			}
 		}

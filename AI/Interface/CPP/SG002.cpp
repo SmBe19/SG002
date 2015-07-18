@@ -19,7 +19,7 @@ using namespace std;
  * This class describes one type of GameObjects (e.g. TownCenter, Villager)
  */
 class GameObjectType {
-	private:
+	public:
 	// The id of this type. Corresponds to the id used in the protocol and to the index in gameWorld.getGameObjectType(int)
 	int id;
 	// Health points a new instance has
@@ -48,10 +48,11 @@ class GameObjectType {
 	bool canFight;
 	// Whether this type is able to produce
 	bool canProduce;
+	// Whether this type is able to move
+	bool canMove;
 	// List of GameObjectTypes this type can produce.
 	vector<int> produceList;
-	
-	public:
+
 	GameObjectType(int cId, int cDefaultHp, int cValue, int cValuePerRound, int cValueOnDestruction,
 			int cRadiusWalkMin, int cRadiusWalkMax, int cRadiusProduceMin, int cRadiusProduceMax, int cRadiusFightMin, int cRadiusFightMax,
 			int cDamage, vector<int> cProduceList, bool cCanFight, bool cCanProduce){
@@ -70,70 +71,7 @@ class GameObjectType {
 		produceList = cProduceList;
 		canFight = cCanFight;
 		canProduce = cCanProduce;
-	}
-	
-	int getId(){
-		return id;
-	}
-	
-	int getDefaultHp(){
-		return defaultHp;
-	}
-	
-	int getValue(){
-		return value;
-	}
-	
-	int getValuePerRound(){
-		return valuePerRound;
-	}
-	
-	int getValueOnDestruction(){
-		return valueOnDestruction;
-	}
-	
-	int getRadiusWalkMin(){
-		return radiusWalkMin;
-	}
-	
-	int getRadiusWalkMax(){
-		return radiusWalkMax;
-	}
-	
-	int getRadiusProduceMin(){
-		return radiusProduceMin;
-	}
-	
-	int getRadiusProduceMax(){
-		return radiusProduceMax;
-	}
-	
-	int getRadiusFightMin(){
-		return radiusFightMin;
-	}
-	
-	int getRadiusFightMax(){
-		return radiusFightMax;
-	}
-	
-	int getDamage(){
-		return damage;
-	}
-	
-	vector<int> getProduceList(){
-		return produceList;
-	}
-	
-	bool isCanMove(){
-		return radiusWalkMax > 0;
-	}
-	
-	bool isCanFight(){
-		return canFight;
-	}
-	
-	bool isCanProduce(){
-		return canProduce;
+		canMove = radiusWalkMax > 0;
 	}
 };
 
@@ -141,7 +79,7 @@ class GameObjectType {
  * This class describes an action the player wants to perform / has performed
  */
 class Action {
-	private:
+	public:
 	// the player that did the action
 	int player;
 	// type of the action (0 -> move, 1 -> fight, 2 -> produce)
@@ -153,7 +91,6 @@ class Action {
 	// the type of object that was created (only when actionType == 2)
 	int produceGameObjectType;
 	
-	public:
 	Action(){}
 	Action(int cPlayer, int cActionType, int cStartX, int cStartY, int cEndX, int cEndY, int cProduceGameObjectType){
 		player = cPlayer;
@@ -165,45 +102,12 @@ class Action {
 		produceGameObjectType = cProduceGameObjectType;
 	}
 	
-	int getActionType(){
-		return actionType;
-	}
-	
-	int getStartX(){
-		return startX;
-	}
-	
-	int getStartY(){
-		return startY;
-	}
-	
-	int getEndX(){
-		return endX;
-	}
-	
-	int getEndY(){
-		return endY;
-	}
-	
-	int getProduceGameObjectType(){
-		return produceGameObjectType;
-	}
-	
 	// Read the action from the server
 	void readAction(){
 		cin >> player >> actionType >> startX >> startY >> endX >> endY;
 		if(actionType == 2){
 			cin >> produceGameObjectType;
 		}
-	}
-	
-	// Send the action to the server
-	void writeAction(){
-		cout << player << " " << actionType << " " << startX << " " << startY << " " << endX << " " << endY;
-		if(actionType == 2){
-			cout << " " << produceGameObjectType;
-		}
-		cout << "\n";
 	}
 	
 	// send the action to the server but omitting the player (as defined in the protocol)
@@ -220,7 +124,7 @@ class Action {
  * This class describes an object on the map.
  */
 class GameObject {
-	private:
+	public:
 	// health points this object has
 	int hp;
 	// type of the object (can be resolved using gameWorld.getGameObjectType(int))
@@ -232,7 +136,6 @@ class GameObject {
 	// whether this object exists (if false, the other fields have no meaning)
 	bool present;
 	
-	public:
 	GameObject(){}
 	GameObject(int cHp, int cGameObjectType, int cPlayer, int cX, int cY){
 		hp = cHp;
@@ -241,53 +144,6 @@ class GameObject {
 		x = cX;
 		y = cY;
 		present = true;
-	}
-	
-	int getHp(){
-		return hp;
-	}
-	
-	void setHp(int value){
-		hp = value;
-		if(hp <= 0){
-			present = false;
-		}
-	}
-	
-	void addHp(int value){
-		setHp(getHp() + value);
-	}
-	
-	int getGameObjectType(){
-		return gameObjectType;
-	}
-	
-	int getPlayer(){
-		return player;
-	}
-	
-	int getX(){
-		return x;
-	}
-	
-	void setX(int value){
-		x = value;
-	}
-	
-	int getY(){
-		return y;
-	}
-	
-	void setY(int value){
-		y = value;
-	}
-	
-	bool isPresent(){
-		return present;
-	}
-	
-	void setPresent(bool value){
-		present = value;
 	}
 	
 	// Read the state of the GameObject from the server
@@ -301,7 +157,7 @@ class GameObject {
  * This class describes the whole state of the game
  */
 class GameWorld {
-	private:
+	public:
 	// the number of players playing
 	int playerCount;
 	// the amount of money each player has at the start
@@ -344,89 +200,16 @@ class GameWorld {
 		actionQueue.push_back(action);
 	}
 	
-	public:
-	int getPlayerCount(){
-		return playerCount;
-	}
-	
-	int getStartMoney(){
-		return startMoney;
-	}
-	
-	int getWidth(){
-		return width;
-	}
-	
-	int getHeight(){
-		return height;
-	}
-	
-	int getMyId(){
-		return myId;
-	}
-
-	int getGoldCount(){
-		return goldCount;
-	}
-	
-	int getGameObjectCount(){
-		return gameObjectCount;
-	}
-	
-	int getActionCount(){
-		return actionCount;
-	}
-	
-	vector<vector<GameObject> > getWorldMap(){
-		return worldMap;
-	}
-	
 	GameObject getWorldMap(int x, int y){
 		return worldMap[x][y];
-	}
-	
-	vector<pair<int, int> > getGold(){
-		return gold;
-	}
-	
-	pair<int, int> getGold(int i){
-		return gold[i];
-	}
-	
-	set<pair<int, int> > getGoldSet(){
-		return goldSet;
 	}
 	
 	bool isGold(int x, int y){
 		return goldSet.find(make_pair(x, y)) != goldSet.end();
 	}
 	
-	vector<int> getPlayerMoney(){
-		return playerMoney;
-	}
-	
 	int getPlayerMoney(int i){
 		return playerMoney[i];
-	}
-	
-	vector<GameObject> getGameObjects(){
-		return gameObjects;
-	}
-	
-	GameObject getGameObject(int i){
-		return gameObjects[i];
-	}
-	
-	vector<Action> getActions(){
-		return actions;
-	}
-	
-	Action getAction(int i){
-		return actions[i];
-	}
-	
-	vector<GameObjectType> getGameObjectTypes(){
-		return gameObjectTypes;
 	}
 	
 	GameObjectType getGameObjectType(int i){
@@ -481,7 +264,7 @@ class GameWorld {
 		
 		for(int x = 0; x < width; x++){
 			for(int y = 0; y < height; y++){
-				worldMap[x][y].setPresent(false);
+				worldMap[x][y].present = false;
 			}
 		}
 		
@@ -493,7 +276,7 @@ class GameWorld {
 			gameObject.readGameObject();
 			
 			gameObjects.push_back(gameObject);
-			worldMap[gameObject.getX()][gameObject.getY()] = gameObject;
+			worldMap[gameObject.x][gameObject.y] = gameObject;
 		}
 		
 		actions.clear();
@@ -532,9 +315,9 @@ class GameWorld {
 		addActionToQueue(Action(myId, 0, startX, startY, endX, endY, 0));
 		
 		worldMap[endX][endY] = worldMap[startX][startY];
-		worldMap[endX][endY].setX(endX);
-		worldMap[endX][endY].setY(endY);
-		worldMap[startX][startY].setPresent(false);
+		worldMap[endX][endY].x = endX;
+		worldMap[endX][endY].y = endY;
+		worldMap[startX][startY].present = false;
 		
 		// TODO change x & y on the object in gameObjects
 	}
@@ -543,7 +326,10 @@ class GameWorld {
 	void fight(int startX, int startY, int endX, int endY){
 		addActionToQueue(Action(myId, 1, startX, startY, endX, endY, 0));
 		
-		worldMap[endX][endY].addHp(-gameObjectTypes[worldMap[startX][startY].getGameObjectType()].getDamage());
+		worldMap[endX][endY].hp -= gameObjectTypes[worldMap[startX][startY].gameObjectType].damage;
+		if(worldMap[endX][endY].hp <= 0){
+			worldMap[endX][endY].present = false;
+		}
 		
 		// TODO change hp on the object in gameObjects
 	}
@@ -552,10 +338,10 @@ class GameWorld {
 	void produce(int startX, int startY, int endX, int endY, int produceGameObjectType){
 		addActionToQueue(Action(myId, 2, startX, startY, endX, endY, produceGameObjectType));
 		
-		worldMap[endX][endY] = GameObject(gameObjectTypes[produceGameObjectType].getDefaultHp(),
+		worldMap[endX][endY] = GameObject(gameObjectTypes[produceGameObjectType].defaultHp,
 				produceGameObjectType, myId, endX, endY);
 				
-		playerMoney[myId] -= gameObjectTypes[produceGameObjectType].getValue();
+		playerMoney[myId] -= gameObjectTypes[produceGameObjectType].value;
 		
 		// TODO add object to gameObjects but mark somehow that is was already used
 	}

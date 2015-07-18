@@ -108,7 +108,8 @@ public class Evaluation {
 	private void addPoints(GameController gameController, List<Integer> playerPoints, List<Integer> aGamePlayers){
 		for(Player player : gameController.getPlayers()){
 			if(gameController.getGameWorld().isPlayerStillAlive(player)){
-				playerPoints.set(aGamePlayers.get(player.getId()), aGamePlayers.get(player.getId()) + 1);
+				playerPoints.set(aGamePlayers.get(player.getId()),
+						playerPoints.get(aGamePlayers.get(player.getId())) + 1);
 			}
 		}
 	}
